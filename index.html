@@ -1,115 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Lifestyle & Stress Analysis</title>
-
-<link rel="stylesheet" href="styles.css">
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Stress & Performance Insights</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">Data Insights: Student Lifestyle</span>
+        </div>
+    </nav>
 
-<header>
-<h1>📊 Student Lifestyle & Stress Analysis</h1>
-<p>Exploring how lifestyle habits affect student stress and academic performance</p>
-</header>
+    <header class="hero-section text-center py-5 bg-light">
+        <div class="container">
+            <h1>Student Stress & Performance Analysis</h1>
+            <p class="lead">Analyzing how lifestyle choices impact GPA and stress levels among 2,000 students.</p>
+        </div>
+    </header>
 
-<section class="section">
+    <main class="container my-5">
+        <section id="overview" class="mb-5">
+            <h2>📊 Dataset Overview</h2>
+            <p>The dataset captures daily patterns across several key metrics including study hours, sleep duration, and physical activity.</p>
+            <div class="row text-center mt-4">
+                <div class="col-md-4">
+                    <div class="card p-3">
+                        <h3>2,000</h3>
+                        <p>Total Records</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3">
+                        <h3>3</h3>
+                        <p>Stress Levels (Low, Med, High)</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3">
+                        <h3>8</h3>
+                        <p>Total Features</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<h2>🎯 Dataset Objective</h2>
+        <section id="insights" class="mb-5">
+            <h2>🔍 Key Insights</h2>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Study vs. Sleep:</strong> High stress levels are strongly correlated with longer study hours and shorter sleep duration.</li>
+                <li class="list-group-item"><strong>Balance is Key:</strong> Moderate stress levels typically reflect a balance between academics and physical/social activities.</li>
+                <li class="list-group-item"><strong>Academic Success:</strong> The average GPA suggests a positive relationship between balanced lifestyle habits and performance.</li>
+            </ul>
+        </section>
 
-<p>
-This dataset explores how lifestyle patterns influence student stress levels
-and academic performance. It includes lifestyle attributes such as study hours,
-sleep, social activities, physical activity and GPA.
-</p>
+        <section id="visualizations" class="mb-5">
+            <h2>📈 Data Visualizations</h2>
+            <p>Paste images or embed charts exported from your notebook here.</p>
+            <div class="placeholder-img bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
+                [Insert Plot: Stress Level Distribution Pie Chart]
+            </div>
+        </section>
+    </main>
 
-</section>
-
-
-<section class="section">
-
-<h2>📋 Dataset Features</h2>
-
-<ul>
-
-<li>🕒 Study Hours Per Day</li>
-<li>😴 Sleep Hours Per Day</li>
-<li>🏃 Physical Activity Hours</li>
-<li>🗣 Social Hours</li>
-<li>🎭 Extracurricular Hours</li>
-<li>🎓 GPA</li>
-<li>⚡ Stress Level (Low / Moderate / High)</li>
-
-</ul>
-
-</section>
-
-
-<section class="section">
-
-<h2>📊 Dataset Statistics</h2>
-
-<div class="stats">
-
-<div class="card">
-<h3>Records</h3>
-<p>2000</p>
-</div>
-
-<div class="card">
-<h3>Features</h3>
-<p>8 Columns</p>
-</div>
-
-<div class="card">
-<h3>Target Variable</h3>
-<p>Stress Level</p>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<h2>📈 Stress Level Distribution</h2>
-
-<canvas id="stressChart"></canvas>
-
-</section>
-
-
-<section class="section">
-
-<h2>📉 Key Insight</h2>
-
-<p>
-
-⚡ High stress is associated with longer study hours and less sleep.<br><br>
-
-⚖ Moderate stress shows balanced lifestyle patterns.<br><br>
-
-😊 Low stress correlates with higher physical activity and social engagement.
-
-</p>
-
-</section>
-
-
-<footer>
-
-<p>Student Lifestyle & Stress Analysis Project</p>
-
-</footer>
-
-
-<script src="script.js"></script>
-
+    <footer class="bg-dark text-white text-center py-3">
+        <p>Built for GitHub Pages | Data Analysis Project</p>
+    </footer>
 </body>
 </html>
