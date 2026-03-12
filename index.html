@@ -1,53 +1,115 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My GitHub Pages Site</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Lifestyle & Stress Analysis</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
 <header>
-  <h1>My Website</h1>
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Contact</a>
-  </nav>
+<h1>📊 Student Lifestyle & Stress Analysis</h1>
+<p>Exploring how lifestyle habits affect student stress and academic performance</p>
 </header>
 
-<section id="home" class="section">
-  <h2>Welcome</h2>
-  <p>This website is hosted using GitHub Pages.</p>
-  <button onclick="showMessage()">Click Me</button>
+<section class="section">
+
+<h2>🎯 Dataset Objective</h2>
+
+<p>
+This dataset explores how lifestyle patterns influence student stress levels
+and academic performance. It includes lifestyle attributes such as study hours,
+sleep, social activities, physical activity and GPA.
+</p>
+
 </section>
 
-<section id="about" class="section">
-  <h2>About Me</h2>
-  <p>Edit this section to describe yourself.</p>
+
+<section class="section">
+
+<h2>📋 Dataset Features</h2>
+
+<ul>
+
+<li>🕒 Study Hours Per Day</li>
+<li>😴 Sleep Hours Per Day</li>
+<li>🏃 Physical Activity Hours</li>
+<li>🗣 Social Hours</li>
+<li>🎭 Extracurricular Hours</li>
+<li>🎓 GPA</li>
+<li>⚡ Stress Level (Low / Moderate / High)</li>
+
+</ul>
+
 </section>
 
-<section id="projects" class="section">
-  <h2>Projects</h2>
-  <ul>
-    <li>Project 1</li>
-    <li>Project 2</li>
-    <li>Project 3</li>
-  </ul>
+
+<section class="section">
+
+<h2>📊 Dataset Statistics</h2>
+
+<div class="stats">
+
+<div class="card">
+<h3>Records</h3>
+<p>2000</p>
+</div>
+
+<div class="card">
+<h3>Features</h3>
+<p>8 Columns</p>
+</div>
+
+<div class="card">
+<h3>Target Variable</h3>
+<p>Stress Level</p>
+</div>
+
+</div>
+
 </section>
 
-<section id="contact" class="section">
-  <h2>Contact</h2>
-  <p>Email: example@email.com</p>
+
+<section class="section">
+
+<h2>📈 Stress Level Distribution</h2>
+
+<canvas id="stressChart"></canvas>
+
 </section>
+
+
+<section class="section">
+
+<h2>📉 Key Insight</h2>
+
+<p>
+
+⚡ High stress is associated with longer study hours and less sleep.<br><br>
+
+⚖ Moderate stress shows balanced lifestyle patterns.<br><br>
+
+😊 Low stress correlates with higher physical activity and social engagement.
+
+</p>
+
+</section>
+
 
 <footer>
-  <p>© 2026 My GitHub Website</p>
+
+<p>Student Lifestyle & Stress Analysis Project</p>
+
 </footer>
 
+
 <script src="script.js"></script>
+
 </body>
 </html>
