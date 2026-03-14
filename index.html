@@ -1,12 +1,57 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<div class="container">
-    <h1>Focus Well</h1>
-    <p>Predict your stress level using AI</p>
-    <form action="/predict" method="post">
-        <label>Sleep Quality (1-10):</label><input type="number" name="sleep" min="1" max="10" required>
-        <label>Work Load (1-10):</label><input type="number" name="work" min="1" max="10" required>
-        <label>Activity Level (1-10):</label><input type="number" name="activity" min="1" max="10" required>
-        <label>Anxiety Level (1-10):</label><input type="number" name="anxiety" min="1" max="10" required>
-        <button type="submit">CHECK STRESS LEVEL</button>
-    </form>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Well | AI Stress Insights</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <video autoplay muted loop id="bg-video">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-of-a-serene-forest-34538-large.mp4" type="video/mp4">
+    </video>
+
+    <div class="overlay"></div>
+
+    <div class="main-content">
+        <header>
+            <div class="logo">FOCUS<span>WELL</span></div>
+        </header>
+
+        <section class="hero-card">
+            <h1>Check Your Stress Level</h1>
+            <p>IMDb-inspired AI Diagnostics</p>
+            
+            <form action="/" method="POST" class="stress-form">
+                <div class="input-group">
+                    <label>Sleep Quality (1-10)</label>
+                    <input type="number" name="f1" min="1" max="10" placeholder="eg. 8" required>
+                </div>
+                <div class="input-group">
+                    <label>Work Load (1-10)</label>
+                    <input type="number" name="f2" min="1" max="10" placeholder="eg. 4" required>
+                </div>
+                <div class="input-group">
+                    <label>Activity Level (1-10)</label>
+                    <input type="number" name="f3" min="1" max="10" placeholder="eg. 7" required>
+                </div>
+                <div class="input-group">
+                    <label>Anxiety Level (1-10)</label>
+                    <input type="number" name="f4" min="1" max="10" placeholder="eg. 2" required>
+                </div>
+                <button type="submit" class="imdb-btn">GET SCORE</button>
+            </form>
+
+            {% if result %}
+            <div class="result-box" id="result">
+                <h2 class="status">{{ result }}</h2>
+                <p class="advice">{{ advice }}</p>
+                <a href="/" class="reset-link">Try Again</a>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+
+</body>
+</html>
