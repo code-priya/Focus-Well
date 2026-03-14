@@ -1,71 +1,59 @@
-# Stress Level Prediction
+# Focus Well - AI-Powered Stress Management Platform
 
-This project is a web application that predicts stress levels based on various input factors. It uses a machine learning model to make predictions and provides a user-friendly interface for input and result display.
+![Focus Well Banner](assets/images/banner.png)
 
-## Features
+## 🧠 About Focus Well
 
-- User input form for various stress-related factors
-- Machine learning model (Decision Tree Classifier) for stress level prediction
-- Responsive web design with custom styling
-- Input validation to ensure data integrity
-- Error handling for invalid inputs
+Focus Well is an interactive, AI-powered web application designed to help users understand and manage their stress levels. Using machine learning algorithms, the platform analyzes user responses to a comprehensive questionnaire and provides personalized stress management recommendations.
 
-## Technologies Used
+## ✨ Features
 
-- Python
-- Flask
-- scikit-learn
-- pandas
-- numpy
-- HTML/CSS
-- JavaScript
+- **AI-Powered Stress Assessment**: Advanced ML algorithms predict stress levels based on user responses
+- **Interactive Questionnaire**: Engaging 10-question assessment with intuitive interface
+- **Personalized Recommendations**: Custom stress management strategies based on individual results
+- **Visual Analytics**: Beautiful charts and visualizations to understand stress patterns
+- **Resource Library**: Curated content for stress management techniques
+- **Responsive Design**: Seamless experience across all devices
 
-## Project Structure
+## 🚀 Live Demo
 
-- `app.py`: Main Flask application file containing the server-side logic and machine learning model
-- `templates/`: Directory containing HTML templates
-  - `login.html`: Input form for user data
-  - `result.html`: Displays the predicted stress level
-  - `error.html`: Error page for invalid inputs
-- `static/`: Directory for static files
-  - `styles.css`: Custom CSS styles for the application
-- `StressLevelDataset.csv`: Dataset used for training the model (not included in the repository)
+[View Live Demo](https://your-username.github.io/focus-well)
 
-## Setup and Running the Application
+## 🛠️ Technologies Used
 
-1. Clone the repository:
-   ```sh
-   https://github.com/venky-1710/stress-level-predection.git
-   ```
-2. Install the required dependencies:
-   ```sh
-   pip install flask pandas numpy scikit-learn
-   ```
-3. Ensure you have the `StressLevelDataset.csv` file in the project root directory.
+- HTML5
+- CSS3 (with modern animations and gradients)
+- JavaScript (ES6+)
+- Chart.js for data visualization
+- Font Awesome icons
+- Google Fonts (Poppins)
 
-4. Run the Flask application:
-   ```sh
-   python app.py
-   ```
-5. Open a web browser and navigate to `http://localhost:5000` to use the application.
+## 📋 Prerequisites
 
-## How to Use
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Basic understanding of HTML/CSS/JavaScript (for development)
+- Git (for cloning the repository)
 
-1. Fill in the form with your stress-related factors. Each field has a specified range of values.
-2. Click the "Submit" button to get your predicted stress level.
-3. The result page will display your predicted stress level based on the input factors.
+## 🔧 Installation & Setup
 
-## Future Improvements
+### Method 1: Direct Download
 
-- Implement user authentication and data storage
-- Add more detailed explanations for each input factor
-- Incorporate additional machine learning models for comparison
-- Develop a feature to track stress levels over time
+1. Download the project files as ZIP
+2. Extract the files to your desired location
+3. Open `index.html` in your browser
 
-## Contributing
+### Method 2: Using Git
 
-Contributions to improve the project are welcome. Please feel free to fork the repository and submit pull requests.
+```bash
+# Clone the repository
+git clone https://github.com/your-username/focus-well.git
 
-## License
+# Navigate to project directory
+cd focus-well
 
-This project is open source and available under the [MIT License](LICENSE).
+# Open in browser
+open index.html  # On macOS
+# OR
+start index.html # On Windows
+# OR
+xdg-open index.html # On Linux
