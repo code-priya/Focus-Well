@@ -3,204 +3,644 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus Well - AI-Powered Stress Management</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>FocusWell - Student Study & Wellness Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Main Container */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .date-display {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Navigation */
+        .nav-menu {
+            display: flex;
+            background: #f8f9fa;
+            padding: 10px;
+            gap: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .nav-item:hover {
+            background: #e9ecef;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        /* Screen Containers */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        /* Home Dashboard Styles */
+        .goal-progress {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            width: 75%;
+        }
+
+        .reminder-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .reminder-time {
+            color: #667eea;
+            font-weight: 600;
+            min-width: 60px;
+        }
+
+        /* Study Planner Styles */
+        .deadline-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .deadline-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Mood Check Styles */
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .mood-btn {
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 15px;
+            background: #f8f9fa;
+            font-size: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.1);
+            background: #e9ecef;
+        }
+
+        .mood-btn.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .supportive-response {
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Progress Tracking Styles */
+        .stats-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .motivation-quote {
+            font-style: italic;
+            font-size: 18px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Accessibility Features */
+        .high-contrast {
+            filter: contrast(150%);
+        }
+
+        .large-text {
+            font-size: 18px;
+        }
+
+        .focus-outline :focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+            }
+            
+            .mood-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
+    <div class="app-container">
+        <header class="header">
             <div class="logo">
-                <i class="fas fa-brain"></i>
-                <span>Focus Well</span>
+                <div class="logo-icon">F</div>
+                <h1>FocusWell</h1>
             </div>
-            <ul class="nav-menu">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="stress-test.html">Stress Test</a></li>
-                <li><a href="resources.html">Resources</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-            <div class="nav-buttons">
-                <button class="btn btn-outline">Sign In</button>
-                <button class="btn btn-primary">Get Started</button>
-            </div>
-        </div>
-    </nav>
+            <div class="date-display" id="currentDate"></div>
+        </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Understand Your Stress, <span class="gradient-text">Take Control</span></h1>
-            <p>Using advanced AI to analyze your stress levels and provide personalized wellness strategies</p>
-            <div class="hero-buttons">
-                <a href="stress-test.html" class="btn btn-primary btn-large">Take Stress Assessment <i class="fas fa-arrow-right"></i></a>
-                <a href="#features" class="btn btn-outline btn-large">Learn More</a>
-            </div>
-            <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-number">10K+</span>
-                    <span class="stat-label">Users Helped</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">95%</span>
-                    <span class="stat-label">Accuracy Rate</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">24/7</span>
-                    <span class="stat-label">Support</span>
-                </div>
-            </div>
-        </div>
-        <div class="hero-image">
-            <div class="floating-card card-1">
-                <i class="fas fa-heartbeat"></i>
-                <span>Stress Level: 45%</span>
-            </div>
-            <div class="floating-card card-2">
-                <i class="fas fa-meditation"></i>
-                <span>Recommended: Meditation</span>
-            </div>
-            <div class="floating-card card-3">
-                <i class="fas fa-moon"></i>
-                <span>Sleep Quality: Good</span>
-            </div>
-        </div>
-    </section>
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+            <div class="nav-item active" onclick="showScreen('home')">🏠 Home Dashboard</div>
+            <div class="nav-item" onclick="showScreen('planner')">📅 Study Planner</div>
+            <div class="nav-item" onclick="showScreen('mood')">😊 Mood Check</div>
+            <div class="nav-item" onclick="showScreen('progress')">📊 Progress</div>
+        </nav>
 
-    <section id="features" class="features">
-        <h2>How Focus Well Helps You</h2>
-        <p class="section-subtitle">Our AI-powered platform provides comprehensive stress management solutions</p>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <h3>AI-Powered Analysis</h3>
-                <p>Advanced machine learning algorithms analyze your responses to accurately predict stress levels</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <h3>Track Progress</h3>
-                <p>Monitor your stress levels over time with detailed analytics and insights</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-spa"></i>
-                </div>
-                <h3>Personalized Recommendations</h3>
-                <p>Get customized stress management techniques based on your unique profile</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <h3>Community Support</h3>
-                <p>Connect with others on similar journeys and share experiences</p>
-            </div>
-        </div>
-    </section>
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Home Dashboard Screen -->
+            <div id="homeScreen" class="screen active">
+                <div class="grid-2">
+                    <div class="card">
+                        <h2 class="card-title">🎯 Today's Goals</h2>
+                        <div class="goal-progress">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Study Progress</span>
+                                <span>75%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                        <div class="reminder-item">
+                            <span class="reminder-time">10:00</span>
+                            <span>📚 Complete Math Assignment</span>
+                        </div>
+                        <div class="reminder-item">
+                            <span class="reminder-time">14:00</span>
+                            <span>📖 Review Physics Notes</span>
+                        </div>
+                        <div class="reminder-item">
+                            <span class="reminder-time">16:00</span>
+                            <span>🧘 Take a Break & Meditate</span>
+                        </div>
+                    </div>
 
-    <section class="how-it-works">
-        <h2>Simple 3-Step Process</h2>
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <i class="fas fa-question-circle"></i>
-                <h3>Answer Questions</h3>
-                <p>Take our comprehensive stress assessment questionnaire</p>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <i class="fas fa-chart-pie"></i>
-                <h3>Get Analysis</h3>
-                <p>Our AI analyzes your responses and predicts stress levels</p>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <i class="fas fa-check-circle"></i>
-                <h3>Take Action</h3>
-                <p>Receive personalized strategies to manage your stress</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="testimonial">
-        <h2>What Our Users Say</h2>
-        <div class="testimonial-container">
-            <div class="testimonial-card">
-                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
-                <p>"Focus Well helped me understand my stress patterns better than any other app. The personalized recommendations actually work!"</p>
-                <h4>Sarah Johnson</h4>
-                <span>Marketing Professional</span>
-                <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                    <div class="card">
+                        <h2 class="card-title">⭐ Quick Actions</h2>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <button class="btn" onclick="showScreen('planner')">Create Study Plan</button>
+                            <button class="btn" onclick="showScreen('mood')">Check-in Mood</button>
+                            <button class="btn" onclick="showScreen('progress')">View Progress</button>
+                        </div>
+                        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                            <h3 style="margin-bottom: 10px;">💡 Daily Motivation</h3>
+                            <p>"Small progress is still progress. Keep going!"</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="testimonial-card">
-                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
-                <p>"The AI predictions are surprisingly accurate. It's like having a personal wellness coach available 24/7."</p>
-                <h4>Michael Chen</h4>
-                <span>Software Engineer</span>
-                <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+
+            <!-- Study Planner Screen -->
+            <div id="plannerScreen" class="screen">
+                <div class="card">
+                    <h2 class="card-title">📅 Create Your Study Schedule</h2>
+                    <div class="deadline-input">
+                        <input type="text" id="deadlineInput" placeholder="Enter deadline (e.g., Math Exam - Friday)">
+                        <input type="date" id="deadlineDate">
+                        <button class="btn" onclick="addDeadline()">Add Deadline</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">📚 Your Personalized Schedule</h2>
+                    <div id="scheduleList">
+                        <div class="schedule-item">
+                            <div style="flex: 1;">
+                                <strong>Math Exam</strong> - Due Friday
+                                <div style="color: #666; font-size: 14px;">Recommended: Study 2 hours today</div>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div style="flex: 1;">
+                                <strong>Physics Assignment</strong> - Due Wednesday
+                                <div style="color: #666; font-size: 14px;">Recommended: Study 1.5 hours today</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Focus Well</h4>
-                <p>Your AI-powered companion for stress management and mental wellness</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
+            <!-- Mood Check Screen -->
+            <div id="moodScreen" class="screen">
+                <div class="card">
+                    <h2 class="card-title">😊 How are you feeling today?</h2>
+                    <div class="mood-grid">
+                        <button class="mood-btn" onclick="selectMood('great')">😄</button>
+                        <button class="mood-btn" onclick="selectMood('good')">🙂</button>
+                        <button class="mood-btn" onclick="selectMood('okay')">😐</button>
+                        <button class="mood-btn" onclick="selectMood('stressed')">😰</button>
+                        <button class="mood-btn" onclick="selectMood('tired')">😴</button>
+                    </div>
+
+                    <div id="moodResponse" class="supportive-response">
+                        <p>Select a mood above to receive a supportive message.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">💭 Quick Stress Relief</h2>
+                    <div style="display: grid; gap: 15px;">
+                        <button class="btn" onclick="showBreathingExercise()">Take a Deep Breath</button>
+                        <button class="btn" onclick="showPositiveAffirmation()">Positive Affirmation</button>
+                    </div>
+                    <div id="wellnessTip" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                        Click a button for a quick wellness tip.
+                    </div>
                 </div>
             </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="stress-test.html">Stress Test</a></li>
-                    <li><a href="resources.html">Resources</a></li>
-                    <li><a href="about.html">About</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Meditation Guides</a></li>
-                    <li><a href="#">Expert Advice</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Contact</h4>
-                <ul>
-                    <li><i class="fas fa-envelope"></i> support@focuswell.com</li>
-                    <li><i class="fas fa-phone"></i> +1 (888) 123-4567</li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Focus Well. All rights reserved.</p>
-        </div>
-    </footer>
 
-    <script src="js/main.js"></script>
+            <!-- Progress Tracking Screen -->
+            <div id="progressScreen" class="screen">
+                <div class="grid-2">
+                    <div class="stats-card">
+                        <h3>📊 Completed Tasks</h3>
+                        <div class="stat-number">24</div>
+                        <p>This Month</p>
+                    </div>
+                    
+                    <div class="stats-card" style="background: linear-gradient(135deg, #764ba2, #667eea);">
+                        <h3>⭐ Study Streak</h3>
+                        <div class="stat-number">7</div>
+                        <p>Days in a row</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">📈 Weekly Progress</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 150px; gap: 10px;">
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #667eea; height: 80px; border-radius: 8px 8px 0 0;"></div>
+                            <span>Mon</span>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #667eea; height: 120px; border-radius: 8px 8px 0 0;"></div>
+                            <span>Tue</span>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #667eea; height: 100px; border-radius: 8px 8px 0 0;"></div>
+                            <span>Wed</span>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #667eea; height: 140px; border-radius: 8px 8px 0 0;"></div>
+                            <span>Thu</span>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #667eea; height: 90px; border-radius: 8px 8px 0 0;"></div>
+                            <span>Fri</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="motivation-quote">
+                    "You've completed 24 tasks this month! Keep up the amazing work. Remember, every step forward is progress, no matter how small."
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Screen navigation
+        function showScreen(screenName) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected screen
+            document.getElementById(screenName + 'Screen').classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+
+        // Update current date
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Mood selection
+        function selectMood(mood) {
+            // Remove selected class from all mood buttons
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked button
+            event.target.classList.add('selected');
+            
+            // Show supportive response
+            const responses = {
+                great: "That's wonderful to hear! Your positive energy will help you tackle your studies with enthusiasm. Keep shining! ✨",
+                good: "Glad you're feeling good! Remember to maintain this positive momentum. You've got this! 💪",
+                okay: "It's okay to feel just okay. Sometimes the best thing we can do is acknowledge our feelings and take a small step forward. 🌱",
+                stressed: "It's normal to feel stressed with studies. Take a deep breath. Remember, you're doing your best, and that's enough. Would you like to try a quick breathing exercise? 🧘",
+                tired: "Rest is important too! Make sure to take breaks and get some rest. Your brain needs time to recharge. Here's a gentle reminder to be kind to yourself. 💤"
+            };
+            
+            document.getElementById('moodResponse').innerHTML = `<p>${responses[mood]}</p>`;
+        }
+
+        // Breathing exercise
+        function showBreathingExercise() {
+            document.getElementById('wellnessTip').innerHTML = `
+                <h4 style="margin-bottom: 10px;">🌬️ 4-7-8 Breathing Exercise</h4>
+                <p>1. Inhale quietly through your nose for 4 seconds<br>
+                2. Hold your breath for 7 seconds<br>
+                3. Exhale completely through your mouth for 8 seconds<br>
+                Repeat 3-4 times. Feel the calm wash over you.</p>
+            `;
+        }
+
+        // Positive affirmation
+        function showPositiveAffirmation() {
+            const affirmations = [
+                "I am capable of handling whatever comes my way today.",
+                "My mind is calm, and my heart is open to learning.",
+                "I have the power to create positive change in my life.",
+                "Every challenge is an opportunity to grow stronger.",
+                "I am proud of myself for showing up and trying my best."
+            ];
+            
+            const random = affirmations[Math.floor(Math.random() * affirmations.length)];
+            document.getElementById('wellnessTip').innerHTML = `
+                <h4 style="margin-bottom: 10px;">💫 Today's Affirmation</h4>
+                <p style="font-size: 18px;">"${random}"</p>
+            `;
+        }
+
+        // Add deadline to study planner
+        function addDeadline() {
+            const input = document.getElementById('deadlineInput');
+            const date = document.getElementById('deadlineDate').value;
+            
+            if (input.value.trim() !== '') {
+                const scheduleList = document.getElementById('scheduleList');
+                const newSchedule = document.createElement('div');
+                newSchedule.className = 'schedule-item';
+                
+                // Calculate recommended study time based on deadline
+                const today = new Date();
+                const deadlineDate = new Date(date);
+                const daysUntilDeadline = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                const recommendedHours = daysUntilDeadline > 0 ? Math.min(4, Math.ceil(8 / daysUntilDeadline)) : 2;
+                
+                newSchedule.innerHTML = `
+                    <div style="flex: 1;">
+                        <strong>${input.value}</strong>
+                        <div style="color: #666; font-size: 14px;">
+                            ${daysUntilDeadline > 0 ? `Due in ${daysUntilDeadline} days` : 'Due soon'} - 
+                            Recommended: Study ${recommendedHours} hours today
+                        </div>
+                    </div>
+                `;
+                
+                scheduleList.appendChild(newSchedule);
+                input.value = '';
+            }
+        }
+
+        // Initialize the app
+        updateDate();
+        
+        // Add keyboard navigation for accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '1' && e.altKey) showScreen('home');
+            if (e.key === '2' && e.altKey) showScreen('planner');
+            if (e.key === '3' && e.altKey) showScreen('mood');
+            if (e.key === '4' && e.altKey) showScreen('progress');
+        });
+
+        // Add touch-friendly interactions
+        let touchStart = 0;
+        document.querySelector('.main-content').addEventListener('touchstart', function(e) {
+            touchStart = e.touches[0].clientX;
+        });
+
+        document.querySelector('.main-content').addEventListener('touchend', function(e) {
+            if (!touchStart) return;
+            
+            const touchEnd = e.changedTouches[0].clientX;
+            const diff = touchStart - touchEnd;
+            
+            const screens = ['home', 'planner', 'mood', 'progress'];
+            const currentScreen = document.querySelector('.screen.active').id.replace('Screen', '');
+            const currentIndex = screens.indexOf(currentScreen);
+            
+            if (diff > 50 && currentIndex < screens.length - 1) {
+                // Swipe left - next screen
+                showScreen(screens[currentIndex + 1]);
+            } else if (diff < -50 && currentIndex > 0) {
+                // Swipe right - previous screen
+                showScreen(screens[currentIndex - 1]);
+            }
+            
+            touchStart = 0;
+        });
+    </script>
 </body>
 </html>
