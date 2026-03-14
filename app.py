@@ -1,61 +1,35 @@
-import numpy as np
-import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
 from flask import Flask, render_template, request
+import pickle
+import numpy as np
 
-app = Flask(__name__, template_folder='templates')  # Specify the directory for templates
+app = Flask(__name__)
 
-# Load dataset
-data = pd.read_csv("StressLevelDataset.csv")
-encoder = LabelEncoder()
-data["stress_level"] = encoder.fit_transform(data["stress_level"])
+# Load the model
+with open('stress_model.pkl', 'rb') as f:
+    model = pickle.load(f)
 
-# Split dataset into features and target
-X = data.drop("stress_level", axis=1)
-y = data["stress_level"]
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+@app.route('/predict', methods=['POST'])
+def predict():
+    # Get data from form
+    features = [int(x) for x in request.form.values()]
+    final_features = [np.array(features)]
+    prediction = model.predict(final_features)
+    
+    levels = ["Low Stress", "Moderate Stress", "High Stress"]
+    tips = [
+        "You're doing great! Keep maintaining your work-life balance.",
+        "Consider taking short breaks and practicing deep breathing exercises.",
+        "It's time to prioritize rest. Maybe try meditation or talk to a friend."
+    ]
+    
+    res = levels[prediction[0]]
+    advice = tips[prediction[0]]
+    
+    return render_template('result.html', prediction=res, advice=advice)
 
-# Train a decision tree classifier
-tree_clf = DecisionTreeClassifier(max_depth=7, random_state=100)
-tree_clf.fit(X_train, y_train)
-
-# Route for login page
-@app.route('/', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        try:
-            # Get user input from the form
-            anxiety_level = float(request.form.get('anxiety_level'))
-            mental_health_history = float(request.form.get('mental_health_history'))
-            depression = float(request.form.get('depression'))
-            headache = float(request.form.get('headache'))
-            sleep_quality = float(request.form.get('sleep_quality'))
-            breathing_problem = float(request.form.get('breathing_problem'))
-            living_conditions = float(request.form.get('living_conditions'))
-            academic_performance = float(request.form.get('academic_performance'))
-            study_load = float(request.form.get('study_load'))
-            future_career_concerns = float(request.form.get('future_career_concerns'))
-            extracurricular_activities = float(request.form.get('extracurricular_activities'))
-
-            # Predict stress level
-            user_input = np.array([[anxiety_level, mental_health_history, depression, headache, sleep_quality,
-                                    breathing_problem, living_conditions, academic_performance, study_load,
-                                    future_career_concerns, extracurricular_activities]])
-            predicted_stress_level = tree_clf.predict(user_input)[0]
-
-            # Map encoded label back to original class
-            predicted_stress_level = encoder.inverse_transform([predicted_stress_level])[0]
-
-            return render_template('result.html', stress_level=predicted_stress_level)
-        except ValueError:
-            error_message = "Invalid input. Please enter numeric values for all fields."
-            return render_template('error.html', error_message=error_message)
-
-    return render_template('login.html')
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
