@@ -1,0 +1,43 @@
+body {
+    background-color: #121212;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    border-top: 5px solid #f5c518;
+}
+
+h1 { color: #f5c518; text-transform: uppercase; }
+
+input, select {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    background: #333;
+    color: white;
+    border: 1px solid #444;
+}
+
+button {
+    background: #f5c518;
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.result-card {
+    border: 2px solid #f5c518;
+    padding: 20px;
+    margin-top: 20px;
+}
