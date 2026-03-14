@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <h1>Focus Well</h1>
+    <p>Predict your stress level using AI</p>
+    <form action="/predict" method="post">
+        <label>Sleep Quality (1-10):</label><input type="number" name="sleep" min="1" max="10" required>
+        <label>Work Load (1-10):</label><input type="number" name="work" min="1" max="10" required>
+        <label>Activity Level (1-10):</label><input type="number" name="activity" min="1" max="10" required>
+        <label>Anxiety Level (1-10):</label><input type="number" name="anxiety" min="1" max="10" required>
+        <button type="submit">CHECK STRESS LEVEL</button>
+    </form>
+</div>
