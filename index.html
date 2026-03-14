@@ -3,55 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus Well | AI Stress Insights</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Focus Well - AI-Powered Stress Management</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-
-    <video autoplay muted loop id="bg-video">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-of-a-serene-forest-34538-large.mp4" type="video/mp4">
-    </video>
-
-    <div class="overlay"></div>
-
-    <div class="main-content">
-        <header>
-            <div class="logo">FOCUS<span>WELL</span></div>
-        </header>
-
-        <section class="hero-card">
-            <h1>Check Your Stress Level</h1>
-            <p>IMDb-inspired AI Diagnostics</p>
-            
-            <form action="/" method="POST" class="stress-form">
-                <div class="input-group">
-                    <label>Sleep Quality (1-10)</label>
-                    <input type="number" name="f1" min="1" max="10" placeholder="eg. 8" required>
-                </div>
-                <div class="input-group">
-                    <label>Work Load (1-10)</label>
-                    <input type="number" name="f2" min="1" max="10" placeholder="eg. 4" required>
-                </div>
-                <div class="input-group">
-                    <label>Activity Level (1-10)</label>
-                    <input type="number" name="f3" min="1" max="10" placeholder="eg. 7" required>
-                </div>
-                <div class="input-group">
-                    <label>Anxiety Level (1-10)</label>
-                    <input type="number" name="f4" min="1" max="10" placeholder="eg. 2" required>
-                </div>
-                <button type="submit" class="imdb-btn">GET SCORE</button>
-            </form>
-
-            {% if result %}
-            <div class="result-box" id="result">
-                <h2 class="status">{{ result }}</h2>
-                <p class="advice">{{ advice }}</p>
-                <a href="/" class="reset-link">Try Again</a>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Focus Well</span>
             </div>
-            {% endif %}
-        </section>
-    </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="stress-test.html">Stress Test</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="btn btn-outline">Sign In</button>
+                <button class="btn btn-primary">Get Started</button>
+            </div>
+        </div>
+    </nav>
 
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Understand Your Stress, <span class="gradient-text">Take Control</span></h1>
+            <p>Using advanced AI to analyze your stress levels and provide personalized wellness strategies</p>
+            <div class="hero-buttons">
+                <a href="stress-test.html" class="btn btn-primary btn-large">Take Stress Assessment <i class="fas fa-arrow-right"></i></a>
+                <a href="#features" class="btn btn-outline btn-large">Learn More</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Users Helped</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Accuracy Rate</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-card card-1">
+                <i class="fas fa-heartbeat"></i>
+                <span>Stress Level: 45%</span>
+            </div>
+            <div class="floating-card card-2">
+                <i class="fas fa-meditation"></i>
+                <span>Recommended: Meditation</span>
+            </div>
+            <div class="floating-card card-3">
+                <i class="fas fa-moon"></i>
+                <span>Sleep Quality: Good</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <h2>How Focus Well Helps You</h2>
+        <p class="section-subtitle">Our AI-powered platform provides comprehensive stress management solutions</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI-Powered Analysis</h3>
+                <p>Advanced machine learning algorithms analyze your responses to accurately predict stress levels</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Track Progress</h3>
+                <p>Monitor your stress levels over time with detailed analytics and insights</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <h3>Personalized Recommendations</h3>
+                <p>Get customized stress management techniques based on your unique profile</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Community Support</h3>
+                <p>Connect with others on similar journeys and share experiences</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <h2>Simple 3-Step Process</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <i class="fas fa-question-circle"></i>
+                <h3>Answer Questions</h3>
+                <p>Take our comprehensive stress assessment questionnaire</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <i class="fas fa-chart-pie"></i>
+                <h3>Get Analysis</h3>
+                <p>Our AI analyzes your responses and predicts stress levels</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <i class="fas fa-check-circle"></i>
+                <h3>Take Action</h3>
+                <p>Receive personalized strategies to manage your stress</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial">
+        <h2>What Our Users Say</h2>
+        <div class="testimonial-container">
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
+                <p>"Focus Well helped me understand my stress patterns better than any other app. The personalized recommendations actually work!"</p>
+                <h4>Sarah Johnson</h4>
+                <span>Marketing Professional</span>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                <p>"The AI predictions are surprisingly accurate. It's like having a personal wellness coach available 24/7."</p>
+                <h4>Michael Chen</h4>
+                <span>Software Engineer</span>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Focus Well</h4>
+                <p>Your AI-powered companion for stress management and mental wellness</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="stress-test.html">Stress Test</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Meditation Guides</a></li>
+                    <li><a href="#">Expert Advice</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul>
+                    <li><i class="fas fa-envelope"></i> support@focuswell.com</li>
+                    <li><i class="fas fa-phone"></i> +1 (888) 123-4567</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Focus Well. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
 </body>
 </html>
