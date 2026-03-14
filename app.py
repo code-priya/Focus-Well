@@ -4,32 +4,36 @@ import numpy as np
 
 app = Flask(__name__)
 
-# Load the model
-with open('stress_model.pkl', 'rb') as f:
-    model = pickle.load(f)
+# Load the model (Ensure you have run model.py first to create this file)
+try:
+    with open('stress_model.pkl', 'rb') as f:
+        model = pickle.load(f)
+except FileNotFoundError:
+    model = None
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('index.html')
+    if request.method == 'POST':
+        # Processing prediction
+        try:
+            features = [int(x) for x in request.form.values()]
+            prediction = model.predict([np.array(features)])
+            
+            levels = ["Low Stress", "Moderate Stress", "High Stress"]
+            tips = [
+                "Stay Gold! Your balance is perfect. Keep doing what you love.",
+                "Take a breather. A 10-minute walk could change your day.",
+                "Priority: YOU. It's time to unplug and seek calm."
+            ]
+            
+            return render_template('index.html', 
+                                   result=levels[prediction[0]], 
+                                   advice=tips[prediction[0]],
+                                   scroll_to_result=True)
+        except Exception as e:
+            return render_template('index.html', error="Please enter valid numbers.")
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    # Get data from form
-    features = [int(x) for x in request.form.values()]
-    final_features = [np.array(features)]
-    prediction = model.predict(final_features)
-    
-    levels = ["Low Stress", "Moderate Stress", "High Stress"]
-    tips = [
-        "You're doing great! Keep maintaining your work-life balance.",
-        "Consider taking short breaks and practicing deep breathing exercises.",
-        "It's time to prioritize rest. Maybe try meditation or talk to a friend."
-    ]
-    
-    res = levels[prediction[0]]
-    advice = tips[prediction[0]]
-    
-    return render_template('result.html', prediction=res, advice=advice)
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
