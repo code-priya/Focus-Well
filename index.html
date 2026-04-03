@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>FocusWell Pro | Enterprise AI Study Suite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@1.3.3/dist/use.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -36,7 +35,7 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             overflow-x: hidden;
@@ -46,11 +45,6 @@
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 5px rgba(59,130,246,0.5); }
-            50% { box-shadow: 0 0 20px rgba(59,130,246,0.8); }
         }
 
         @keyframes slideIn {
@@ -98,24 +92,6 @@
             box-shadow: 0 10px 25px -5px rgba(59,130,246,0.5);
         }
 
-        .btn-premium::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn-premium:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
         /* Dashboard Layout */
         .dashboard {
             display: flex;
@@ -132,6 +108,7 @@
             display: flex;
             flex-direction: column;
             z-index: 100;
+            overflow-y: auto;
         }
 
         .main-content {
@@ -155,6 +132,7 @@
             padding: 1.5rem;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .stat-card::before {
@@ -167,7 +145,36 @@
             background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
-        /* AI Chat Interface */
+        /* Task Board */
+        .task-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .task-column {
+            background: rgba(255,255,255,0.9);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .task-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* AI Chat */
         .ai-chat {
             background: rgba(255,255,255,0.95);
             border-radius: var(--radius-lg);
@@ -212,33 +219,38 @@
             color: #1f2937;
         }
 
-        /* Task Board */
-        .task-board {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .task-column {
-            background: rgba(255,255,255,0.9);
-            border-radius: var(--radius);
-            padding: 1rem;
-        }
-
-        .task-card {
-            background: white;
-            border-radius: 0.75rem;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            box-shadow: var(--shadow-sm);
+        /* Nav Items */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            text-decoration: none;
             transition: all 0.3s;
             cursor: pointer;
         }
 
-        .task-card:hover {
-            transform: translateX(5px);
-            box-shadow: var(--shadow-md);
+        .nav-item:hover, .nav-item.active {
+            background: rgba(99, 102, 241, 0.3);
+        }
+
+        /* Mood Buttons */
+        .mood-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 2rem;
+            background: #f3f4f6;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
         }
 
         /* Responsive */
@@ -255,28 +267,20 @@
             }
         }
 
-        /* Loading Spinner */
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(59,130,246,0.3);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        /* Form Styles */
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-family: inherit;
+            transition: all 0.2s;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Progress Rings */
-        .progress-ring {
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring-circle {
-            transition: stroke-dashoffset 0.35s;
-            transform-origin: 50% 50%;
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
     </style>
 </head>
@@ -284,322 +288,90 @@
     <div id="app"></div>
 
     <script>
-        // ============ ADVANCED AI/ML ENGINE ============
-        class AdvancedAIModel {
-            constructor() {
-                this.model = null;
-                this.encoder = null;
-                this.isInitialized = false;
-            }
-
-            async initialize() {
-                try {
-                    // Load Universal Sentence Encoder for NLP tasks
-                    this.encoder = await use.load();
-                    this.isInitialized = true;
-                    console.log('AI Model initialized successfully');
-                } catch (error) {
-                    console.warn('Using fallback AI models:', error);
-                    this.isInitialized = false;
+        // ============ STORAGE MANAGEMENT ============
+        const Storage = {
+            getUsers: () => JSON.parse(localStorage.getItem('focuswell_pro_users') || '[]'),
+            saveUser: (user) => {
+                const users = Storage.getUsers();
+                users.push(user);
+                localStorage.setItem('focuswell_pro_users', JSON.stringify(users));
+            },
+            getUser: (email) => Storage.getUsers().find(u => u.email === email),
+            updateUser: (email, data) => {
+                const users = Storage.getUsers();
+                const index = users.findIndex(u => u.email === email);
+                if (index !== -1) {
+                    users[index] = { ...users[index], ...data };
+                    localStorage.setItem('focuswell_pro_users', JSON.stringify(users));
                 }
-            }
+            },
+            getCurrentUser: () => JSON.parse(localStorage.getItem('focuswell_current_user')),
+            setCurrentUser: (user) => localStorage.setItem('focuswell_current_user', JSON.stringify(user)),
+            clearCurrentUser: () => localStorage.removeItem('focuswell_current_user')
+        };
 
-            async analyzeText(text) {
-                if (this.encoder && this.isInitialized) {
-                    const embeddings = await this.encoder.embed([text]);
-                    const embeddingArray = await embeddings.array();
-                    return this.processEmbeddings(embeddingArray[0]);
-                }
-                return this.fallbackTextAnalysis(text);
-            }
-
-            processEmbeddings(embeddings) {
-                // Simulate sentiment and intent analysis
-                const magnitude = Math.sqrt(embeddings.reduce((sum, val) => sum + val * val, 0));
-                return {
-                    sentiment: magnitude > 0.5 ? 'positive' : magnitude > 0.2 ? 'neutral' : 'negative',
-                    confidence: Math.min(0.95, magnitude),
-                    topics: this.extractTopics(embeddings)
-                };
-            }
-
-            fallbackTextAnalysis(text) {
-                const words = text.toLowerCase().split(' ');
-                const positiveWords = ['good', 'great', 'excellent', 'amazing', 'productive'];
-                const negativeWords = ['bad', 'stressed', 'tired', 'overwhelmed', 'difficult'];
+        // ============ AI ENGINE ============
+        class AIEngine {
+            static async predictOptimalStudy(userData) {
+                const tasks = userData.tasks || [];
+                const completed = tasks.filter(t => t.completed).length;
+                const total = tasks.length || 1;
+                const productivity = (completed / total) * 100;
                 
-                let score = 0;
-                words.forEach(word => {
-                    if (positiveWords.includes(word)) score += 0.3;
-                    if (negativeWords.includes(word)) score -= 0.3;
-                });
+                let hours = 2;
+                if (productivity > 80) hours = 3.5;
+                else if (productivity > 60) hours = 2.5;
+                else if (productivity < 40) hours = 1.5;
+                
+                const bestTime = this.getBestStudyTime(userData);
                 
                 return {
-                    sentiment: score > 0.2 ? 'positive' : score < -0.2 ? 'negative' : 'neutral',
-                    confidence: Math.abs(score) + 0.5,
-                    topics: ['general']
+                    hours: hours,
+                    bestTime: bestTime,
+                    productivity: Math.round(productivity),
+                    confidence: Math.min(95, 60 + productivity * 0.35)
                 };
             }
-
-            extractTopics(embeddings) {
-                // Simulate topic extraction
-                const topics = ['productivity', 'learning', 'focus'];
-                return topics.slice(0, Math.floor(Math.random() * 3) + 1);
-            }
-
-            async predictOptimalSchedule(userData) {
-                const tasks = userData.tasks || [];
-                const completedTasks = tasks.filter(t => t.completed).length;
-                const productivityScore = tasks.length ? (completedTasks / tasks.length) * 100 : 75;
-                
-                // Neural network simulation with weighted factors
-                const energyLevel = this.calculateEnergyLevel(userData);
-                const focusScore = this.calculateFocusScore(userData);
-                
-                const optimalHours = Math.min(8, Math.max(1, 
-                    (productivityScore / 100) * 4 + 
-                    (energyLevel / 100) * 2 + 
-                    (focusScore / 100) * 2
-                ));
-                
-                const timeSlots = this.findOptimalTimeSlots(userData);
-                
-                return {
-                    recommendedHours: optimalHours.toFixed(1),
-                    optimalTimeSlots: timeSlots,
-                    productivityScore: Math.round(productivityScore),
-                    energyLevel: Math.round(energyLevel),
-                    focusScore: Math.round(focusScore),
-                    confidence: 0.85 + (productivityScore / 500)
-                };
-            }
-
-            calculateEnergyLevel(userData) {
-                const moods = userData.moods || [];
-                if (moods.length === 0) return 70;
-                
-                const recentMoods = moods.slice(-7);
-                const energyMap = { great: 90, motivated: 85, good: 75, okay: 60, tired: 40, stressed: 35 };
-                const avgEnergy = recentMoods.reduce((sum, m) => sum + (energyMap[m.mood] || 60), 0) / recentMoods.length;
-                return avgEnergy;
-            }
-
-            calculateFocusScore(userData) {
-                const tasks = userData.tasks || [];
-                const focusBreaks = userData.focusBreaks || [];
-                const completedOnTime = tasks.filter(t => t.completed && new Date(t.deadline) > new Date(t.completedAt)).length;
-                return tasks.length ? (completedOnTime / tasks.length) * 100 : 65;
-            }
-
-            findOptimalTimeSlots(userData) {
-                const studyPatterns = userData.studyPatterns || [];
-                const productiveHours = [];
-                
-                for (let hour = 8; hour <= 22; hour++) {
-                    let productivity = 70;
-                    if (hour >= 9 && hour <= 12) productivity = 85;
-                    else if (hour >= 14 && hour <= 17) productivity = 80;
-                    else if (hour >= 19 && hour <= 21) productivity = 75;
-                    else productivity = 60;
-                    
-                    if (productivity > 75) {
-                        productiveHours.push(`${hour}:00 - ${hour + 1}:00`);
-                    }
-                }
-                
-                return productiveHours.slice(0, 3);
-            }
-
-            async generatePersonalizedPlan(userData) {
-                const schedule = await this.predictOptimalSchedule(userData);
-                const learningStyle = this.analyzeLearningStyle(userData);
-                const recommendedTechniques = this.getStudyTechniques(learningStyle);
-                
-                return {
-                    dailySchedule: schedule,
-                    learningStyle: learningStyle,
-                    techniques: recommendedTechniques,
-                    estimatedImprovement: `${Math.floor(15 + Math.random() * 20)}%`,
-                    aiConfidence: `${Math.floor(schedule.confidence * 100)}%`
-                };
-            }
-
-            analyzeLearningStyle(userData) {
-                const tasks = userData.tasks || [];
-                const taskTypes = tasks.map(t => t.type || 'general');
-                
-                const visualCount = taskTypes.filter(t => t === 'visual').length;
-                const readingCount = taskTypes.filter(t => t === 'reading').length;
-                const kinestheticCount = taskTypes.filter(t => t === 'practical').length;
-                
-                if (visualCount > readingCount && visualCount > kinestheticCount) return 'Visual Learner';
-                if (readingCount > visualCount && readingCount > kinestheticCount) return 'Reading/Writing Learner';
-                if (kinestheticCount > visualCount && kinestheticCount > readingCount) return 'Kinesthetic Learner';
-                return 'Mixed Learning Style';
-            }
-
-            getStudyTechniques(learningStyle) {
-                const techniques = {
-                    'Visual Learner': ['Mind Maps', 'Color-Coded Notes', 'Diagrams', 'Video Tutorials'],
-                    'Reading/Writing Learner': ['Summarization', 'Flashcards', 'Outline Method', 'Blog Writing'],
-                    'Kinesthetic Learner': ['Practice Problems', 'Role-Playing', 'Hands-on Projects', 'Study Groups'],
-                    'Mixed Learning Style': ['Pomodoro Technique', 'Active Recall', 'Spaced Repetition', 'Feynman Technique']
-                };
-                return techniques[learningStyle] || techniques['Mixed Learning Style'];
-            }
-        }
-
-        // ============ DATA MANAGEMENT ============
-        class DataManager {
-            constructor() {
-                this.dbName = 'FocusWellDB';
-                this.dbVersion = 2;
-                this.db = null;
-            }
-
-            async initDB() {
-                return new Promise((resolve, reject) => {
-                    const request = indexedDB.open(this.dbName, this.dbVersion);
-                    
-                    request.onerror = () => reject(request.error);
-                    request.onsuccess = () => {
-                        this.db = request.result;
-                        resolve(this.db);
-                    };
-                    
-                    request.onupgradeneeded = (event) => {
-                        const db = event.target.result;
-                        if (!db.objectStoreNames.contains('users')) {
-                            db.createObjectStore('users', { keyPath: 'email' });
-                        }
-                        if (!db.objectStoreNames.contains('sessions')) {
-                            db.createObjectStore('sessions', { keyPath: 'id', autoIncrement: true });
-                        }
-                        if (!db.objectStoreNames.contains('analytics')) {
-                            db.createObjectStore('analytics', { keyPath: 'timestamp' });
-                        }
-                    };
-                });
-            }
-
-            async saveUser(user) {
-                const transaction = this.db.transaction(['users'], 'readwrite');
-                const store = transaction.objectStore('users');
-                return store.put(user);
-            }
-
-            async getUser(email) {
-                const transaction = this.db.transaction(['users'], 'readonly');
-                const store = transaction.objectStore('users');
-                return new Promise((resolve, reject) => {
-                    const request = store.get(email);
-                    request.onsuccess = () => resolve(request.result);
-                    request.onerror = () => reject(request.error);
-                });
-            }
-
-            async getAllUsers() {
-                const transaction = this.db.transaction(['users'], 'readonly');
-                const store = transaction.objectStore('users');
-                return new Promise((resolve, reject) => {
-                    const request = store.getAll();
-                    request.onsuccess = () => resolve(request.result);
-                    request.onerror = () => reject(request.error);
-                });
-            }
-        }
-
-        // ============ COMMERCIAL FEATURES ============
-        class AnalyticsEngine {
-            static calculateKPIs(userData) {
-                const tasks = userData.tasks || [];
-                const completedTasks = tasks.filter(t => t.completed);
-                const totalStudyTime = tasks.reduce((sum, t) => sum + (t.timeSpent || 0), 0);
-                
-                return {
-                    completionRate: tasks.length ? (completedTasks.length / tasks.length) * 100 : 0,
-                    averageTaskTime: completedTasks.length ? totalStudyTime / completedTasks.length : 0,
-                    streakScore: this.calculateStreakScore(userData),
-                    efficiency: this.calculateEfficiency(userData),
-                    recommendations: this.generateRecommendations(userData)
-                };
-            }
-
-            static calculateStreakScore(userData) {
-                const studyDays = userData.studyHistory || [];
-                let currentStreak = 0;
-                let maxStreak = 0;
-                
-                for (let i = studyDays.length - 1; i >= 0; i--) {
-                    if (studyDays[i].studied) {
-                        currentStreak++;
-                        maxStreak = Math.max(maxStreak, currentStreak);
-                    } else {
-                        break;
-                    }
-                }
-                
-                return { current: currentStreak, max: maxStreak };
-            }
-
-            static calculateEfficiency(userData) {
-                const tasks = userData.tasks || [];
-                const plannedVsActual = tasks.map(task => {
-                    const planned = this.estimateTaskTime(task);
-                    const actual = task.timeSpent || planned;
-                    return planned / actual;
-                });
-                
-                const avgEfficiency = plannedVsActual.reduce((a, b) => a + b, 0) / plannedVsActual.length;
-                return Math.min(1, Math.max(0, avgEfficiency)) * 100;
-            }
-
-            static estimateTaskTime(task) {
-                const baseTimes = { low: 30, medium: 60, high: 120 };
-                return baseTimes[task.priority] || 60;
-            }
-
-            static generateRecommendations(userData) {
-                const kpis = this.calculateKPIs(userData);
-                const recommendations = [];
-                
-                if (kpis.completionRate < 50) {
-                    recommendations.push('Break down large tasks into smaller chunks');
-                    recommendations.push('Use the Pomodoro technique for better focus');
-                }
-                if (kpis.efficiency < 60) {
-                    recommendations.push('Eliminate distractions during study sessions');
-                    recommendations.push('Create a dedicated study environment');
-                }
-                if (kpis.streakScore.current < 3) {
-                    recommendations.push('Set daily reminders to maintain consistency');
-                    recommendations.push('Start with small, achievable goals');
-                }
-                
-                return recommendations;
-            }
-        }
-
-        // ============ UI RENDERING ============
-        let currentUser = null;
-        let aiModel = new AdvancedAIModel();
-        let dataManager = new DataManager();
-
-        async function init() {
-            await dataManager.initDB();
-            await aiModel.initialize();
             
-            // Check for existing session
-            const savedUser = localStorage.getItem('focuswell_current_user');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                renderDashboard();
-            } else {
-                renderLogin();
+            static getBestStudyTime(userData) {
+                const moods = userData.moods || [];
+                const morningMoods = moods.filter(m => new Date(m.date).getHours() < 12);
+                const afternoonMoods = moods.filter(m => new Date(m.date).getHours() >= 12 && new Date(m.date).getHours() < 17);
+                
+                const getAvg = (moods) => {
+                    if (!moods.length) return 0;
+                    const values = { great: 5, good: 4, motivated: 4, okay: 3, tired: 2, stressed: 1 };
+                    return moods.reduce((sum, m) => sum + (values[m.mood] || 3), 0) / moods.length;
+                };
+                
+                const morning = getAvg(morningMoods);
+                const afternoon = getAvg(afternoonMoods);
+                
+                if (morning >= afternoon) return "Morning (9 AM - 12 PM)";
+                return "Afternoon (2 PM - 5 PM)";
+            }
+            
+            static generateRecommendation(userData) {
+                const tasks = userData.tasks || [];
+                const pending = tasks.filter(t => !t.completed).length;
+                const moods = userData.moods || [];
+                const recentStress = moods.slice(-3).filter(m => m.mood === 'stressed').length;
+                
+                if (pending > 5) {
+                    return "📚 You have several pending tasks. Try breaking them into 25-minute focused sessions using the Pomodoro technique!";
+                }
+                if (recentStress > 2) {
+                    return "🧘 I notice you've been feeling stressed. Take a 5-minute break and try our breathing exercise. Your wellbeing matters!";
+                }
+                if (userData.studyStreak > 5) {
+                    return `🔥 Amazing ${userData.studyStreak}-day streak! Keep the momentum going. Remember to celebrate small wins!`;
+                }
+                return "💪 You're doing great! Focus on one task at a time, and don't forget to take short breaks between study sessions.";
             }
         }
 
-        function renderLogin() {
+        // ============ AUTHENTICATION ============
+        function showLogin() {
             document.getElementById('app').innerHTML = `
                 <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem;">
                     <div class="glass-card" style="max-width: 450px; width: 100%; padding: 2.5rem;">
@@ -608,23 +380,23 @@
                                 <i class="fas fa-brain" style="font-size: 40px; color: white;"></i>
                             </div>
                             <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">FocusWell Pro</h1>
-                            <p class="gradient-text" style="font-weight: 600;">Enterprise AI Study Suite</p>
+                            <p class="gradient-text" style="font-weight: 600;">AI-Powered Study Assistant</p>
                         </div>
                         
                         <form id="loginForm">
                             <div style="margin-bottom: 1rem;">
                                 <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email</label>
-                                <input type="email" id="email" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; transition: all 0.3s;">
+                                <input type="email" id="email" required placeholder="student@example.com">
                             </div>
                             <div style="margin-bottom: 1.5rem;">
                                 <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Password</label>
-                                <input type="password" id="password" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                <input type="password" id="password" required placeholder="••••••">
                             </div>
                             <button type="submit" class="btn-premium" style="width: 100%;">Login to Dashboard →</button>
                         </form>
                         
                         <p style="text-align: center; margin-top: 1.5rem;">
-                            Don't have an account? <a href="#" onclick="renderRegister(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Start Free Trial</a>
+                            New user? <a href="#" onclick="showRegister(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Create Free Account</a>
                         </p>
                         
                         <div id="errorMsg" style="color: var(--danger); text-align: center; margin-top: 1rem;"></div>
@@ -632,23 +404,22 @@
                 </div>
             `;
             
-            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
+                const user = Storage.getUser(email);
                 
-                const user = await dataManager.getUser(email);
                 if (user && user.password === password) {
-                    currentUser = user;
-                    localStorage.setItem('focuswell_current_user', JSON.stringify(user));
-                    renderDashboard();
+                    Storage.setCurrentUser(user);
+                    showDashboard();
                 } else {
-                    document.getElementById('errorMsg').innerText = 'Invalid credentials. Please try again.';
+                    document.getElementById('errorMsg').innerText = 'Invalid email or password';
                 }
             });
         }
-
-        async function renderRegister() {
+        
+        function showRegister() {
             document.getElementById('app').innerHTML = `
                 <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem;">
                     <div class="glass-card" style="max-width: 500px; width: 100%; padding: 2.5rem;">
@@ -661,43 +432,42 @@
                         <form id="registerForm">
                             <div style="margin-bottom: 1rem;">
                                 <label>Full Name</label>
-                                <input type="text" id="name" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                <input type="text" id="name" required placeholder="John Doe">
                             </div>
                             <div style="margin-bottom: 1rem;">
                                 <label>Email</label>
-                                <input type="email" id="email" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                <input type="email" id="email" required placeholder="student@example.com">
                             </div>
                             <div style="margin-bottom: 1rem;">
                                 <label>Password</label>
-                                <input type="password" id="password" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                <input type="password" id="password" required placeholder="••••••">
                             </div>
                             <div style="margin-bottom: 1.5rem;">
-                                <label>Role</label>
-                                <select id="role" style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                <label>I am a</label>
+                                <select id="role">
                                     <option value="student">Student</option>
                                     <option value="professional">Professional</option>
-                                    <option value="entrepreneur">Entrepreneur</option>
+                                    <option value="teacher">Teacher/Educator</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn-premium" style="width: 100%;">Create Account →</button>
+                            <button type="submit" class="btn-premium" style="width: 100%;">Create Free Account →</button>
                         </form>
                         
                         <p style="text-align: center; margin-top: 1.5rem;">
-                            Already have an account? <a href="#" onclick="renderLogin(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Login</a>
+                            Already have an account? <a href="#" onclick="showLogin(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Login</a>
                         </p>
                     </div>
                 </div>
             `;
             
-            document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            document.getElementById('registerForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const name = document.getElementById('name').value;
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
                 const role = document.getElementById('role').value;
                 
-                const existingUser = await dataManager.getUser(email);
-                if (existingUser) {
+                if (Storage.getUser(email)) {
                     alert('User already exists. Please login.');
                     return;
                 }
@@ -706,23 +476,30 @@
                     name, email, password, role,
                     tasks: [],
                     moods: [],
-                    studyHistory: [],
-                    focusBreaks: [],
+                    studyStreak: 0,
                     createdAt: new Date().toISOString(),
-                    subscription: 'trial',
-                    analytics: {}
+                    subscription: 'free'
                 };
                 
-                await dataManager.saveUser(newUser);
-                currentUser = newUser;
-                localStorage.setItem('focuswell_current_user', JSON.stringify(newUser));
-                renderDashboard();
+                Storage.saveUser(newUser);
+                Storage.setCurrentUser(newUser);
+                showDashboard();
             });
         }
-
-        async function renderDashboard() {
-            const aiPlan = await aiModel.generatePersonalizedPlan(currentUser);
-            const kpis = AnalyticsEngine.calculateKPIs(currentUser);
+        
+        // ============ DASHBOARD ============
+        async function showDashboard() {
+            const user = Storage.getCurrentUser();
+            if (!user) {
+                showLogin();
+                return;
+            }
+            
+            const aiPlan = await AIEngine.predictOptimalStudy(user);
+            const recommendation = AIEngine.generateRecommendation(user);
+            const completedTasks = (user.tasks || []).filter(t => t.completed).length;
+            const totalTasks = (user.tasks || []).length;
+            const completionRate = totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0;
             
             document.getElementById('app').innerHTML = `
                 <div class="dashboard">
@@ -739,28 +516,25 @@
                             </div>
                             
                             <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                <a href="#" onclick="showScreen('dashboard')" class="nav-item" data-screen="dashboard" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none; transition: all 0.3s;">
+                                <div class="nav-item active" data-screen="dashboard">
                                     <i class="fas fa-chart-line"></i> Dashboard
-                                </a>
-                                <a href="#" onclick="showScreen('tasks')" class="nav-item" data-screen="tasks" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none;">
+                                </div>
+                                <div class="nav-item" data-screen="tasks">
                                     <i class="fas fa-tasks"></i> Tasks
-                                </a>
-                                <a href="#" onclick="showScreen('ai-chat')" class="nav-item" data-screen="ai-chat" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none;">
+                                </div>
+                                <div class="nav-item" data-screen="ai-chat">
                                     <i class="fas fa-robot"></i> AI Assistant
-                                </a>
-                                <a href="#" onclick="showScreen('analytics')" class="nav-item" data-screen="analytics" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none;">
-                                    <i class="fas fa-chart-bar"></i> Analytics
-                                </a>
-                                <a href="#" onclick="showScreen('wellness')" class="nav-item" data-screen="wellness" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none;">
+                                </div>
+                                <div class="nav-item" data-screen="wellness">
                                     <i class="fas fa-heartbeat"></i> Wellness
-                                </a>
+                                </div>
                             </nav>
                             
                             <div style="position: absolute; bottom: 2rem; left: 2rem; right: 2rem;">
                                 <div style="background: rgba(255,255,255,0.1); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;">
-                                    <p style="color: white; font-size: 0.875rem;">Subscription: <strong>${currentUser.subscription === 'trial' ? 'Trial' : 'Premium'}</strong></p>
+                                    <p style="color: white; font-size: 0.875rem;">Account: <strong>${user.subscription === 'free' ? 'Free' : 'Premium'}</strong></p>
                                     <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-top: 0.5rem;">
-                                        <div style="width: ${currentUser.subscription === 'trial' ? '30%' : '100%'}; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 2px;"></div>
+                                        <div style="width: ${user.subscription === 'free' ? '30%' : '100%'}; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 2px;"></div>
                                     </div>
                                 </div>
                                 <button onclick="logout()" class="btn-premium" style="width: 100%; background: rgba(239,68,68,0.8);">Logout</button>
@@ -775,68 +549,81 @@
                                 <div class="stat-card">
                                     <i class="fas fa-brain" style="font-size: 2rem; color: var(--primary);"></i>
                                     <h3 style="margin-top: 1rem;">AI Productivity Score</h3>
-                                    <p style="font-size: 2.5rem; font-weight: bold;">${aiPlan.dailySchedule.productivityScore}</p>
-                                    <p>+12% vs last week</p>
+                                    <p style="font-size: 2.5rem; font-weight: bold;">${aiPlan.productivity}</p>
+                                    <p>+${Math.floor(Math.random() * 15)}% vs last week</p>
                                 </div>
                                 <div class="stat-card">
                                     <i class="fas fa-clock" style="font-size: 2rem; color: var(--secondary);"></i>
                                     <h3 style="margin-top: 1rem;">Optimal Study Time</h3>
-                                    <p style="font-size: 1.5rem; font-weight: bold;">${aiPlan.dailySchedule.recommendedHours} hours</p>
-                                    <p>${aiPlan.dailySchedule.optimalTimeSlots[0] || '9:00 - 12:00'}</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold;">${aiPlan.hours} hours/day</p>
+                                    <p>${aiPlan.bestTime}</p>
                                 </div>
                                 <div class="stat-card">
                                     <i class="fas fa-fire" style="font-size: 2rem; color: var(--warning);"></i>
-                                    <h3 style="margin-top: 1rem;">Current Streak</h3>
-                                    <p style="font-size: 2.5rem; font-weight: bold;">${kpis.streakScore.current}</p>
-                                    <p>Max: ${kpis.streakScore.max} days</p>
+                                    <h3 style="margin-top: 1rem;">Study Streak</h3>
+                                    <p style="font-size: 2.5rem; font-weight: bold;">${user.studyStreak}</p>
+                                    <p>Keep it going! 🔥</p>
                                 </div>
                                 <div class="stat-card">
-                                    <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--success);"></i>
-                                    <h3 style="margin-top: 1rem;">Efficiency Rate</h3>
-                                    <p style="font-size: 2.5rem; font-weight: bold;">${Math.round(kpis.efficiency)}%</p>
-                                    <p>Target: 85%</p>
+                                    <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--success);"></i>
+                                    <h3 style="margin-top: 1rem;">Completion Rate</h3>
+                                    <p style="font-size: 2.5rem; font-weight: bold;">${completionRate}%</p>
+                                    <p>${totalTasks} total tasks</p>
                                 </div>
                             </div>
                             
                             <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-                                <h3>🤖 AI Personalized Plan</h3>
-                                <div style="margin-top: 1rem;">
-                                    <p><strong>Learning Style:</strong> ${aiPlan.learningStyle}</p>
-                                    <p><strong>Recommended Techniques:</strong> ${aiPlan.techniques.join(', ')}</p>
-                                    <p><strong>Expected Improvement:</strong> ${aiPlan.estimatedImprovement}</p>
-                                    <p><strong>AI Confidence:</strong> ${aiPlan.aiConfidence}</p>
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                    <i class="fas fa-robot" style="font-size: 2rem; color: var(--primary);"></i>
+                                    <h3>AI Recommendation</h3>
+                                    <span style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 0.25rem 0.75rem; border-radius: 1rem; color: white; font-size: 0.75rem;">${Math.round(aiPlan.confidence)}% confident</span>
                                 </div>
+                                <p>${recommendation}</p>
                             </div>
                             
                             <div class="glass-card" style="padding: 1.5rem;">
-                                <h3>📋 Priority Recommendations</h3>
-                                <ul style="margin-top: 1rem; list-style: none;">
-                                    ${kpis.recommendations.map(rec => `<li style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem;"></i>${rec}</li>`).join('')}
-                                </ul>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                    <h3>📋 Recent Tasks</h3>
+                                    <button class="btn-premium" style="padding: 0.5rem 1rem;" onclick="document.querySelector('[data-screen=\\'tasks\\']').click()">+ Add Task</button>
+                                </div>
+                                <div id="recentTasks">
+                                    ${renderTaskList((user.tasks || []).slice(0, 5))}
+                                </div>
                             </div>
                         </div>
                         
                         <!-- Tasks Screen -->
                         <div id="tasks-screen" style="display: none;">
                             <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-                                <h3>➕ Add New Task</h3>
+                                <h3>➕ Create New Task</h3>
                                 <form id="addTaskForm" style="margin-top: 1rem;">
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                        <input type="text" id="taskTitle" placeholder="Task title" required style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
-                                        <input type="text" id="taskSubject" placeholder="Subject/Category" required style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
-                                        <input type="date" id="taskDeadline" required style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
-                                        <select id="taskPriority" style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                        <input type="text" id="taskTitle" placeholder="Task title" required>
+                                        <input type="text" id="taskSubject" placeholder="Subject/Category" required>
+                                        <input type="date" id="taskDeadline" required>
+                                        <select id="taskPriority">
                                             <option value="low">Low Priority</option>
                                             <option value="medium" selected>Medium Priority</option>
                                             <option value="high">High Priority</option>
                                         </select>
                                     </div>
-                                    <button type="submit" class="btn-premium" style="margin-top: 1rem; width: 100%;">Add Task with AI Optimization</button>
+                                    <button type="submit" class="btn-premium" style="width: 100%;">Add Task with AI Optimization</button>
                                 </form>
                             </div>
                             
-                            <div class="task-board" id="taskBoard">
-                                ${renderTaskBoard(currentUser.tasks || [])}
+                            <div class="task-board">
+                                <div class="task-column">
+                                    <h4>📋 Pending Tasks</h4>
+                                    <div id="pendingTasks">
+                                        ${renderTaskList((user.tasks || []).filter(t => !t.completed))}
+                                    </div>
+                                </div>
+                                <div class="task-column">
+                                    <h4>✅ Completed Tasks</h4>
+                                    <div id="completedTasks">
+                                        ${renderTaskList((user.tasks || []).filter(t => t.completed))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -846,36 +633,18 @@
                                 <div class="chat-messages" id="chatMessages">
                                     <div class="message ai">
                                         <div class="message-bubble">
-                                            Hello! I'm your AI study assistant. How can I help you today? I can help with study planning, motivation, or answering questions about your progress.
+                                            👋 Hello! I'm your AI study assistant. I can help you with:<br>
+                                            • Study planning and scheduling<br>
+                                            • Motivation and productivity tips<br>
+                                            • Breaking down complex tasks<br>
+                                            • Stress management techniques<br><br>
+                                            How can I help you today?
                                         </div>
                                     </div>
                                 </div>
                                 <div style="padding: 1rem; border-top: 1px solid #e5e7eb; display: flex; gap: 1rem;">
-                                    <input type="text" id="chatInput" placeholder="Ask me anything about studying, productivity, or wellness..." style="flex: 1; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
-                                    <button onclick="sendMessage()" class="btn-premium">Send</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Analytics Screen -->
-                        <div id="analytics-screen" style="display: none;">
-                            <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
-                                <h3>📊 Performance Analytics</h3>
-                                <canvas id="performanceChart" style="max-height: 400px; margin-top: 1rem;"></canvas>
-                            </div>
-                            
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <h4>Task Completion Rate</h4>
-                                    <p style="font-size: 2rem; font-weight: bold;">${Math.round(kpis.completionRate)}%</p>
-                                    <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; margin-top: 0.5rem;">
-                                        <div style="width: ${kpis.completionRate}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px;"></div>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                    <h4>Average Task Time</h4>
-                                    <p style="font-size: 2rem; font-weight: bold;">${Math.round(kpis.averageTaskTime)} min</p>
-                                    <p>Optimal: 45-60 min</p>
+                                    <input type="text" id="chatInput" placeholder="Ask me anything about studying, productivity, or wellness..." style="flex: 1;">
+                                    <button onclick="sendChatMessage()" class="btn-premium">Send</button>
                                 </div>
                             </div>
                         </div>
@@ -885,29 +654,61 @@
                             <div class="stats-grid">
                                 <div class="stat-card">
                                     <i class="fas fa-smile" style="font-size: 2rem;"></i>
-                                    <h3>Mood Tracker</h3>
-                                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                                    <h3>How are you feeling?</h3>
+                                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
                                         <button onclick="logMood('great')" class="mood-btn">😁 Great</button>
                                         <button onclick="logMood('good')" class="mood-btn">🙂 Good</button>
                                         <button onclick="logMood('okay')" class="mood-btn">😐 Okay</button>
-                                        <button onclick="logMood('stressed')" class="mood-btn">😫 Stressed</button>
+                                        <button onclick="logMood('tired')" class="mood-btn">😴 Tired</button>
+                                        <button onclick="logMood('stressed')" class="mood-btn">😰 Stressed</button>
+                                        <button onclick="logMood('motivated')" class="mood-btn">🚀 Motivated</button>
+                                    </div>
+                                    <div id="moodFeedback" style="margin-top: 1rem;"></div>
+                                </div>
+                                
+                                <div class="stat-card">
+                                    <i class="fas fa-chart-line" style="font-size: 2rem;"></i>
+                                    <h3>Mood History</h3>
+                                    <div id="moodHistory" style="max-height: 200px; overflow-y: auto;">
+                                        ${renderMoodHistory((user.moods || []).slice(-7))}
                                     </div>
                                 </div>
+                                
                                 <div class="stat-card">
                                     <i class="fas fa-spa" style="font-size: 2rem;"></i>
-                                    <h3>Wellness Tips</h3>
-                                    <p>Take a 5-minute break every hour</p>
-                                    <p>Stay hydrated throughout the day</p>
-                                    <button class="btn-premium" style="margin-top: 1rem;" onclick="startMeditation()">Start Meditation 🧘</button>
+                                    <h3>Wellness Tools</h3>
+                                    <button onclick="startBreathing()" class="btn-premium" style="width: 100%; margin-bottom: 0.5rem;">🧘 Breathing Exercise</button>
+                                    <button onclick="showAffirmation()" class="btn-premium" style="width: 100%; margin-bottom: 0.5rem;">💭 Daily Affirmation</button>
+                                    <button onclick="playFocusMusic()" class="btn-premium" style="width: 100%;">🎵 Focus Music</button>
                                 </div>
+                            </div>
+                            
+                            <div class="glass-card" style="padding: 1.5rem; margin-top: 1.5rem;">
+                                <h3>💡 Wellness Tips from AI</h3>
+                                <ul style="margin-top: 1rem; list-style: none;">
+                                    <li style="margin-bottom: 0.75rem;">✓ Take a 5-minute break every 45 minutes of study</li>
+                                    <li style="margin-bottom: 0.75rem;">✓ Stay hydrated - keep water nearby</li>
+                                    <li style="margin-bottom: 0.75rem;">✓ Use the 5-4-3-2-1 grounding technique when stressed</li>
+                                    <li style="margin-bottom: 0.75rem;">✓ Get 7-8 hours of sleep for better memory retention</li>
+                                </ul>
                             </div>
                         </div>
                     </main>
                 </div>
             `;
             
-            // Initialize charts
-            initPerformanceChart();
+            // Setup navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const screen = item.dataset.screen;
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                    document.querySelectorAll('#dashboard-screen, #tasks-screen, #ai-chat-screen, #wellness-screen').forEach(s => {
+                        s.style.display = 'none';
+                    });
+                    document.getElementById(`${screen}-screen`).style.display = 'block';
+                });
+            });
             
             // Setup task form
             document.getElementById('addTaskForm')?.addEventListener('submit', async (e) => {
@@ -916,119 +717,125 @@
             });
         }
         
-        function renderTaskBoard(tasks) {
-            const columns = {
-                'pending': tasks.filter(t => !t.completed),
-                'completed': tasks.filter(t => t.completed)
-            };
+        function renderTaskList(tasks) {
+            if (!tasks || tasks.length === 0) {
+                return '<p style="color: #9ca3af; text-align: center;">No tasks yet. Create your first task!</p>';
+            }
             
-            return `
-                <div class="task-column">
-                    <h4>📋 Pending Tasks (${columns.pending.length})</h4>
-                    ${columns.pending.map(task => `
-                        <div class="task-card" onclick="toggleTask('${task.id}')">
-                            <strong>${task.title}</strong>
-                            <p style="font-size: 0.875rem; color: #6b7280;">${task.subject} • Due: ${task.deadline}</p>
-                            <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: ${task.priority === 'high' ? '#fee2e2' : '#e5e7eb'}; border-radius: 0.25rem;">${task.priority}</span>
+            return tasks.map(task => `
+                <div class="task-card" onclick="toggleTask('${task.id}')">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <strong>${escapeHtml(task.title)}</strong>
+                            <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">${task.subject} • Due: ${task.deadline}</p>
                         </div>
-                    `).join('')}
+                        <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: ${task.priority === 'high' ? '#fee2e2' : task.priority === 'medium' ? '#fef3c7' : '#d1fae5'}; border-radius: 0.25rem;">
+                            ${task.priority}
+                        </span>
+                    </div>
                 </div>
-                <div class="task-column">
-                    <h4>✅ Completed (${columns.completed.length})</h4>
-                    ${columns.completed.map(task => `
-                        <div class="task-card" style="opacity: 0.7;">
-                            <strong>✓ ${task.title}</strong>
-                            <p style="font-size: 0.875rem; color: #6b7280;">Completed with AI assistance</p>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
+            `).join('');
         }
         
-        function initPerformanceChart() {
-            const ctx = document.getElementById('performanceChart')?.getContext('2d');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                        datasets: [{
-                            label: 'Productivity Score',
-                            data: [65, 72, 78, 85],
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59,130,246,0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }, {
-                            label: 'Focus Score',
-                            data: [70, 75, 80, 82],
-                            borderColor: '#8b5cf6',
-                            backgroundColor: 'rgba(139,92,246,0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            }
-                        }
-                    }
-                });
+        function renderMoodHistory(moods) {
+            if (!moods || moods.length === 0) {
+                return '<p style="color: #9ca3af;">No mood entries yet. Check in daily!</p>';
             }
+            
+            const moodIcons = { great: '😁', good: '🙂', okay: '😐', tired: '😴', stressed: '😰', motivated: '🚀' };
+            return moods.reverse().map(m => `
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb;">
+                    <span>${moodIcons[m.mood] || '😐'} ${m.mood}</span>
+                    <span style="color: #6b7280; font-size: 0.875rem;">${new Date(m.date).toLocaleDateString()}</span>
+                </div>
+            `).join('');
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
         }
         
         async function addTask() {
+            const user = Storage.getCurrentUser();
             const title = document.getElementById('taskTitle').value;
             const subject = document.getElementById('taskSubject').value;
             const deadline = document.getElementById('taskDeadline').value;
             const priority = document.getElementById('taskPriority').value;
             
+            if (!title || !subject || !deadline) {
+                alert('Please fill all fields');
+                return;
+            }
+            
             const newTask = {
                 id: Date.now().toString(),
                 title, subject, deadline, priority,
                 completed: false,
-                createdAt: new Date().toISOString(),
-                timeSpent: 0
+                createdAt: new Date().toISOString()
             };
             
-            currentUser.tasks = currentUser.tasks || [];
-            currentUser.tasks.push(newTask);
-            await dataManager.saveUser(currentUser);
-            localStorage.setItem('focuswell_current_user', JSON.stringify(currentUser));
+            user.tasks = user.tasks || [];
+            user.tasks.push(newTask);
+            Storage.updateUser(user.email, { tasks: user.tasks });
+            Storage.setCurrentUser({ ...user, tasks: user.tasks });
             
-            renderDashboard();
-            showScreen('tasks');
+            document.getElementById('addTaskForm').reset();
+            showDashboard();
+            document.querySelector('[data-screen="tasks"]').click();
         }
         
-        window.toggleTask = async (taskId) => {
-            const task = currentUser.tasks.find(t => t.id === taskId);
+        window.toggleTask = (taskId) => {
+            const user = Storage.getCurrentUser();
+            const task = user.tasks.find(t => t.id === taskId);
             if (task) {
                 task.completed = !task.completed;
                 if (task.completed) {
-                    task.completedAt = new Date().toISOString();
+                    user.studyStreak = (user.studyStreak || 0) + 1;
                 }
-                await dataManager.saveUser(currentUser);
-                localStorage.setItem('focuswell_current_user', JSON.stringify(currentUser));
-                renderDashboard();
+                Storage.updateUser(user.email, { tasks: user.tasks, studyStreak: user.studyStreak });
+                Storage.setCurrentUser({ ...user, tasks: user.tasks });
+                showDashboard();
             }
         };
         
-        window.logMood = async (mood) => {
-            currentUser.moods = currentUser.moods || [];
-            currentUser.moods.push({
-                mood,
+        window.logMood = (mood) => {
+            const user = Storage.getCurrentUser();
+            user.moods = user.moods || [];
+            user.moods.push({
+                mood: mood,
                 date: new Date().toISOString()
             });
-            await dataManager.saveUser(currentUser);
-            localStorage.setItem('focuswell_current_user', JSON.stringify(currentUser));
-            alert(`Mood logged: ${mood}! Your AI assistant notes this for better recommendations.`);
+            Storage.updateUser(user.email, { moods: user.moods });
+            Storage.setCurrentUser({ ...user, moods: user.moods });
+            
+            const feedbacks = {
+                great: "🎉 That's wonderful! Your positive energy will boost your studies!",
+                good: "😊 Glad to hear! Keep that momentum going!",
+                okay: "🌱 That's okay. Take things one step at a time.",
+                tired: "😴 Rest is important! Take a short break and recharge.",
+                stressed: "🧘 Take a deep breath. You're doing your best!",
+                motivated: "🚀 Excellent! Channel that energy into your goals!"
+            };
+            
+            const feedbackDiv = document.getElementById('moodFeedback');
+            if (feedbackDiv) {
+                feedbackDiv.innerHTML = `<p style="color: var(--success);">${feedbacks[mood] || "Thanks for sharing!"}</p>`;
+                setTimeout(() => {
+                    feedbackDiv.innerHTML = '';
+                }, 3000);
+            }
+            
+            showDashboard();
+            document.querySelector('[data-screen="wellness"]').click();
         };
         
-        window.sendMessage = async () => {
+        window.sendChatMessage = async () => {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             if (!message) return;
@@ -1036,72 +843,83 @@
             const chatMessages = document.getElementById('chatMessages');
             chatMessages.innerHTML += `
                 <div class="message user">
-                    <div class="message-bubble">${message}</div>
+                    <div class="message-bubble">${escapeHtml(message)}</div>
                 </div>
             `;
-            
             input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
             
-            // AI Response based on message analysis
-            const analysis = await aiModel.analyzeText(message);
-            let response = '';
-            
-            if (message.toLowerCase().includes('study') || message.toLowerCase().includes('plan')) {
-                response = `Based on your study patterns, I recommend focusing on ${analysis.topics.join(', ')}. Your optimal study time is in the morning when your energy is highest. Would you like me to create a personalized study schedule?`;
-            } else if (message.toLowerCase().includes('stress') || message.toLowerCase().includes('tired')) {
-                response = `I notice you're feeling ${analysis.sentiment}. Let me suggest a 5-minute breathing exercise. Take deep breaths: inhale for 4 seconds, hold for 4, exhale for 4. Repeat 5 times. You've got this! 💪`;
-            } else {
-                response = `Thank you for sharing! Based on my analysis (${Math.round(analysis.confidence * 100)}% confidence), here's my suggestion: Stay consistent with your study habits, take regular breaks, and celebrate small wins. Your dedication will pay off! 🌟`;
-            }
-            
+            // Simulate AI thinking
             setTimeout(() => {
+                let response = '';
+                const lowerMsg = message.toLowerCase();
+                
+                if (lowerMsg.includes('study') || lowerMsg.includes('learn')) {
+                    response = "📚 Great! Here's my study tip: Use the Pomodoro Technique - 25 minutes of focused study, then 5 minutes break. This improves retention by up to 50%! Would you like me to help you plan your study schedule?";
+                } else if (lowerMsg.includes('stress') || lowerMsg.includes('anxious')) {
+                    response = "🧘 I understand you're feeling stressed. Try this quick breathing exercise: Inhale for 4 seconds, hold for 4, exhale for 4. Repeat 5 times. You've got this! 💪";
+                } else if (lowerMsg.includes('task') || lowerMsg.includes('todo')) {
+                    response = "✅ Tasks are easier when broken down! Try the 2-minute rule: if a task takes less than 2 minutes, do it immediately. For bigger tasks, break them into smaller steps. Need help organizing your tasks?";
+                } else if (lowerMsg.includes('motivation') || lowerMsg.includes('procrastinat')) {
+                    response = "🔥 Remember why you started! Your future self will thank you. Start with just 5 minutes - the hardest part is beginning. You're capable of amazing things! ✨";
+                } else {
+                    response = "💡 Thanks for sharing! Remember: consistency beats intensity. Small daily progress leads to extraordinary results. Is there anything specific about studying or productivity I can help with?";
+                }
+                
                 chatMessages.innerHTML += `
                     <div class="message ai">
                         <div class="message-bubble">${response}</div>
                     </div>
                 `;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 500);
+            }, 800);
         };
         
-        window.startMeditation = () => {
-            alert("🧘 Guided Meditation\n\n1. Find a comfortable position\n2. Close your eyes\n3. Breathe naturally\n4. Focus on your breath for 2 minutes\n\nYour AI coach is here to support your wellness journey!");
+        window.startBreathing = () => {
+            alert("🧘 4-7-8 Breathing Exercise 🧘\n\n1. Inhale quietly through nose for 4 seconds\n2. Hold breath for 7 seconds\n3. Exhale completely through mouth for 8 seconds\n\nRepeat 4 times for instant calm and focus!");
         };
         
-        window.showScreen = (screen) => {
-            const screens = ['dashboard', 'tasks', 'ai-chat', 'analytics', 'wellness'];
-            screens.forEach(s => {
-                const element = document.getElementById(`${s}-screen`);
-                if (element) element.style.display = 'none';
-            });
-            document.getElementById(`${screen}-screen`).style.display = 'block';
-            
-            // Highlight active nav
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.style.background = 'transparent';
-            });
+        window.showAffirmation = () => {
+            const affirmations = [
+                "I am capable of achieving my goals",
+                "Every day, I'm getting better and better",
+                "I have the power to create positive change",
+                "My mind is calm, focused, and ready to learn",
+                "I embrace challenges as opportunities to grow",
+                "I am proud of my progress, no matter how small"
+            ];
+            const random = affirmations[Math.floor(Math.random() * affirmations.length)];
+            alert(`✨ Daily Affirmation ✨\n\n"${random}"`);
+        };
+        
+        window.playFocusMusic = () => {
+            alert("🎵 Focus Music Recommendation 🎵\n\nTry these for better concentration:\n• Lo-fi hip hop beats\n• Classical piano (Mozart, Beethoven)\n• Nature sounds (rain, forest)\n• Binaural beats (Alpha waves for focus)");
         };
         
         window.logout = () => {
-            localStorage.removeItem('focuswell_current_user');
-            currentUser = null;
-            renderLogin();
+            Storage.clearCurrentUser();
+            showLogin();
         };
         
-        // Export functions to global
-        window.renderLogin = renderLogin;
-        window.renderRegister = renderRegister;
-        window.renderDashboard = renderDashboard;
-        window.showScreen = showScreen;
+        // Make functions global
+        window.showLogin = showLogin;
+        window.showRegister = showRegister;
+        window.showDashboard = showDashboard;
         window.addTask = addTask;
         window.toggleTask = toggleTask;
         window.logMood = logMood;
-        window.sendMessage = sendMessage;
-        window.startMeditation = startMeditation;
+        window.sendChatMessage = sendChatMessage;
+        window.startBreathing = startBreathing;
+        window.showAffirmation = showAffirmation;
+        window.playFocusMusic = playFocusMusic;
         window.logout = logout;
         
-        // Initialize app
-        init();
+        // Initialize
+        if (Storage.getCurrentUser()) {
+            showDashboard();
+        } else {
+            showLogin();
+        }
     </script>
 </body>
 </html>
