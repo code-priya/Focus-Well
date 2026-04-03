@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusWell AI - Smart Study Assistant</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">FW</div>
+                    <span class="logo-text">FocusWell AI</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active" data-screen="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-link" data-screen="planner">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>AI Study Planner</span>
+                </a>
+                <a href="#" class="nav-link" data-screen="mood">
+                    <i class="fas fa-brain"></i>
+                    <span>Mood & Wellness</span>
+                </a>
+                <a href="#" class="nav-link" data-screen="analytics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>AI Analytics</span>
+                </a>
+                <a href="#" class="nav-link" data-screen="insights">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Insights</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <div class="user-details">
+                        <h4 id="userName">Student</h4>
+                        <p id="userEmail">user@example.com</p>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Screen -->
+            <div id="dashboardScreen" class="screen active">
+                <div class="screen-header">
+                    <h1>Welcome back, <span id="welcomeName">Student</span>!</h1>
+                    <p>Your AI-powered study assistant is ready</p>
+                </div>
+                
+                <!-- AI Quick Stats -->
+                <div class="ai-stats-grid">
+                    <div class="stat-card glass-effect">
+                        <i class="fas fa-brain"></i>
+                        <div class="stat-info">
+                            <h3 id="productivityScore">--</h3>
+                            <p>AI Productivity Score</p>
+                        </div>
+                        <div class="trend-indicator" id="productivityTrend"></div>
+                    </div>
+                    
+                    <div class="stat-card glass-effect">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="stat-info">
+                            <h3 id="moodTrend">--</h3>
+                            <p>Mood Trend</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-effect">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <h3 id="studyStreak">--</h3>
+                            <p>Day Streak</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card glass-effect">
+                        <i class="fas fa-tasks"></i>
+                        <div class="stat-info">
+                            <h3 id="completionRate">--</h3>
+                            <p>Task Completion</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI Recommendation Card -->
+                <div class="ai-card pulse-animation">
+                    <div class="ai-card-header">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI Recommendation</h3>
+                        <span class="ai-badge">Powered by ML</span>
+                    </div>
+                    <div class="ai-card-content" id="aiRecommendation">
+                        Loading AI insights...
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <!-- Today's Tasks -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Today's Tasks</h2>
+                            <button class="btn-icon" id="addTaskBtn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="tasksList" class="tasks-list"></div>
+                    </div>
+                    
+                    <!-- Mood Check-in -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Quick Mood Check</h2>
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="mood-buttons">
+                            <button class="mood-btn" data-mood="great">
+                                <i class="fas fa-laugh-beam"></i>
+                                <span>Great</span>
+                            </button>
+                            <button class="mood-btn" data-mood="good">
+                                <i class="fas fa-smile"></i>
+                                <span>Good</span>
+                            </button>
+                            <button class="mood-btn" data-mood="okay">
+                                <i class="fas fa-meh"></i>
+                                <span>Okay</span>
+                            </button>
+                            <button class="mood-btn" data-mood="stressed">
+                                <i class="fas fa-tired"></i>
+                                <span>Stressed</span>
+                            </button>
+                            <button class="mood-btn" data-mood="motivated">
+                                <i class="fas fa-rocket"></i>
+                                <span>Motivated</span>
+                            </button>
+                        </div>
+                        <div id="moodResponse" class="mood-response" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Study Planner Screen -->
+            <div id="plannerScreen" class="screen">
+                <div class="screen-header">
+                    <h1>AI Study Planner</h1>
+                    <p>Intelligent scheduling powered by your study patterns</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Create New Task</h2>
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <form id="addTaskForm" class="task-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Task Title</label>
+                                <input type="text" name="title" required placeholder="e.g., Complete Math Assignment">
+                            </div>
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <input type="text" name="subject" required placeholder="Mathematics, Physics, etc.">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Deadline</label>
+                                <input type="datetime-local" name="deadline" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Estimated Hours</label>
+                                <input type="number" name="estimatedHours" step="0.5" required placeholder="Hours needed">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select name="priority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-magic"></i> Generate AI Plan
+                        </button>
+                    </form>
+                </div>
+                
+                <div id="aiPredictionResult" class="ai-prediction-card" style="display: none;">
+                    <div class="prediction-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>AI Prediction</h3>
+                    </div>
+                    <div id="predictionContent"></div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Your Tasks</h2>
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <div id="allTasksList" class="tasks-list"></div>
+                </div>
+            </div>
+            
+            <!-- Mood & Wellness Screen -->
+            <div id="moodScreen" class="screen">
+                <div class="screen-header">
+                    <h1>Mood & Wellness Tracker</h1>
+                    <p>AI-powered emotional intelligence</p>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Mood History</h2>
+                            <i class="fas fa-chart-simple"></i>
+                        </div>
+                        <canvas id="moodChart" class="mood-chart"></canvas>
+                        <div id="moodHistoryList" class="mood-history"></div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>AI Wellness Insights</h2>
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div id="wellnessInsights" class="wellness-insights">
+                            <div class="loading-spinner">Analyzing your mood patterns...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Quick Wellness Tools</h2>
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <div class="wellness-tools">
+                        <button class="tool-btn" onclick="startBreathingExercise()">
+                            <i class="fas fa-lungs"></i>
+                            <span>Breathing Exercise</span>
+                        </button>
+                        <button class="tool-btn" onclick="showAffirmation()">
+                            <i class="fas fa-star"></i>
+                            <span>Positive Affirmation</span>
+                        </button>
+                        <button class="tool-btn" onclick="playFocusMusic()">
+                            <i class="fas fa-headphones"></i>
+                            <span>Focus Music</span>
+                        </button>
+                        <button class="tool-btn" onclick="guidedMeditation()">
+                            <i class="fas fa-meditate"></i>
+                            <span>Guided Meditation</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Analytics Screen -->
+            <div id="analyticsScreen" class="screen">
+                <div class="screen-header">
+                    <h1>AI Performance Analytics</h1>
+                    <p>Deep insights into your study patterns</p>
+                </div>
+                
+                <div class="analytics-grid">
+                    <div class="card full-width">
+                        <div class="card-header">
+                            <h2>Study Pattern Analysis</h2>
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <canvas id="studyPatternChart"></canvas>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Optimal Study Times</h2>
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div id="optimalTimes" class="optimal-times"></div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Productivity Factors</h2>
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <canvas id="productivityChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>AI Recommendations</h2>
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div id="performanceRecommendations" class="recommendations-list"></div>
+                </div>
+            </div>
+            
+            <!-- AI Insights Screen -->
+            <div id="insightsScreen" class="screen">
+                <div class="screen-header">
+                    <h1>AI Learning Insights</h1>
+                    <p>Personalized recommendations from machine learning</p>
+                </div>
+                
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Performance Prediction</h3>
+                        <div id="performancePrediction" class="insight-value"></div>
+                        <p>Next week's predicted productivity</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>Learning Style</h3>
+                        <div id="learningStyle" class="insight-value"></div>
+                        <p>Based on your study patterns</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <i class="fas fa-calendar-week"></i>
+                        <h3>Best Study Days</h3>
+                        <div id="bestDays" class="insight-value"></div>
+                        <p>Your peak performance days</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Weekly Forecast</h2>
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div id="weeklyForecast" class="weekly-forecast"></div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Smart Suggestions</h2>
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div id="smartSuggestions" class="suggestions-list"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Add Task Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Log Study Session</h2>
+            <form id="studyLogForm">
+                <div class="form-group">
+                    <label>Study Hours</label>
+                    <input type="number" id="studyHours" step="0.5" required>
+                </div>
+                <div class="form-group">
+                    <label>Productivity Score (1-100)</label>
+                    <input type="number" id="productivityScore" min="1" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label>Focus Duration (minutes)</label>
+                    <input type="number" id="focusDuration" required>
+                </div>
+                <div class="form-group">
+                    <label>Energy Level (1-10)</label>
+                    <input type="number" id="energyLevel" min="1" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label>Distractions Count</label>
+                    <input type="number" id="distractions" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Environment</label>
+                    <select id="environment">
+                        <option value="home">Home</option>
+                        <option value="library">Library</option>
+                        <option value="cafe">Cafe</option>
+                        <option value="dorm">Dorm</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Log Session</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
