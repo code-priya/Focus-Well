@@ -1,487 +1,1107 @@
-Here is an HTML document that creates a modern, AI-powered study and wellness dashboard with advanced features like personalized recommendations, mood tracking, task management, and interactive data visualizations.
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FocusWell AI | Intelligent Study & Wellness Companion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusWell Pro | Enterprise AI Study Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder@1.3.3/dist/use.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ec4899;
-            --accent: #06b6d4;
-            --glass: rgba(255, 255, 255, 0.92);
-            --glass-dark: rgba(15, 23, 42, 0.85);
-            --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.25);
-            --radius-2xl: 28px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --glass: rgba(255, 255, 255, 0.98);
+            --glass-dark: rgba(15, 23, 42, 0.85);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --radius: 1rem;
+            --radius-lg: 1.5rem;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at 10% 30%, #0f172a, #1e1b4b);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             overflow-x: hidden;
         }
-        /* animated gradient bg */
-        .bg-blur {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at 50% 40%, rgba(99,102,241,0.2), rgba(0,0,0,0.4));
-            pointer-events: none;
-            z-index: 0;
+
+        /* Premium Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
-        /* auth */
-        .auth-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            position: relative;
-            z-index: 10;
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(59,130,246,0.5); }
+            50% { box-shadow: 0 0 20px rgba(59,130,246,0.8); }
         }
-        .auth-card {
-            background: var(--glass);
-            backdrop-filter: blur(16px);
-            border-radius: var(--radius-2xl);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 440px;
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Glassmorphism Components */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
             box-shadow: var(--shadow-xl);
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        /* dashboard layout */
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 35px -12px rgba(0,0,0,0.25);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px -5px rgba(59,130,246,0.5);
+        }
+
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-premium:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Dashboard Layout */
         .dashboard {
             display: flex;
             min-height: 100vh;
-            position: relative;
-            z-index: 10;
         }
+
         .sidebar {
             width: 280px;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
             border-right: 1px solid rgba(255,255,255,0.1);
             position: fixed;
             height: 100vh;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease;
-            z-index: 30;
+            z-index: 100;
         }
+
         .main-content {
             flex: 1;
             margin-left: 280px;
-            padding: 2rem 2rem 2rem 2rem;
+            padding: 2rem;
             overflow-y: auto;
         }
-        .screen { display: none; animation: fadeUp 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-        .screen.active { display: block; }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(18px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
-        /* modern card design */
-        .glass-card {
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(8px);
-            border-radius: 32px;
-            padding: 1.75rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.5);
-            transition: all 0.2s;
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
         }
-        .ai-gradient-card {
-            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-            border-radius: 32px;
-            padding: 1.8rem;
-            color: white;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.3);
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
-        .stat-modern {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(4px);
-            border-radius: 28px;
-            padding: 1.2rem;
+
+        /* AI Chat Interface */
+        .ai-chat {
+            background: rgba(255,255,255,0.95);
+            border-radius: var(--radius-lg);
+            height: 500px;
             display: flex;
-            align-items: center;
-            gap: 1rem;
+            flex-direction: column;
         }
-        .task-item {
-            background: #f8fafc;
-            border-radius: 20px;
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.ai {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+        }
+
+        .message.ai .message-bubble {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .message.user .message-bubble {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        /* Task Board */
+        .task-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .task-column {
+            background: rgba(255,255,255,0.9);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 0.75rem;
             padding: 1rem;
             margin-bottom: 0.75rem;
-            transition: all 0.2s;
-            border-left: 4px solid #6366f1;
-        }
-        .mood-emoji-btn {
-            background: white;
-            border-radius: 60px;
-            padding: 0.8rem 1rem;
-            text-align: center;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: 1px solid #e2e8f0;
-        }
-        .mood-emoji-btn.selected, .mood-emoji-btn:hover {
-            background: linear-gradient(145deg, #6366f1, #a855f7);
-            color: white;
-            transform: scale(1.02);
-        }
-        .btn-glow {
-            background: linear-gradient(95deg, #6366f1, #a855f7);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            color: white;
-            transition: 0.2s;
-        }
-        .btn-glow:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px -8px #6366f1;
-        }
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 20px;
-            margin: 4px 16px;
-            border-radius: 50px;
-            color: #cbd5e1;
-            transition: 0.2s;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
             cursor: pointer;
         }
-        .nav-link.active, .nav-link:hover {
-            background: rgba(99,102,241,0.3);
-            color: white;
-            backdrop-filter: blur(4px);
+
+        .task-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
         }
-        .grid-2col { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.8rem; }
-        @media (max-width: 800px) {
-            .sidebar { transform: translateX(-100%); }
-            .main-content { margin-left: 0; }
-            .grid-2col { grid-template-columns: 1fr; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
         }
-        .avatar-circle {
-            width: 48px; height: 48px; background: linear-gradient(145deg, #6366f1, #ec4899);
-            border-radius: 60px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.3rem;
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(59,130,246,0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        .video-bg-card {
-            background: linear-gradient(145deg, #0f172a80, #1e1b4b80);
-            border-radius: 32px;
-            overflow: hidden;
-            position: relative;
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .inspire-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 28px;
-            margin-top: 12px;
+
+        /* Progress Rings */
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform-origin: 50% 50%;
         }
     </style>
 </head>
 <body>
-<div class="bg-blur"></div>
-<div id="appRoot"></div>
+    <div id="app"></div>
 
-<script>
-    // ---------- STORAGE ----------
-    const Store = {
-        getUsers: () => JSON.parse(localStorage.getItem('focuswell_pro_users') || '[]'),
-        saveUser: (user) => { const u = Store.getUsers(); u.push(user); localStorage.setItem('focuswell_pro_users', JSON.stringify(u)); },
-        getUserByEmail: (email) => Store.getUsers().find(u => u.email === email),
-        updateUser: (email, patch) => {
-            let users = Store.getUsers();
-            const idx = users.findIndex(u => u.email === email);
-            if(idx !== -1) { users[idx] = { ...users[idx], ...patch }; localStorage.setItem('focuswell_pro_users', JSON.stringify(users)); return true; }
-            return false;
-        },
-        getCurrent: () => JSON.parse(localStorage.getItem('focuswell_current_pro')),
-        setCurrent: (u) => localStorage.setItem('focuswell_current_pro', JSON.stringify(u)),
-        clearCurrent: () => localStorage.removeItem('focuswell_current_pro')
-    };
-
-    // ---------- ADVANCED AI ENGINE ----------
-    const AIBrain = {
-        // Personalized productivity forecasting (TF.js style simulation but with real logic)
-        predictPeakProductivity(user) {
-            const moods = user.moods || [];
-            const tasksCompleted = (user.tasks || []).filter(t => t.completed).length;
-            const totalTasks = (user.tasks || []).length;
-            const baseScore = totalTasks ? (tasksCompleted / totalTasks) * 100 : 68;
-            // analyze recent mood trend
-            let moodAvg = 3;
-            if(moods.length) {
-                const valMap = { great:5, motivated:5, good:4, okay:3, tired:2, stressed:1 };
-                const recent = moods.slice(-5).map(m => valMap[m.mood] || 3);
-                if(recent.length) moodAvg = recent.reduce((a,b)=>a+b,0)/recent.length;
+    <script>
+        // ============ ADVANCED AI/ML ENGINE ============
+        class AdvancedAIModel {
+            constructor() {
+                this.model = null;
+                this.encoder = null;
+                this.isInitialized = false;
             }
-            const finalProductivity = Math.min(98, Math.max(30, baseScore * 0.6 + moodAvg * 8));
-            let bestTimeSlot = "Morning 🌅";
-            if(moodAvg > 3.8) bestTimeSlot = "Morning 🌅";
-            else if(moodAvg > 2.8) bestTimeSlot = "Afternoon ☀️";
-            else bestTimeSlot = "Evening 🌙 with break";
-            return { score: Math.round(finalProductivity), bestTime: bestTimeSlot, recommendedHours: finalProductivity > 75 ? 3.2 : finalProductivity > 50 ? 2.2 : 1.5 };
-        },
-        // Deep emotional intelligence: predicts future mood and gives empathetic advice
-        moodForecast(moodsHistory) {
-            if(!moodsHistory.length) return { trend: "neutral", nextMood: "😊", insight: "Log your first mood to unlock AI wisdom! ✨" };
-            const val = { great:5, motivated:5, good:4, okay:3, tired:2, stressed:1 };
-            const last7 = moodsHistory.slice(-7).map(m => val[m.mood] || 3);
-            if(last7.length < 2) return { trend: "stable", nextMood: "🙂", insight: "Keep tracking — I'll learn your patterns!" };
-            const avg = last7.reduce((a,b)=>a+b,0)/last7.length;
-            const latest = last7[last7.length-1];
-            const trend = latest > avg ? "improving 📈" : latest < avg ? "declining 📉" : "stable ➡️";
-            let nextMood = "😌";
-            if(trend.includes("improving")) nextMood = "😄✨";
-            else if(trend.includes("declining")) nextMood = "😔💙";
-            let insight = "";
-            if(trend.includes("declining")) insight = "It's okay to rest. Try a 5-min meditation or walk. You're resilient.";
-            else if(trend.includes("improving")) insight = "Your positive momentum is powerful! Keep celebrating small wins.";
-            else insight = "Consistency is key. Today is a fresh canvas!";
-            return { trend, nextMood, insight, confidence: Math.min(92, Math.abs(latest-avg)*15+60) };
-        },
-        // AI recommendation generator with contextual hints
-        getSmartRecommendation(user) {
-            const tasks = user.tasks || [];
-            const pending = tasks.filter(t => !t.completed).length;
-            const highPriority = tasks.filter(t => !t.completed && t.priority === 'high').length;
-            const moodEntries = user.moods || [];
-            const recentStress = moodEntries.slice(-3).filter(m => m.mood === 'stressed').length;
-            if(recentStress >= 2) return "🧘‍♀️ AI Wellness Alert: High stress detected. Try 4-7-8 breathing or a short nature break. Your mental health is #1 priority.";
-            if(highPriority > 2) return "⚡ Priority surge! Use time-blocking: 45min deep work, 10min break. You got this! 🎯";
-            if(pending === 0 && tasks.length>0) return "🎉 Amazing! All tasks done. Want to challenge yourself? Add a skill-building task! 🚀";
-            if(pending > 5) return "📚 AI suggests breaking tasks into micro-sprints (25min). Use the pomodoro timer! 🍅";
-            return "🌟 Today's AI insight: Focus on one deep-work session, then reward yourself. Small steps lead to big results!";
-        },
-        // Generate a motivational quote based on user's productivity
-        getMotivationalGem(productivityScore) {
-            if(productivityScore > 80) return "✨ Excellence is not an act, but a habit. You're building greatness! ✨";
-            if(productivityScore > 60) return "💪 Momentum is on your side. One more hour of focused study will compound!";
-            return "🌱 Every expert was once a beginner. Consistency > intensity. You're making progress!";
-        },
-        // Learning style recommendation (AI)
-        suggestLearningStyle(tasksCompleted) {
-            if(tasksCompleted > 20) return "📖 Active recall + spaced repetition suit you. Try flashcards!";
-            return "🎥 Video + note-taking hybrid recommended based on your pattern.";
-        }
-    };
 
-    // helpers
-    function renderTasksList(tasks) {
-        if(!tasks || tasks.length===0) return '<div class="glass-card" style="text-align:center; color:#475569;">✨ No tasks yet. Create your first AI-enhanced task!</div>';
-        return tasks.map(task => `
-            <div class="task-item" style="display:flex; justify-content:space-between; align-items:center;">
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="window.toggleTask('${task.id}')" style="width:22px;height:22px;accent-color:#6366f1;">
-                    <div><strong>${escapeHtml(task.title)}</strong><br><small>📘 ${task.subject} • ⏰ ${task.deadline}</small></div>
-                </div>
-                <span class="badge" style="background:${task.priority==='high'?'#fee2e2':task.priority==='medium'?'#fff3e0':'#e0f2fe'}; padding:4px 12px; border-radius:60px;">${task.priority}</span>
-            </div>
-        `).join('');
-    }
-    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;});}
-    function renderMoodHistoryList(moods){
-        if(!moods.length) return '<p class="glass-card">💜 No mood data yet — tap a mood above!</p>';
-        return moods.slice().reverse().slice(0,8).map(m => `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #eef2ff; padding:10px;"><span>${getMoodIcon(m.mood)} ${m.mood}</span><span style="color:#475569;">${new Date(m.date).toLocaleDateString()}</span></div>`).join('');
-    }
-    function getMoodIcon(m){ const icons={great:'😁',good:'🙂',okay:'😐',stressed:'😫',tired:'😴',motivated:'🚀'}; return icons[m]||'😊';}
-    
-    // login/register UI
-    function renderAuth() {
-        document.getElementById('appRoot').innerHTML = `
-        <div class="auth-container">
-            <div class="auth-card">
-                <div style="text-align:center"><div class="avatar-circle" style="margin:0 auto 16px; width:70px;height:70px;font-size:32px;">🧠</div><h2 style="font-size:28px;">FocusWell AI</h2><p style="color:#334155;">Next‑gen study companion with deep learning</p></div>
-                <form id="loginFormMain">
-                    <div class="form-group" style="margin-top:24px"><label>📧 Email</label><input type="email" id="loginEmail" class="form-control" style="width:100%;padding:12px;border-radius:60px;border:1px solid #cbd5e1;margin-top:5px;"></div>
-                    <div class="form-group"><label>🔒 Password</label><input type="password" id="loginPass" class="form-control" style="width:100%;padding:12px;border-radius:60px;border:1px solid #cbd5e1;margin-top:5px;"></div>
-                    <button type="submit" class="btn-glow" style="width:100%;margin-top:20px;">Login →</button>
-                </form>
-                <p style="margin-top:20px;text-align:center;">New? <a href="#" id="signupSwitch">Create free account</a></p>
-                <div id="authMsg" class="error" style="color:#e11d48;text-align:center;margin-top:12px;"></div>
-            </div>
-        </div>`;
-        document.getElementById('loginFormMain').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const pwd = document.getElementById('loginPass').value;
-            const user = Store.getUserByEmail(email);
-            if(user && user.password === pwd) { Store.setCurrent(user); renderDashboard(); }
-            else document.getElementById('authMsg').innerText = 'Invalid credentials or sign up first.';
-        });
-        document.getElementById('signupSwitch').addEventListener('click', (e) => { e.preventDefault(); renderRegister(); });
-    }
-    function renderRegister(){
-        document.getElementById('appRoot').innerHTML = `
-        <div class="auth-container"><div class="auth-card"><div style="text-align:center"><div class="avatar-circle" style="margin:0 auto 16px;">✨</div><h2>Join FocusWell AI</h2></div>
-        <form id="regForm"><div class="form-group"><label>Full name</label><input type="text" id="regName" required style="width:100%;padding:12px;border-radius:60px;"></div>
-        <div class="form-group"><label>Email</label><input type="email" id="regEmail" required style="width:100%;padding:12px;border-radius:60px;"></div>
-        <div class="form-group"><label>Password</label><input type="password" id="regPass" required style="width:100%;padding:12px;border-radius:60px;"></div>
-        <button type="submit" class="btn-glow" style="width:100%;">🚀 Start AI journey</button></form>
-        <p style="margin-top:16px;text-align:center"><a href="#" id="backLogin">← Back to Login</a></p><div id="regMsg"></div></div></div>`;
-        document.getElementById('regForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const pwd = document.getElementById('regPass').value;
-            if(Store.getUserByEmail(email)) { document.getElementById('regMsg').innerText = 'User exists. Login instead.'; return; }
-            const newUser = { name, email, password:pwd, tasks:[], moods:[], studyStreak:0, createdAt:new Date().toISOString(), preferences:{dailyGoal:4}, aiFeedback:[] };
-            Store.saveUser(newUser);
-            Store.setCurrent(newUser);
-            renderDashboard();
-        });
-        document.getElementById('backLogin').addEventListener('click', (e) => { e.preventDefault(); renderAuth(); });
-    }
+            async initialize() {
+                try {
+                    // Load Universal Sentence Encoder for NLP tasks
+                    this.encoder = await use.load();
+                    this.isInitialized = true;
+                    console.log('AI Model initialized successfully');
+                } catch (error) {
+                    console.warn('Using fallback AI models:', error);
+                    this.isInitialized = false;
+                }
+            }
 
-    // MAIN DASHBOARD WITH ENHANCED AI, IMAGES, VIDEOS
-    async function renderDashboard() {
-        const user = Store.getCurrent();
-        if(!user) return renderAuth();
-        const aiProductivity = AIBrain.predictPeakProductivity(user);
-        const moodInsight = AIBrain.moodForecast(user.moods || []);
-        const recommendation = AIBrain.getSmartRecommendation(user);
-        const quote = AIBrain.getMotivationalGem(aiProductivity.score);
-        const completed = (user.tasks || []).filter(t=>t.completed).length;
-        const totalTasks = (user.tasks || []).length;
-        const completionRate = totalTasks ? Math.round((completed/totalTasks)*100) : 0;
-        
-        const html = `
-        <div class="dashboard">
-            <aside class="sidebar">
-                <div style="padding:28px 20px;"><div style="display:flex;align-items:center;gap:12px;"><div class="avatar-circle">🧠</div><span style="font-weight:700;font-size:1.4rem;color:white;">FocusWell</span></div></div>
-                <nav style="flex:1; margin-top:20px;">
-                    <div class="nav-link active" data-nav="dashboard">📊 AI Dashboard</div>
-                    <div class="nav-link" data-nav="planner">📅 Smart Planner</div>
-                    <div class="nav-link" data-nav="mood">🧠 Mood & Wellness AI</div>
-                    <div class="nav-link" data-nav="analytics">📈 Deep Insights</div>
-                </nav>
-                <div style="padding:20px; border-top:1px solid rgba(255,255,255,0.1);"><div style="display:flex;align-items:center;gap:12px;color:white;"><div class="avatar-circle" style="width:40px;height:40px;">${user.name.charAt(0)}</div><div><strong>${user.name}</strong><br><small>${user.email}</small></div></div><button id="logoutBtnSide" style="margin-top:16px; width:100%; background:rgba(255,99,132,0.2); border:none; padding:10px; border-radius:40px; color:#fecaca; font-weight:500;">🚪 Logout</button></div>
-            </aside>
-            <main class="main-content">
-                <!-- Dashboard screen -->
-                <div id="dashboardScr" class="screen active">
-                    <div style="margin-bottom:24px;"><h1 style="color:white; font-size:2.2rem;">Hello, ${user.name.split(' ')[0]} ✨</h1><p style="color:#cbd5e6;">AI insights crafted just for you</p></div>
-                    <div class="grid-2col">
-                        <div class="glass-card"><div style="display:flex; align-items:center; gap:15px;"><i class="fas fa-brain" style="font-size:38px; color:#6366f1;"></i><div><h3>🧠 Productivity Score</h3><p style="font-size:32px; font-weight:800;">${aiProductivity.score}%</p></div></div><progress value="${aiProductivity.score}" max="100" style="width:100%; height:10px; border-radius:10px;"></progress></div>
-                        <div class="glass-card"><div><i class="fas fa-chart-line"></i> <strong>AI Best Study Time</strong><p style="font-size:28px;font-weight:700;">${aiProductivity.bestTime}</p><small>⭐ ${aiProductivity.recommendedHours}h recommended</small></div></div>
-                        <div class="ai-gradient-card"><i class="fas fa-robot" style="font-size:28px;"></i><h3 style="margin-top:8px;">🤖 AI Recommendation</h3><p>${recommendation}</p><div style="margin-top:12px;"><i class="fas fa-quote-left"></i> ${quote}</div></div>
-                        <div class="glass-card"><h3>🔥 Streak & Progress</h3><div style="font-size:42px; font-weight:800;">${user.studyStreak || 0} days</div><p>${completionRate}% tasks done</p></div>
-                    </div>
-                    <div class="video-bg-card" style="margin:24px 0; padding:0; overflow:hidden;"><img src="https://picsum.photos/id/20/900/200" alt="inspiring study" style="width:100%; height:180px; object-fit:cover;"/><div style="padding:1rem; background:rgba(0,0,0,0.6); color:white;"><i class="fas fa-video"></i> "Your focus today defines tomorrow's success" — AI Mindset</div></div>
-                    <div class="grid-2col">
-                        <div class="glass-card"><div style="display:flex; justify-content:space-between;"><h3>📋 Priority Tasks</h3><button class="btn-glow" style="padding:6px 18px;" onclick="window.showQuickAdd()">+ New</button></div><div id="dashTasksList">${renderTasksList((user.tasks || []).slice(0,4))}</div></div>
-                        <div class="glass-card"><h3>😌 Mood Snapshot</h3><div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">${['great','good','okay','stressed','motivated'].map(m => `<div class="mood-emoji-btn" onclick="window.logMoodAI('${m}')">${getMoodIcon(m)} ${m}</div>`).join('')}</div><div id="quickMoodFeedback"></div><div><strong>AI mood forecast:</strong> ${moodInsight.nextMood} ${moodInsight.trend}<br><small>${moodInsight.insight}</small></div></div>
-                    </div>
-                </div>
-                <!-- Planner screen -->
-                <div id="plannerScr" class="screen">
-                    <h2 style="color:white;">📘 AI Study Planner</h2>
-                    <div class="glass-card" style="margin:20px 0;"><h3>➕ Create AI-optimized task</h3><form id="aiTaskForm"><input type="text" id="taskTitleAI" placeholder="Task title" style="width:100%; padding:12px; border-radius:60px; margin-bottom:10px;"><input type="text" id="taskSubjectAI" placeholder="Subject (e.g. Calculus)" style="width:100%; padding:12px; border-radius:60px; margin-bottom:10px;"><input type="date" id="taskDeadlineAI" style="width:100%; padding:12px; border-radius:60px; margin-bottom:10px;"><select id="taskPriorityAI" style="padding:12px; border-radius:60px;"><option>low</option><option selected>medium</option><option>high</option></select><button type="submit" class="btn-glow" style="margin-top:12px;">✨ Generate AI Study Plan</button></form><div id="aiPlanResult" style="margin-top:16px;"></div></div>
-                    <div class="glass-card"><h3>📌 All Tasks</h3><div id="allTasksListPlanner">${renderTasksList(user.tasks || [])}</div></div>
-                </div>
-                <!-- Mood + Wellness screen with video -->
-                <div id="moodScr" class="screen">
-                    <h2 style="color:white;">🧘 AI Emotional Intelligence</h2>
-                    <div class="grid-2col"><div class="glass-card"><canvas id="moodTrendCanvas" height="180"></canvas><div id="moodHistoryContainer">${renderMoodHistoryList(user.moods || [])}</div></div>
-                    <div class="ai-gradient-card"><i class="fas fa-heartbeat"></i><h3>AI Wellness Insight</h3><p>${moodInsight.insight}</p><p><strong>Confidence:</strong> ${moodInsight.confidence}%</p><button class="btn-glow" onclick="window.launchMeditation()">🧘 Start 2-min Meditation</button></div></div>
-                    <div style="margin-top:20px;"><img src="https://picsum.photos/id/29/800/150" style="width:100%; border-radius:32px; margin-top:8px;" alt="calm landscape"/></div>
-                </div>
-                <!-- analytics with deep charts -->
-                <div id="analyticsScr" class="screen">
-                    <h2 style="color:white;">📊 Deep Learning Analytics</h2>
-                    <div class="glass-card"><canvas id="advancedProductivityChart" height="180"></canvas></div>
-                    <div class="glass-card"><h3>🧠 Learning Style Insight</h3><p>${AIBrain.suggestLearningStyle(completed)}</p><div class="stat-modern"><i class="fas fa-microchip"></i> AI Confidence in predictions: ${Math.min(98, 70+completionRate/4)}%</div></div>
-                </div>
-            </main>
-        </div>`;
-        document.getElementById('appRoot').innerHTML = html;
-        attachNavEvents();
-        document.getElementById('logoutBtnSide')?.addEventListener('click', ()=>{Store.clearCurrent(); renderAuth();});
-        const taskForm = document.getElementById('aiTaskForm');
-        if(taskForm) taskForm.addEventListener('submit', async(e)=>{ e.preventDefault(); await addAITask(); });
-        renderMoodChart(user.moods || []);
-        renderAdvancedChart();
-        window.logMoodAI = (mood) => { logMoodAdvanced(mood); };
-        window.showQuickAdd = () => { document.querySelector('[data-nav="planner"]').click(); };
-        window.toggleTask = (id) => { toggleTaskComplete(id); };
-        window.launchMeditation = () => { alert("🧘 Breathe in for 4 sec, hold 7, exhale 8. Repeat 5 times. You are doing amazing."); };
-    }
-    async function addAITask(){
-        const user = Store.getCurrent();
-        const title = document.getElementById('taskTitleAI').value;
-        const subject = document.getElementById('taskSubjectAI').value;
-        const deadline = document.getElementById('taskDeadlineAI').value;
-        const priority = document.getElementById('taskPriorityAI').value;
-        if(!title || !subject || !deadline) { alert("Please fill all fields"); return; }
-        const newTask = { id:Date.now().toString(), title, subject, deadline, priority, completed:false, createdAt:new Date().toISOString() };
-        user.tasks = user.tasks || [];
-        user.tasks.push(newTask);
-        Store.updateUser(user.email, { tasks: user.tasks });
-        Store.setCurrent({...user, tasks: user.tasks});
-        const aiAdvice = AIBrain.getSmartRecommendation({...user, tasks:user.tasks});
-        document.getElementById('aiPlanResult').innerHTML = `<div class="ai-gradient-card">🧠 AI Study Tip: ${aiAdvice}<br>📅 Recommended study slot: ${AIBrain.predictPeakProductivity(user).bestTime}</div>`;
-        renderDashboard();
-    }
-    function toggleTaskComplete(taskId){
-        const user = Store.getCurrent();
-        const task = user.tasks.find(t=>t.id===taskId);
-        if(task){ task.completed = !task.completed; if(task.completed) { user.studyStreak = (user.studyStreak||0)+1; } Store.updateUser(user.email,{ tasks:user.tasks, studyStreak:user.studyStreak }); Store.setCurrent({...user, tasks:user.tasks}); renderDashboard();}
-    }
-    function logMoodAdvanced(mood){
-        const user = Store.getCurrent();
-        user.moods = user.moods || [];
-        user.moods.push({ mood, date: new Date().toISOString(), note:"" });
-        Store.updateUser(user.email, { moods: user.moods });
-        Store.setCurrent({...user, moods:user.moods});
-        const insight = AIBrain.moodForecast(user.moods);
-        const feedbackDiv = document.getElementById('quickMoodFeedback');
-        if(feedbackDiv) feedbackDiv.innerHTML = `<span style="color:#059669;">✅ Mood logged! AI: ${insight.insight}</span>`;
-        renderDashboard();
-    }
-    function renderMoodChart(moods){
-        const ctx = document.getElementById('moodTrendCanvas')?.getContext('2d');
-        if(!ctx) return;
-        const values = { great:5, motivated:5, good:4, okay:3, tired:2, stressed:1 };
-        const data = moods.slice(-10).map(m => values[m.mood] || 3);
-        new Chart(ctx, { type:'line', data:{ labels:data.map((_,i)=>`Day ${i+1}`), datasets:[{ label:'Mood Score', data:data, borderColor:'#a855f7', tension:0.3, fill:true, backgroundColor:'rgba(168,85,247,0.1)' }] }, options:{ responsive:true, maintainAspectRatio:true } });
-    }
-    function renderAdvancedChart(){
-        const ctx2 = document.getElementById('advancedProductivityChart')?.getContext('2d');
-        if(ctx2){
-            new Chart(ctx2, { type:'bar', data:{ labels:['Week1','Week2','Week3','Week4'], datasets:[{ label:'Productivity (AI estimate)', data:[68,74,79,85], backgroundColor:'#6366f1' }] } });
+            async analyzeText(text) {
+                if (this.encoder && this.isInitialized) {
+                    const embeddings = await this.encoder.embed([text]);
+                    const embeddingArray = await embeddings.array();
+                    return this.processEmbeddings(embeddingArray[0]);
+                }
+                return this.fallbackTextAnalysis(text);
+            }
+
+            processEmbeddings(embeddings) {
+                // Simulate sentiment and intent analysis
+                const magnitude = Math.sqrt(embeddings.reduce((sum, val) => sum + val * val, 0));
+                return {
+                    sentiment: magnitude > 0.5 ? 'positive' : magnitude > 0.2 ? 'neutral' : 'negative',
+                    confidence: Math.min(0.95, magnitude),
+                    topics: this.extractTopics(embeddings)
+                };
+            }
+
+            fallbackTextAnalysis(text) {
+                const words = text.toLowerCase().split(' ');
+                const positiveWords = ['good', 'great', 'excellent', 'amazing', 'productive'];
+                const negativeWords = ['bad', 'stressed', 'tired', 'overwhelmed', 'difficult'];
+                
+                let score = 0;
+                words.forEach(word => {
+                    if (positiveWords.includes(word)) score += 0.3;
+                    if (negativeWords.includes(word)) score -= 0.3;
+                });
+                
+                return {
+                    sentiment: score > 0.2 ? 'positive' : score < -0.2 ? 'negative' : 'neutral',
+                    confidence: Math.abs(score) + 0.5,
+                    topics: ['general']
+                };
+            }
+
+            extractTopics(embeddings) {
+                // Simulate topic extraction
+                const topics = ['productivity', 'learning', 'focus'];
+                return topics.slice(0, Math.floor(Math.random() * 3) + 1);
+            }
+
+            async predictOptimalSchedule(userData) {
+                const tasks = userData.tasks || [];
+                const completedTasks = tasks.filter(t => t.completed).length;
+                const productivityScore = tasks.length ? (completedTasks / tasks.length) * 100 : 75;
+                
+                // Neural network simulation with weighted factors
+                const energyLevel = this.calculateEnergyLevel(userData);
+                const focusScore = this.calculateFocusScore(userData);
+                
+                const optimalHours = Math.min(8, Math.max(1, 
+                    (productivityScore / 100) * 4 + 
+                    (energyLevel / 100) * 2 + 
+                    (focusScore / 100) * 2
+                ));
+                
+                const timeSlots = this.findOptimalTimeSlots(userData);
+                
+                return {
+                    recommendedHours: optimalHours.toFixed(1),
+                    optimalTimeSlots: timeSlots,
+                    productivityScore: Math.round(productivityScore),
+                    energyLevel: Math.round(energyLevel),
+                    focusScore: Math.round(focusScore),
+                    confidence: 0.85 + (productivityScore / 500)
+                };
+            }
+
+            calculateEnergyLevel(userData) {
+                const moods = userData.moods || [];
+                if (moods.length === 0) return 70;
+                
+                const recentMoods = moods.slice(-7);
+                const energyMap = { great: 90, motivated: 85, good: 75, okay: 60, tired: 40, stressed: 35 };
+                const avgEnergy = recentMoods.reduce((sum, m) => sum + (energyMap[m.mood] || 60), 0) / recentMoods.length;
+                return avgEnergy;
+            }
+
+            calculateFocusScore(userData) {
+                const tasks = userData.tasks || [];
+                const focusBreaks = userData.focusBreaks || [];
+                const completedOnTime = tasks.filter(t => t.completed && new Date(t.deadline) > new Date(t.completedAt)).length;
+                return tasks.length ? (completedOnTime / tasks.length) * 100 : 65;
+            }
+
+            findOptimalTimeSlots(userData) {
+                const studyPatterns = userData.studyPatterns || [];
+                const productiveHours = [];
+                
+                for (let hour = 8; hour <= 22; hour++) {
+                    let productivity = 70;
+                    if (hour >= 9 && hour <= 12) productivity = 85;
+                    else if (hour >= 14 && hour <= 17) productivity = 80;
+                    else if (hour >= 19 && hour <= 21) productivity = 75;
+                    else productivity = 60;
+                    
+                    if (productivity > 75) {
+                        productiveHours.push(`${hour}:00 - ${hour + 1}:00`);
+                    }
+                }
+                
+                return productiveHours.slice(0, 3);
+            }
+
+            async generatePersonalizedPlan(userData) {
+                const schedule = await this.predictOptimalSchedule(userData);
+                const learningStyle = this.analyzeLearningStyle(userData);
+                const recommendedTechniques = this.getStudyTechniques(learningStyle);
+                
+                return {
+                    dailySchedule: schedule,
+                    learningStyle: learningStyle,
+                    techniques: recommendedTechniques,
+                    estimatedImprovement: `${Math.floor(15 + Math.random() * 20)}%`,
+                    aiConfidence: `${Math.floor(schedule.confidence * 100)}%`
+                };
+            }
+
+            analyzeLearningStyle(userData) {
+                const tasks = userData.tasks || [];
+                const taskTypes = tasks.map(t => t.type || 'general');
+                
+                const visualCount = taskTypes.filter(t => t === 'visual').length;
+                const readingCount = taskTypes.filter(t => t === 'reading').length;
+                const kinestheticCount = taskTypes.filter(t => t === 'practical').length;
+                
+                if (visualCount > readingCount && visualCount > kinestheticCount) return 'Visual Learner';
+                if (readingCount > visualCount && readingCount > kinestheticCount) return 'Reading/Writing Learner';
+                if (kinestheticCount > visualCount && kinestheticCount > readingCount) return 'Kinesthetic Learner';
+                return 'Mixed Learning Style';
+            }
+
+            getStudyTechniques(learningStyle) {
+                const techniques = {
+                    'Visual Learner': ['Mind Maps', 'Color-Coded Notes', 'Diagrams', 'Video Tutorials'],
+                    'Reading/Writing Learner': ['Summarization', 'Flashcards', 'Outline Method', 'Blog Writing'],
+                    'Kinesthetic Learner': ['Practice Problems', 'Role-Playing', 'Hands-on Projects', 'Study Groups'],
+                    'Mixed Learning Style': ['Pomodoro Technique', 'Active Recall', 'Spaced Repetition', 'Feynman Technique']
+                };
+                return techniques[learningStyle] || techniques['Mixed Learning Style'];
+            }
         }
-    }
-    function attachNavEvents(){
-        document.querySelectorAll('.nav-link').forEach(link=>{
-            link.addEventListener('click',()=>{
-                const nav = link.dataset.nav;
-                document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
-                link.classList.add('active');
-                document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-                if(nav==='dashboard') document.getElementById('dashboardScr').classList.add('active');
-                if(nav==='planner') document.getElementById('plannerScr').classList.add('active');
-                if(nav==='mood') document.getElementById('moodScr').classList.add('active');
-                if(nav==='analytics') document.getElementById('analyticsScr').classList.add('active');
-                if(nav==='mood') setTimeout(()=>renderMoodChart(Store.getCurrent()?.moods || []), 50);
-                if(nav==='analytics') renderAdvancedChart();
+
+        // ============ DATA MANAGEMENT ============
+        class DataManager {
+            constructor() {
+                this.dbName = 'FocusWellDB';
+                this.dbVersion = 2;
+                this.db = null;
+            }
+
+            async initDB() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.dbVersion);
+                    
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        resolve(this.db);
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains('users')) {
+                            db.createObjectStore('users', { keyPath: 'email' });
+                        }
+                        if (!db.objectStoreNames.contains('sessions')) {
+                            db.createObjectStore('sessions', { keyPath: 'id', autoIncrement: true });
+                        }
+                        if (!db.objectStoreNames.contains('analytics')) {
+                            db.createObjectStore('analytics', { keyPath: 'timestamp' });
+                        }
+                    };
+                });
+            }
+
+            async saveUser(user) {
+                const transaction = this.db.transaction(['users'], 'readwrite');
+                const store = transaction.objectStore('users');
+                return store.put(user);
+            }
+
+            async getUser(email) {
+                const transaction = this.db.transaction(['users'], 'readonly');
+                const store = transaction.objectStore('users');
+                return new Promise((resolve, reject) => {
+                    const request = store.get(email);
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async getAllUsers() {
+                const transaction = this.db.transaction(['users'], 'readonly');
+                const store = transaction.objectStore('users');
+                return new Promise((resolve, reject) => {
+                    const request = store.getAll();
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+        }
+
+        // ============ COMMERCIAL FEATURES ============
+        class AnalyticsEngine {
+            static calculateKPIs(userData) {
+                const tasks = userData.tasks || [];
+                const completedTasks = tasks.filter(t => t.completed);
+                const totalStudyTime = tasks.reduce((sum, t) => sum + (t.timeSpent || 0), 0);
+                
+                return {
+                    completionRate: tasks.length ? (completedTasks.length / tasks.length) * 100 : 0,
+                    averageTaskTime: completedTasks.length ? totalStudyTime / completedTasks.length : 0,
+                    streakScore: this.calculateStreakScore(userData),
+                    efficiency: this.calculateEfficiency(userData),
+                    recommendations: this.generateRecommendations(userData)
+                };
+            }
+
+            static calculateStreakScore(userData) {
+                const studyDays = userData.studyHistory || [];
+                let currentStreak = 0;
+                let maxStreak = 0;
+                
+                for (let i = studyDays.length - 1; i >= 0; i--) {
+                    if (studyDays[i].studied) {
+                        currentStreak++;
+                        maxStreak = Math.max(maxStreak, currentStreak);
+                    } else {
+                        break;
+                    }
+                }
+                
+                return { current: currentStreak, max: maxStreak };
+            }
+
+            static calculateEfficiency(userData) {
+                const tasks = userData.tasks || [];
+                const plannedVsActual = tasks.map(task => {
+                    const planned = this.estimateTaskTime(task);
+                    const actual = task.timeSpent || planned;
+                    return planned / actual;
+                });
+                
+                const avgEfficiency = plannedVsActual.reduce((a, b) => a + b, 0) / plannedVsActual.length;
+                return Math.min(1, Math.max(0, avgEfficiency)) * 100;
+            }
+
+            static estimateTaskTime(task) {
+                const baseTimes = { low: 30, medium: 60, high: 120 };
+                return baseTimes[task.priority] || 60;
+            }
+
+            static generateRecommendations(userData) {
+                const kpis = this.calculateKPIs(userData);
+                const recommendations = [];
+                
+                if (kpis.completionRate < 50) {
+                    recommendations.push('Break down large tasks into smaller chunks');
+                    recommendations.push('Use the Pomodoro technique for better focus');
+                }
+                if (kpis.efficiency < 60) {
+                    recommendations.push('Eliminate distractions during study sessions');
+                    recommendations.push('Create a dedicated study environment');
+                }
+                if (kpis.streakScore.current < 3) {
+                    recommendations.push('Set daily reminders to maintain consistency');
+                    recommendations.push('Start with small, achievable goals');
+                }
+                
+                return recommendations;
+            }
+        }
+
+        // ============ UI RENDERING ============
+        let currentUser = null;
+        let aiModel = new AdvancedAIModel();
+        let dataManager = new DataManager();
+
+        async function init() {
+            await dataManager.initDB();
+            await aiModel.initialize();
+            
+            // Check for existing session
+            const savedUser = localStorage.getItem('focuswell_current_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                renderDashboard();
+            } else {
+                renderLogin();
+            }
+        }
+
+        function renderLogin() {
+            document.getElementById('app').innerHTML = `
+                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+                    <div class="glass-card" style="max-width: 450px; width: 100%; padding: 2.5rem;">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                                <i class="fas fa-brain" style="font-size: 40px; color: white;"></i>
+                            </div>
+                            <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">FocusWell Pro</h1>
+                            <p class="gradient-text" style="font-weight: 600;">Enterprise AI Study Suite</p>
+                        </div>
+                        
+                        <form id="loginForm">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email</label>
+                                <input type="email" id="email" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; transition: all 0.3s;">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Password</label>
+                                <input type="password" id="password" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                            </div>
+                            <button type="submit" class="btn-premium" style="width: 100%;">Login to Dashboard →</button>
+                        </form>
+                        
+                        <p style="text-align: center; margin-top: 1.5rem;">
+                            Don't have an account? <a href="#" onclick="renderRegister(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Start Free Trial</a>
+                        </p>
+                        
+                        <div id="errorMsg" style="color: var(--danger); text-align: center; margin-top: 1rem;"></div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                const user = await dataManager.getUser(email);
+                if (user && user.password === password) {
+                    currentUser = user;
+                    localStorage.setItem('focuswell_current_user', JSON.stringify(user));
+                    renderDashboard();
+                } else {
+                    document.getElementById('errorMsg').innerText = 'Invalid credentials. Please try again.';
+                }
             });
-        });
-    }
-    if(Store.getCurrent()) renderDashboard(); else renderAuth();
-    window.toggleTask = toggleTaskComplete;
-</script>
+        }
+
+        async function renderRegister() {
+            document.getElementById('app').innerHTML = `
+                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+                    <div class="glass-card" style="max-width: 500px; width: 100%; padding: 2.5rem;">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <i class="fas fa-rocket" style="font-size: 50px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                            <h2 style="margin-top: 1rem;">Start Your AI Journey</h2>
+                            <p>Get personalized AI insights and boost productivity</p>
+                        </div>
+                        
+                        <form id="registerForm">
+                            <div style="margin-bottom: 1rem;">
+                                <label>Full Name</label>
+                                <input type="text" id="name" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <label>Email</label>
+                                <input type="email" id="email" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <label>Password</label>
+                                <input type="password" id="password" required style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label>Role</label>
+                                <select id="role" style="width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                    <option value="student">Student</option>
+                                    <option value="professional">Professional</option>
+                                    <option value="entrepreneur">Entrepreneur</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-premium" style="width: 100%;">Create Account →</button>
+                        </form>
+                        
+                        <p style="text-align: center; margin-top: 1.5rem;">
+                            Already have an account? <a href="#" onclick="renderLogin(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Login</a>
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('registerForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('role').value;
+                
+                const existingUser = await dataManager.getUser(email);
+                if (existingUser) {
+                    alert('User already exists. Please login.');
+                    return;
+                }
+                
+                const newUser = {
+                    name, email, password, role,
+                    tasks: [],
+                    moods: [],
+                    studyHistory: [],
+                    focusBreaks: [],
+                    createdAt: new Date().toISOString(),
+                    subscription: 'trial',
+                    analytics: {}
+                };
+                
+                await dataManager.saveUser(newUser);
+                currentUser = newUser;
+                localStorage.setItem('focuswell_current_user', JSON.stringify(newUser));
+                renderDashboard();
+            });
+        }
+
+        async function renderDashboard() {
+            const aiPlan = await aiModel.generatePersonalizedPlan(currentUser);
+            const kpis = AnalyticsEngine.calculateKPIs(currentUser);
+            
+            document.getElementById('app').innerHTML = `
+                <div class="dashboard">
+                    <aside class="sidebar">
+                        <div style="padding: 2rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-brain" style="color: white;"></i>
+                                </div>
+                                <div>
+                                    <h3 style="color: white;">FocusWell Pro</h3>
+                                    <p style="color: #94a3b8; font-size: 0.875rem;">AI-Powered Suite</p>
+                                </div>
+                            </div>
+                            
+                            <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <a href="#" onclick="showScreen('dashboard')" class="nav-item" data-screen="dashboard" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none; transition: all 0.3s;">
+                                    <i class="fas fa-chart-line"></i> Dashboard
+                                </a>
+                                <a href="#" onclick="showScreen('tasks')" class="nav-item" data-screen="tasks" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none;">
+                                    <i class="fas fa-tasks"></i> Tasks
+                                </a>
+                                <a href="#" onclick="showScreen('ai-chat')" class="nav-item" data-screen="ai-chat" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none;">
+                                    <i class="fas fa-robot"></i> AI Assistant
+                                </a>
+                                <a href="#" onclick="showScreen('analytics')" class="nav-item" data-screen="analytics" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none;">
+                                    <i class="fas fa-chart-bar"></i> Analytics
+                                </a>
+                                <a href="#" onclick="showScreen('wellness')" class="nav-item" data-screen="wellness" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: white; text-decoration: none;">
+                                    <i class="fas fa-heartbeat"></i> Wellness
+                                </a>
+                            </nav>
+                            
+                            <div style="position: absolute; bottom: 2rem; left: 2rem; right: 2rem;">
+                                <div style="background: rgba(255,255,255,0.1); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;">
+                                    <p style="color: white; font-size: 0.875rem;">Subscription: <strong>${currentUser.subscription === 'trial' ? 'Trial' : 'Premium'}</strong></p>
+                                    <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin-top: 0.5rem;">
+                                        <div style="width: ${currentUser.subscription === 'trial' ? '30%' : '100%'}; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 2px;"></div>
+                                    </div>
+                                </div>
+                                <button onclick="logout()" class="btn-premium" style="width: 100%; background: rgba(239,68,68,0.8);">Logout</button>
+                            </div>
+                        </div>
+                    </aside>
+                    
+                    <main class="main-content">
+                        <!-- Dashboard Screen -->
+                        <div id="dashboard-screen" style="display: block;">
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <i class="fas fa-brain" style="font-size: 2rem; color: var(--primary);"></i>
+                                    <h3 style="margin-top: 1rem;">AI Productivity Score</h3>
+                                    <p style="font-size: 2.5rem; font-weight: bold;">${aiPlan.dailySchedule.productivityScore}</p>
+                                    <p>+12% vs last week</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-clock" style="font-size: 2rem; color: var(--secondary);"></i>
+                                    <h3 style="margin-top: 1rem;">Optimal Study Time</h3>
+                                    <p style="font-size: 1.5rem; font-weight: bold;">${aiPlan.dailySchedule.recommendedHours} hours</p>
+                                    <p>${aiPlan.dailySchedule.optimalTimeSlots[0] || '9:00 - 12:00'}</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-fire" style="font-size: 2rem; color: var(--warning);"></i>
+                                    <h3 style="margin-top: 1rem;">Current Streak</h3>
+                                    <p style="font-size: 2.5rem; font-weight: bold;">${kpis.streakScore.current}</p>
+                                    <p>Max: ${kpis.streakScore.max} days</p>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--success);"></i>
+                                    <h3 style="margin-top: 1rem;">Efficiency Rate</h3>
+                                    <p style="font-size: 2.5rem; font-weight: bold;">${Math.round(kpis.efficiency)}%</p>
+                                    <p>Target: 85%</p>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <h3>🤖 AI Personalized Plan</h3>
+                                <div style="margin-top: 1rem;">
+                                    <p><strong>Learning Style:</strong> ${aiPlan.learningStyle}</p>
+                                    <p><strong>Recommended Techniques:</strong> ${aiPlan.techniques.join(', ')}</p>
+                                    <p><strong>Expected Improvement:</strong> ${aiPlan.estimatedImprovement}</p>
+                                    <p><strong>AI Confidence:</strong> ${aiPlan.aiConfidence}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card" style="padding: 1.5rem;">
+                                <h3>📋 Priority Recommendations</h3>
+                                <ul style="margin-top: 1rem; list-style: none;">
+                                    ${kpis.recommendations.map(rec => `<li style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem;"></i>${rec}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Tasks Screen -->
+                        <div id="tasks-screen" style="display: none;">
+                            <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <h3>➕ Add New Task</h3>
+                                <form id="addTaskForm" style="margin-top: 1rem;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                        <input type="text" id="taskTitle" placeholder="Task title" required style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                        <input type="text" id="taskSubject" placeholder="Subject/Category" required style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                        <input type="date" id="taskDeadline" required style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                        <select id="taskPriority" style="padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                            <option value="low">Low Priority</option>
+                                            <option value="medium" selected>Medium Priority</option>
+                                            <option value="high">High Priority</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn-premium" style="margin-top: 1rem; width: 100%;">Add Task with AI Optimization</button>
+                                </form>
+                            </div>
+                            
+                            <div class="task-board" id="taskBoard">
+                                ${renderTaskBoard(currentUser.tasks || [])}
+                            </div>
+                        </div>
+                        
+                        <!-- AI Chat Screen -->
+                        <div id="ai-chat-screen" style="display: none;">
+                            <div class="ai-chat">
+                                <div class="chat-messages" id="chatMessages">
+                                    <div class="message ai">
+                                        <div class="message-bubble">
+                                            Hello! I'm your AI study assistant. How can I help you today? I can help with study planning, motivation, or answering questions about your progress.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="padding: 1rem; border-top: 1px solid #e5e7eb; display: flex; gap: 1rem;">
+                                    <input type="text" id="chatInput" placeholder="Ask me anything about studying, productivity, or wellness..." style="flex: 1; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem;">
+                                    <button onclick="sendMessage()" class="btn-premium">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analytics Screen -->
+                        <div id="analytics-screen" style="display: none;">
+                            <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <h3>📊 Performance Analytics</h3>
+                                <canvas id="performanceChart" style="max-height: 400px; margin-top: 1rem;"></canvas>
+                            </div>
+                            
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <h4>Task Completion Rate</h4>
+                                    <p style="font-size: 2rem; font-weight: bold;">${Math.round(kpis.completionRate)}%</p>
+                                    <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; margin-top: 0.5rem;">
+                                        <div style="width: ${kpis.completionRate}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <h4>Average Task Time</h4>
+                                    <p style="font-size: 2rem; font-weight: bold;">${Math.round(kpis.averageTaskTime)} min</p>
+                                    <p>Optimal: 45-60 min</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Wellness Screen -->
+                        <div id="wellness-screen" style="display: none;">
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <i class="fas fa-smile" style="font-size: 2rem;"></i>
+                                    <h3>Mood Tracker</h3>
+                                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                                        <button onclick="logMood('great')" class="mood-btn">😁 Great</button>
+                                        <button onclick="logMood('good')" class="mood-btn">🙂 Good</button>
+                                        <button onclick="logMood('okay')" class="mood-btn">😐 Okay</button>
+                                        <button onclick="logMood('stressed')" class="mood-btn">😫 Stressed</button>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <i class="fas fa-spa" style="font-size: 2rem;"></i>
+                                    <h3>Wellness Tips</h3>
+                                    <p>Take a 5-minute break every hour</p>
+                                    <p>Stay hydrated throughout the day</p>
+                                    <button class="btn-premium" style="margin-top: 1rem;" onclick="startMeditation()">Start Meditation 🧘</button>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            `;
+            
+            // Initialize charts
+            initPerformanceChart();
+            
+            // Setup task form
+            document.getElementById('addTaskForm')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await addTask();
+            });
+        }
+        
+        function renderTaskBoard(tasks) {
+            const columns = {
+                'pending': tasks.filter(t => !t.completed),
+                'completed': tasks.filter(t => t.completed)
+            };
+            
+            return `
+                <div class="task-column">
+                    <h4>📋 Pending Tasks (${columns.pending.length})</h4>
+                    ${columns.pending.map(task => `
+                        <div class="task-card" onclick="toggleTask('${task.id}')">
+                            <strong>${task.title}</strong>
+                            <p style="font-size: 0.875rem; color: #6b7280;">${task.subject} • Due: ${task.deadline}</p>
+                            <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: ${task.priority === 'high' ? '#fee2e2' : '#e5e7eb'}; border-radius: 0.25rem;">${task.priority}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="task-column">
+                    <h4>✅ Completed (${columns.completed.length})</h4>
+                    ${columns.completed.map(task => `
+                        <div class="task-card" style="opacity: 0.7;">
+                            <strong>✓ ${task.title}</strong>
+                            <p style="font-size: 0.875rem; color: #6b7280;">Completed with AI assistance</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        function initPerformanceChart() {
+            const ctx = document.getElementById('performanceChart')?.getContext('2d');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Productivity Score',
+                            data: [65, 72, 78, 85],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59,130,246,0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Focus Score',
+                            data: [70, 75, 80, 82],
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139,92,246,0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        async function addTask() {
+            const title = document.getElementById('taskTitle').value;
+            const subject = document.getElementById('taskSubject').value;
+            const deadline = document.getElementById('taskDeadline').value;
+            const priority = document.getElementById('taskPriority').value;
+            
+            const newTask = {
+                id: Date.now().toString(),
+                title, subject, deadline, priority,
+                completed: false,
+                createdAt: new Date().toISOString(),
+                timeSpent: 0
+            };
+            
+            currentUser.tasks = currentUser.tasks || [];
+            currentUser.tasks.push(newTask);
+            await dataManager.saveUser(currentUser);
+            localStorage.setItem('focuswell_current_user', JSON.stringify(currentUser));
+            
+            renderDashboard();
+            showScreen('tasks');
+        }
+        
+        window.toggleTask = async (taskId) => {
+            const task = currentUser.tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed;
+                if (task.completed) {
+                    task.completedAt = new Date().toISOString();
+                }
+                await dataManager.saveUser(currentUser);
+                localStorage.setItem('focuswell_current_user', JSON.stringify(currentUser));
+                renderDashboard();
+            }
+        };
+        
+        window.logMood = async (mood) => {
+            currentUser.moods = currentUser.moods || [];
+            currentUser.moods.push({
+                mood,
+                date: new Date().toISOString()
+            });
+            await dataManager.saveUser(currentUser);
+            localStorage.setItem('focuswell_current_user', JSON.stringify(currentUser));
+            alert(`Mood logged: ${mood}! Your AI assistant notes this for better recommendations.`);
+        };
+        
+        window.sendMessage = async () => {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML += `
+                <div class="message user">
+                    <div class="message-bubble">${message}</div>
+                </div>
+            `;
+            
+            input.value = '';
+            
+            // AI Response based on message analysis
+            const analysis = await aiModel.analyzeText(message);
+            let response = '';
+            
+            if (message.toLowerCase().includes('study') || message.toLowerCase().includes('plan')) {
+                response = `Based on your study patterns, I recommend focusing on ${analysis.topics.join(', ')}. Your optimal study time is in the morning when your energy is highest. Would you like me to create a personalized study schedule?`;
+            } else if (message.toLowerCase().includes('stress') || message.toLowerCase().includes('tired')) {
+                response = `I notice you're feeling ${analysis.sentiment}. Let me suggest a 5-minute breathing exercise. Take deep breaths: inhale for 4 seconds, hold for 4, exhale for 4. Repeat 5 times. You've got this! 💪`;
+            } else {
+                response = `Thank you for sharing! Based on my analysis (${Math.round(analysis.confidence * 100)}% confidence), here's my suggestion: Stay consistent with your study habits, take regular breaks, and celebrate small wins. Your dedication will pay off! 🌟`;
+            }
+            
+            setTimeout(() => {
+                chatMessages.innerHTML += `
+                    <div class="message ai">
+                        <div class="message-bubble">${response}</div>
+                    </div>
+                `;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 500);
+        };
+        
+        window.startMeditation = () => {
+            alert("🧘 Guided Meditation\n\n1. Find a comfortable position\n2. Close your eyes\n3. Breathe naturally\n4. Focus on your breath for 2 minutes\n\nYour AI coach is here to support your wellness journey!");
+        };
+        
+        window.showScreen = (screen) => {
+            const screens = ['dashboard', 'tasks', 'ai-chat', 'analytics', 'wellness'];
+            screens.forEach(s => {
+                const element = document.getElementById(`${s}-screen`);
+                if (element) element.style.display = 'none';
+            });
+            document.getElementById(`${screen}-screen`).style.display = 'block';
+            
+            // Highlight active nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.style.background = 'transparent';
+            });
+        };
+        
+        window.logout = () => {
+            localStorage.removeItem('focuswell_current_user');
+            currentUser = null;
+            renderLogin();
+        };
+        
+        // Export functions to global
+        window.renderLogin = renderLogin;
+        window.renderRegister = renderRegister;
+        window.renderDashboard = renderDashboard;
+        window.showScreen = showScreen;
+        window.addTask = addTask;
+        window.toggleTask = toggleTask;
+        window.logMood = logMood;
+        window.sendMessage = sendMessage;
+        window.startMeditation = startMeditation;
+        window.logout = logout;
+        
+        // Initialize app
+        init();
+    </script>
 </body>
 </html>
-```
