@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>FocusWell Social | Study Smarter with AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>StudyBuddy AI | Your Happy Study Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
@@ -16,481 +16,654 @@
         }
 
         :root {
-            --primary: #405DE6;
-            --primary-dark: #3851c9;
-            --secondary: #E4405F;
-            --accent: #F56040;
-            --success: #00C851;
-            --warning: #FFB900;
-            --dark: #262626;
-            --light: #FAFAFA;
-            --gray: #8E8E8E;
-            --border: #DBDBDB;
+            --primary: #FF6B9D;
+            --primary-dark: #FF5277;
+            --secondary: #6C63FF;
+            --accent: #FFD166;
+            --success: #06D6A0;
+            --warning: #FF9F1C;
+            --danger: #EF476F;
+            --dark: #2D3047;
+            --light: #F9F9FF;
+            --white: #FFFFFF;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.12);
+            --radius: 20px;
+            --radius-sm: 12px;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #FAFAFA;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Instagram-style Stories Bar */
-        .stories-container {
+        /* Cute Animations */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Navigation */
+        .nav-bar {
             background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-        }
-
-        .stories-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .story-item {
-            display: inline-flex;
-            flex-direction: column;
+            border-radius: 50px;
+            padding: 12px 24px;
+            margin: 16px 20px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-right: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
             cursor: pointer;
-            transition: transform 0.2s;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.3s;
+            font-weight: 600;
         }
 
-        .story-item:hover {
-            transform: scale(1.05);
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
         }
 
-        .story-ring {
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        /* Stress Meter */
+        .stress-meter {
+            background: linear-gradient(135deg, #FFE8E8, #FFE0F0);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stress-level {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-toggle {
             width: 70px;
             height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
-            padding: 2px;
-            margin-bottom: 8px;
-        }
-
-        .story-ring-inner {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .story-ring-inner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .story-avatar {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-        }
-
-        /* Post Cards */
-        .post-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-        }
-
-        .post-avatar {
-            width: 42px;
-            height: 42px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            margin-right: 12px;
-        }
-
-        .post-info {
-            flex: 1;
-        }
-
-        .post-name {
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .post-time {
-            font-size: 11px;
-            color: var(--gray);
-        }
-
-        .post-options {
             cursor: pointer;
-            font-size: 20px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
         }
 
-        .post-image {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .post-stats {
-            display: flex;
-            gap: 16px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .post-stat {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .post-stat:hover {
+        .chatbot-toggle:hover {
             transform: scale(1.1);
         }
 
-        .post-caption {
-            padding: 12px 16px;
-        }
-
-        /* Navigation Bar */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
             right: 0;
+            width: 380px;
+            height: 500px;
             background: white;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--gray);
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-        }
-
-        .nav-item i {
-            font-size: 24px;
-        }
-
-        .nav-item span {
-            font-size: 11px;
-        }
-
-        /* Study Stats Dashboard */
-        .stats-dashboard {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 20px;
-            padding: 20px;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        /* AI Insights Card */
-        .ai-insight {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 16px;
-            padding: 16px;
-            color: white;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .ai-insight:hover {
-            transform: translateY(-3px);
-        }
-
-        /* Modal */
-        .modal {
+            box-shadow: var(--shadow-lg);
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            max-width: 90%;
-            width: 400px;
-            max-height: 80%;
+        .chatbot-window.open {
+            display: flex;
+        }
+
+        .chat-messages {
+            flex: 1;
             overflow-y: auto;
             padding: 20px;
         }
 
-        /* Create Post Modal */
-        .create-post {
-            background: white;
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 10px 15px;
             border-radius: 20px;
-            padding: 20px;
+            font-size: 14px;
         }
 
-        /* Leaderboard */
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
+        .message.bot .message-bubble {
+            background: #F0F0FF;
+            color: var(--dark);
         }
 
-        .leaderboard-rank {
-            font-size: 20px;
-            font-weight: bold;
-            width: 50px;
-            color: var(--primary);
-        }
-
-        .leaderboard-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+        .message.user .message-bubble {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            margin: 0 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: white;
         }
 
-        /* Study Timer */
-        .timer-card {
-            text-align: center;
+        /* Flashcard */
+        .flashcard {
+            background: white;
+            border-radius: var(--radius);
             padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
         }
 
-        .timer-display {
-            font-size: 64px;
-            font-weight: bold;
-            font-family: monospace;
-            margin: 20px 0;
+        .flashcard:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255,107,157,0.05);
+        }
+
+        .upload-area:hover {
+            background: rgba(255,107,157,0.1);
+            border-color: var(--secondary);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(108,99,255,0.3);
+        }
+
+        /* Study Guide */
+        .study-guide-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Transcription */
+        .transcript-item {
+            background: #F9F9FF;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
         }
 
         /* Responsive */
-        .main-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px 16px 80px 16px;
+        @media (max-width: 1000px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
         }
 
-        @keyframes likeAnimation {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .chatbot-window { width: 300px; right: -20px; }
         }
 
-        .liked {
-            animation: likeAnimation 0.3s ease;
-            color: var(--secondary);
+        /* Cute Elements */
+        .cute-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
         }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: var(--radius);
+            padding: 40px;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: "🌟";
+            position: absolute;
+            font-size: 100px;
+            right: 20px;
+            bottom: 20px;
+            opacity: 0.2;
+        }
+
+        /* Stress Indicator */
+        .stress-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .stress-low { background: var(--success); }
+        .stress-medium { background: var(--warning); }
+        .stress-high { background: var(--danger); }
     </style>
 </head>
 <body>
     <div id="app"></div>
 
     <script>
-        // ============ AI/ML ENGINE ============
-        class StudyAIEngine {
+        // ============ ADVANCED STRESS ANALYSIS ALGORITHM ============
+        class StressAnalyzer {
             constructor() {
-                this.model = null;
+                this.weights = {
+                    sleepQuality: 0.25,
+                    anxietyLevel: 0.30,
+                    physicalSymptoms: 0.20,
+                    workload: 0.15,
+                    socialSupport: 0.10
+                };
             }
 
-            async initModel() {
-                // Create a simple neural network for productivity prediction
-                this.model = tf.sequential();
-                this.model.add(tf.layers.dense({ units: 32, activation: 'relu', inputShape: [4] }));
-                this.model.add(tf.layers.dense({ units: 16, activation: 'relu' }));
-                this.model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }));
+            calculateStressLevel(userData) {
+                const factors = {
+                    sleepQuality: userData.sleepQuality || 7,
+                    anxietyLevel: userData.anxietyLevel || 3,
+                    physicalSymptoms: userData.physicalSymptoms || 2,
+                    workload: userData.workload || 3,
+                    socialSupport: userData.socialSupport || 4
+                };
+
+                let stressScore = 0;
+                for (const [factor, value] of Object.entries(factors)) {
+                    const normalizedValue = value / 10;
+                    stressScore += normalizedValue * this.weights[factor];
+                }
+
+                stressScore = Math.min(1, Math.max(0, stressScore)) * 100;
                 
-                this.model.compile({
-                    optimizer: tf.train.adam(0.01),
-                    loss: 'meanSquaredError'
-                });
+                let level = 'low';
+                let color = '#06D6A0';
+                let emoji = '😊';
+                let advice = '';
                 
-                // Train with sample data
-                const xs = tf.tensor2d([
-                    [2, 7, 3, 80], [4, 6, 5, 70], [1, 8, 2, 90], [5, 5, 8, 50], [3, 7, 4, 85]
-                ]);
-                const ys = tf.tensor2d([[0.7], [0.9], [0.5], [0.95], [0.75]]);
+                if (stressScore < 30) {
+                    level = 'low';
+                    color = '#06D6A0';
+                    emoji = '😊✨';
+                    advice = "You're doing great! Keep maintaining your healthy habits! 🌟";
+                } else if (stressScore < 60) {
+                    level = 'medium';
+                    color = '#FF9F1C';
+                    emoji = '😌🌿';
+                    advice = "Take some deep breaths. A short break or a walk might help! 🚶‍♀️";
+                } else {
+                    level = 'high';
+                    color = '#EF476F';
+                    emoji = '😰💙';
+                    advice = "You need some rest! Try our relaxation exercises or talk to someone. You're not alone! 🤗";
+                }
                 
-                await this.model.fit(xs, ys, { epochs: 20 });
-                console.log('AI Model trained!');
+                return { score: Math.round(stressScore), level, color, emoji, advice };
             }
 
-            async predictProductivity(studyHours, sleepHours, breaks, focusScore) {
-                if (!this.model) await this.initModel();
-                const input = tf.tensor2d([[studyHours, sleepHours, breaks, focusScore]]);
-                const prediction = await this.model.predict(input);
-                const score = (await prediction.data())[0] * 100;
-                return Math.min(98, Math.max(20, Math.round(score)));
+            generateStressReductionTips(stressLevel) {
+                const tips = {
+                    low: [
+                        "🎯 Keep up your great routine!",
+                        "📚 Challenge yourself with new topics",
+                        "💪 Maintain your healthy habits"
+                    ],
+                    medium: [
+                        "🧘 Try 5 minutes of deep breathing",
+                        "🚶 Take a 10-minute walk outside",
+                        "🎵 Listen to calming music",
+                        "📝 Journal your thoughts"
+                    ],
+                    high: [
+                        "🛑 Take an immediate break from studying",
+                        "💆 Try progressive muscle relaxation",
+                        "🗣️ Talk to a friend or counselor",
+                        "😴 Prioritize sleep tonight",
+                        "🍵 Make yourself a warm tea"
+                    ]
+                };
+                return tips[stressLevel] || tips.medium;
+            }
+        }
+
+        // ============ AI STUDY GUIDE GENERATOR ============
+        class StudyGuideGenerator {
+            generateGuide(topic, complexity = 'medium') {
+                const guides = {
+                    'math': {
+                        title: 'Mastering Mathematics 📐',
+                        segments: [
+                            '1. Understanding Basic Concepts',
+                            '2. Practice Problems & Solutions',
+                            '3. Common Mistakes to Avoid',
+                            '4. Advanced Applications',
+                            '5. Quiz Yourself!'
+                        ],
+                        tips: 'Practice daily for 30 minutes!'
+                    },
+                    'science': {
+                        title: 'Science Explorer 🔬',
+                        segments: [
+                            '1. Key Scientific Principles',
+                            '2. Experiments & Observations',
+                            '3. Real-world Applications',
+                            '4. Review Questions',
+                            '5. Lab Safety Tips'
+                        ],
+                        tips: 'Connect concepts to real life!'
+                    },
+                    'programming': {
+                        title: 'Coding Adventure 💻',
+                        segments: [
+                            '1. Syntax Fundamentals',
+                            '2. Practice Exercises',
+                            '3. Debugging Techniques',
+                            '4. Project Ideas',
+                            '5. Code Review Checklist'
+                        ],
+                        tips: 'Code every day, even for 15 minutes!'
+                    }
+                };
+                
+                const defaultGuide = {
+                    title: `Study Guide: ${topic} 📚`,
+                    segments: [
+                        '1. Introduction & Overview',
+                        '2. Key Concepts to Master',
+                        '3. Practice Exercises',
+                        '4. Common Challenges',
+                        '5. Summary & Review'
+                    ],
+                    tips: 'Take breaks every 45 minutes for best focus!'
+                };
+                
+                return guides[topic.toLowerCase()] || defaultGuide;
             }
 
-            generateStudyTip(userData) {
-                const tips = [
-                    "🎯 Use the Pomodoro Technique: 25 min study, 5 min break!",
-                    "📝 Active recall beats passive reading - test yourself!",
-                    "🌙 Sleep consolidates memory - get 7-8 hours!",
-                    "🎵 Lo-fi music can improve focus by 15%!",
-                    "✍️ Handwrite notes for better retention!",
-                    "🏆 Study with friends using our groups feature!",
-                    "🧘 Take movement breaks every 90 minutes!",
-                    "📱 Put your phone on focus mode while studying!"
-                ];
-                return tips[Math.floor(Math.random() * tips.length)];
+            generateFlashcards(topic, count = 5) {
+                const flashcards = [];
+                for (let i = 1; i <= count; i++) {
+                    flashcards.push({
+                        id: i,
+                        question: `${topic} - Question ${i}: What is a key concept you've learned?`,
+                        answer: `This is the answer for ${topic} concept ${i}. Review your notes for specific details!`
+                    });
+                }
+                return flashcards;
+            }
+        }
+
+        // ============ LECTURE TRANSCRIPTION ============
+        class LectureTranscriber {
+            constructor() {
+                this.transcripts = [];
+                this.isRecording = false;
+                this.recognition = null;
             }
 
-            analyzeStudyPattern(studyHistory) {
-                if (studyHistory.length < 3) return null;
-                
-                const bestTimes = {};
-                studyHistory.forEach(session => {
-                    const hour = new Date(session.time).getHours();
-                    const period = hour < 12 ? "Morning" : hour < 17 ? "Afternoon" : "Evening";
-                    bestTimes[period] = (bestTimes[period] || 0) + (session.productivity || 70);
-                });
-                
-                let bestTime = "Morning";
-                let maxScore = 0;
-                for (const [time, score] of Object.entries(bestTimes)) {
-                    if (score > maxScore) {
-                        maxScore = score;
-                        bestTime = time;
+            initSpeechRecognition() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.continuous = true;
+                    this.recognition.interimResults = true;
+                    this.recognition.lang = 'en-US';
+                    return true;
+                }
+                return false;
+            }
+
+            startRecording(onResult, onEnd) {
+                if (!this.recognition) {
+                    if (!this.initSpeechRecognition()) {
+                        alert("Speech recognition not supported. Please type your notes instead.");
+                        return false;
                     }
                 }
                 
+                this.isRecording = true;
+                this.recognition.onresult = (event) => {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    if (onResult) onResult(transcript);
+                };
+                
+                this.recognition.onend = () => {
+                    this.isRecording = false;
+                    if (onEnd) onEnd();
+                };
+                
+                this.recognition.start();
+                return true;
+            }
+
+            stopRecording() {
+                if (this.recognition && this.isRecording) {
+                    this.recognition.stop();
+                    this.isRecording = false;
+                }
+            }
+
+            generateSummary(transcript) {
+                const sentences = transcript.split(/[.!?]+/).filter(s => s.trim().length > 20);
+                const keyPoints = sentences.slice(0, 5).map(s => s.trim());
                 return {
-                    bestTimeToStudy: bestTime,
-                    consistency: studyHistory.length,
-                    averageProductivity: studyHistory.reduce((sum, s) => sum + (s.productivity || 70), 0) / studyHistory.length
+                    summary: keyPoints.join('. ') + '.',
+                    keyPoints: keyPoints,
+                    wordCount: transcript.split(' ').length,
+                    readingTime: Math.ceil(transcript.split(' ').length / 200)
                 };
             }
         }
 
-        // ============ DATA STORAGE ============
-        const DB = {
-            getCurrentUser: () => JSON.parse(localStorage.getItem('focuswell_user')),
-            setCurrentUser: (user) => localStorage.setItem('focuswell_user', JSON.stringify(user)),
-            clearCurrentUser: () => localStorage.removeItem('focuswell_user'),
-            
-            getPosts: () => JSON.parse(localStorage.getItem('focuswell_posts') || '[]'),
-            savePost: (post) => {
-                const posts = DB.getPosts();
-                posts.unshift(post);
-                localStorage.setItem('focuswell_posts', JSON.stringify(posts.slice(0, 50)));
-            },
-            updatePost: (postId, updates) => {
-                const posts = DB.getPosts();
-                const index = posts.findIndex(p => p.id === postId);
-                if (index !== -1) {
-                    posts[index] = { ...posts[index], ...updates };
-                    localStorage.setItem('focuswell_posts', JSON.stringify(posts));
+        // ============ AI CHATBOT ============
+        class StudyChatbot {
+            getResponse(message, userData) {
+                const msg = message.toLowerCase();
+                const stressLevel = userData?.stressLevel || 30;
+                
+                if (msg.includes('stress') || msg.includes('anxious') || msg.includes('worried')) {
+                    return "💙 I hear you! Stress is normal, but you're not alone. Try taking 5 deep breaths with me: Inhale... 1,2,3,4... Exhale... 1,2,3,4. Feel better? You've got this! 🌸";
                 }
-            },
-            
-            getUsers: () => JSON.parse(localStorage.getItem('focuswell_users') || '[]'),
-            saveUser: (user) => {
-                const users = DB.getUsers();
-                users.push(user);
-                localStorage.setItem('focuswell_users', JSON.stringify(users));
-            },
-            updateUser: (email, updates) => {
-                const users = DB.getUsers();
-                const index = users.findIndex(u => u.email === email);
-                if (index !== -1) {
-                    users[index] = { ...users[index], ...updates };
-                    localStorage.setItem('focuswell_users', JSON.stringify(users));
+                if (msg.includes('study tip') || msg.includes('how to study')) {
+                    return "📚 Here's a happy study tip: Try the Pomodoro method! Study for 25 minutes, then take a 5-minute dance break! 🎵 Makes learning so much more fun!";
                 }
-            },
-            getUser: (email) => DB.getUsers().find(u => u.email === email),
-            
-            getStudySessions: () => JSON.parse(localStorage.getItem('focuswell_sessions') || '[]'),
-            saveStudySession: (session) => {
-                const sessions = DB.getStudySessions();
-                sessions.push(session);
-                localStorage.setItem('focuswell_sessions', JSON.stringify(sessions.slice(-30)));
-            }
-        };
-
-        // Initialize sample data
-        function initSampleData() {
-            if (DB.getPosts().length === 0) {
-                const samplePosts = [
-                    { id: 1, userId: 'alex', userName: 'Alex Chen', userAvatar: 'A', content: 'Just finished 4 hours of deep work! 📚 Feeling productive!', image: null, likes: 124, comments: 12, time: new Date().toISOString(), studyHours: 4 },
-                    { id: 2, userId: 'maria', userName: 'Maria Garcia', userAvatar: 'M', content: 'AI suggested I study in the morning and it worked! Got 92% on my quiz! 🎉', image: null, likes: 89, comments: 8, time: new Date(Date.now() - 3600000).toISOString(), studyHours: 3 },
-                    { id: 3, userId: 'james', userName: 'James Wilson', userAvatar: 'J', content: 'Study streak: 7 days! 🔥 Consistency is key!', image: null, likes: 234, comments: 23, time: new Date(Date.now() - 7200000).toISOString(), studyHours: 2.5 }
-                ];
-                samplePosts.forEach(post => DB.savePost(post));
-            }
-            
-            if (DB.getUsers().length === 0) {
-                const sampleUsers = [
-                    { name: 'Alex Chen', email: 'alex@example.com', password: '123', username: 'alexchen', bio: 'CS Student 🖥️ | AI Enthusiast', followers: 234, following: 189, points: 1250, studyStreak: 7 },
-                    { name: 'Current User', email: 'student@focuswell.com', password: '123', username: 'student', bio: 'Learning every day! 📚', followers: 45, following: 67, points: 450, studyStreak: 3 }
-                ];
-                sampleUsers.forEach(u => DB.saveUser(u));
+                if (msg.includes('motivation') || msg.includes('motivate')) {
+                    return "🌟 You are capable of amazing things! Remember why you started. Every small step counts toward your big dreams. Keep going, superstar! ⭐";
+                }
+                if (msg.includes('break') || msg.includes('tired')) {
+                    return "😴 Time for a cozy break! Stretch, grab some water, or look out the window for 2 minutes. Your brain needs rest to learn better! 💤";
+                }
+                if (msg.includes('exam') || msg.includes('test')) {
+                    return "📝 Exam coming up? You've prepared well! Trust yourself, get good sleep, and eat a healthy breakfast. You'll do great! 🎯";
+                }
+                if (msg.includes('procrastinate') || msg.includes('delay')) {
+                    return "⏰ Let's beat procrastination together! Start with just 5 minutes of work - that's all. Often, getting started is the hardest part! You can do it! 🚀";
+                }
+                
+                return "🎓 Hi study buddy! I'm here to help with study tips, stress relief, motivation, or just to chat! What would you like to talk about today? 💫";
             }
         }
 
-        // ============ MAIN APP ============
-        let currentUser = null;
-        let currentScreen = 'home';
-        let aiEngine = new StudyAIEngine();
-        let timerInterval = null;
-        let timerSeconds = 0;
-        let isTimerRunning = false;
-
-        async function init() {
-            initSampleData();
-            await aiEngine.initModel();
+        // ============ STORAGE ============
+        const Storage = {
+            getUsers: () => JSON.parse(localStorage.getItem('studybuddy_users') || '[]'),
+            saveUser: (user) => {
+                const users = Storage.getUsers();
+                users.push(user);
+                localStorage.setItem('studybuddy_users', JSON.stringify(users));
+            },
+            getUser: (email) => Storage.getUsers().find(u => u.email === email),
+            updateUser: (email, data) => {
+                const users = Storage.getUsers();
+                const idx = users.findIndex(u => u.email === email);
+                if (idx !== -1) {
+                    users[idx] = { ...users[idx], ...data };
+                    localStorage.setItem('studybuddy_users', JSON.stringify(users));
+                }
+            },
+            getCurrent: () => JSON.parse(localStorage.getItem('studybuddy_current')),
+            setCurrent: (user) => localStorage.setItem('studybuddy_current', JSON.stringify(user)),
+            clearCurrent: () => localStorage.removeItem('studybuddy_current'),
             
-            const savedUser = DB.getCurrentUser();
-            if (savedUser) {
-                currentUser = savedUser;
-                renderHome();
+            getStudyGuides: () => JSON.parse(localStorage.getItem('studybuddy_guides') || '[]'),
+            saveStudyGuide: (guide) => {
+                const guides = Storage.getStudyGuides();
+                guides.push(guide);
+                localStorage.setItem('studybuddy_guides', JSON.stringify(guides.slice(-20)));
+            },
+            
+            getFlashcards: () => JSON.parse(localStorage.getItem('studybuddy_flashcards') || '[]'),
+            saveFlashcard: (card) => {
+                const cards = Storage.getFlashcards();
+                cards.push(card);
+                localStorage.setItem('studybuddy_flashcards', JSON.stringify(cards));
+            },
+            
+            getTranscripts: () => JSON.parse(localStorage.getItem('studybuddy_transcripts') || '[]'),
+            saveTranscript: (transcript) => {
+                const transcripts = Storage.getTranscripts();
+                transcripts.unshift(transcript);
+                localStorage.setItem('studybuddy_transcripts', JSON.stringify(transcripts.slice(0, 20)));
+            }
+        };
+
+        // ============ INITIALIZE ============
+        let currentUser = null;
+        let currentScreen = 'dashboard';
+        let stressAnalyzer = new StressAnalyzer();
+        let studyGuideGen = new StudyGuideGenerator();
+        let transcriber = new LectureTranscriber();
+        let chatbot = new StudyChatbot();
+        let currentFlashcardIndex = 0;
+        let flashcards = [];
+
+        function init() {
+            const saved = Storage.getCurrent();
+            if (saved) {
+                currentUser = saved;
+                renderDashboard();
             } else {
                 renderLogin();
             }
@@ -498,28 +671,22 @@
 
         function renderLogin() {
             document.getElementById('app').innerHTML = `
-                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #667eea, #764ba2);">
-                    <div style="background: white; border-radius: 24px; padding: 32px; max-width: 400px; width: 100%;">
-                        <div style="text-align: center; margin-bottom: 32px;">
-                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                                <i class="fas fa-brain" style="font-size: 40px; color: white;"></i>
-                            </div>
-                            <h1 style="font-size: 28px;">FocusWell</h1>
-                            <p style="color: #8E8E8E;">Study smarter with AI</p>
+                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                    <div class="glass-card" style="max-width: 450px; width: 100%; padding: 40px; text-align: center;">
+                        <div class="floating">
+                            <div style="font-size: 70px;">🎓✨</div>
                         </div>
+                        <h1 style="font-size: 32px; margin: 20px 0 10px;">StudyBuddy AI</h1>
+                        <p style="color: #666;">Your Happy Study Companion</p>
                         
-                        <form id="loginForm">
-                            <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #DBDBDB; border-radius: 8px;">
-                            <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #DBDBDB; border-radius: 8px;">
-                            <button type="submit" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Login</button>
+                        <form id="loginForm" style="margin-top: 30px;">
+                            <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 14px; margin-bottom: 12px; border: 2px solid #E0E0E0; border-radius: 12px;">
+                            <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 14px; margin-bottom: 20px; border: 2px solid #E0E0E0; border-radius: 12px;">
+                            <button type="submit" class="btn-primary" style="width: 100%;">Login →</button>
                         </form>
                         
-                        <p style="text-align: center; margin-top: 16px;">
-                            Demo: student@focuswell.com / 123
-                        </p>
-                        <p style="text-align: center; margin-top: 8px;">
-                            <a href="#" onclick="renderRegister(); return false;" style="color: #405DE6;">Create account</a>
-                        </p>
+                        <p style="margin-top: 20px;">New here? <a href="#" onclick="renderRegister(); return false;" style="color: var(--primary);">Create Account 🎉</a></p>
+                        <p style="margin-top: 15px; font-size: 12px; color: #999;">Demo: student@studybuddy.com / 123</p>
                     </div>
                 </div>
             `;
@@ -527,31 +694,30 @@
             document.getElementById('loginForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const user = DB.getUser(email);
-                if (user && user.password === password) {
+                const pwd = document.getElementById('password').value;
+                const user = Storage.getUser(email);
+                if (user && user.password === pwd) {
                     currentUser = user;
-                    DB.setCurrentUser(user);
-                    renderHome();
+                    Storage.setCurrent(user);
+                    renderDashboard();
                 } else {
-                    alert('Invalid credentials. Try student@focuswell.com / 123');
+                    alert('Invalid credentials. Try student@studybuddy.com / 123');
                 }
             });
         }
 
         function renderRegister() {
             document.getElementById('app').innerHTML = `
-                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #667eea, #764ba2);">
-                    <div style="background: white; border-radius: 24px; padding: 32px; max-width: 400px; width: 100%;">
-                        <h2 style="text-align: center; margin-bottom: 24px;">Create Account</h2>
+                <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                    <div class="glass-card" style="max-width: 450px; width: 100%; padding: 40px;">
+                        <h2 style="text-align: center; margin-bottom: 20px;">Create Account 🌟</h2>
                         <form id="registerForm">
-                            <input type="text" id="name" placeholder="Full Name" required style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #DBDBDB; border-radius: 8px;">
-                            <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #DBDBDB; border-radius: 8px;">
-                            <input type="text" id="username" placeholder="Username" required style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #DBDBDB; border-radius: 8px;">
-                            <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #DBDBDB; border-radius: 8px;">
-                            <button type="submit" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-weight: bold;">Sign Up</button>
+                            <input type="text" id="name" placeholder="Full Name" required style="width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid #E0E0E0; border-radius: 12px;">
+                            <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid #E0E0E0; border-radius: 12px;">
+                            <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #E0E0E0; border-radius: 12px;">
+                            <button type="submit" class="btn-primary" style="width: 100%;">Sign Up 🎉</button>
                         </form>
-                        <p style="text-align: center; margin-top: 16px;"><a href="#" onclick="renderLogin(); return false;">Back to Login</a></p>
+                        <p style="text-align: center; margin-top: 20px;"><a href="#" onclick="renderLogin(); return false;">Back to Login</a></p>
                     </div>
                 </div>
             `;
@@ -560,432 +726,648 @@
                 e.preventDefault();
                 const name = document.getElementById('name').value;
                 const email = document.getElementById('email').value;
-                const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
                 
-                if (DB.getUser(email)) {
-                    alert('User already exists!');
+                if (Storage.getUser(email)) {
+                    alert('User exists! Login instead.');
                     return;
                 }
                 
-                const newUser = { name, email, username, password, bio: 'Student', followers: 0, following: 0, points: 0, studyStreak: 0, avatar: name[0] };
-                DB.saveUser(newUser);
+                const newUser = {
+                    name, email, password,
+                    sleepQuality: 7,
+                    anxietyLevel: 3,
+                    physicalSymptoms: 2,
+                    workload: 3,
+                    socialSupport: 4,
+                    studyStreak: 0,
+                    points: 0,
+                    createdAt: new Date().toISOString()
+                };
+                Storage.saveUser(newUser);
                 currentUser = newUser;
-                DB.setCurrentUser(newUser);
-                renderHome();
+                Storage.setCurrent(newUser);
+                renderDashboard();
             });
         }
 
-        async function renderHome() {
-            const posts = DB.getPosts();
-            const studySessions = DB.getStudySessions();
-            const todaySessions = studySessions.filter(s => new Date(s.time).toDateString() === new Date().toDateString());
-            const totalStudyHours = todaySessions.reduce((sum, s) => sum + s.hours, 0);
-            
-            const aiTip = aiEngine.generateStudyTip(currentUser);
-            const studyPattern = aiEngine.analyzeStudyPattern(studySessions);
-            
-            // Get leaderboard
-            const users = DB.getUsers();
-            const leaderboard = [...users].sort((a, b) => (b.points || 0) - (a.points || 0)).slice(0, 10);
+        function renderDashboard() {
+            const stressData = stressAnalyzer.calculateStressLevel(currentUser);
+            const stressTips = stressAnalyzer.generateStressReductionTips(stressData.level);
+            const transcripts = Storage.getTranscripts();
+            const guides = Storage.getStudyGuides();
+            const flashcardsList = Storage.getFlashcards();
             
             document.getElementById('app').innerHTML = `
-                <div class="main-container">
-                    <!-- Stats Dashboard -->
-                    <div class="stats-dashboard">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <h3>👋 Hello, ${currentUser.name}!</h3>
-                                <p style="opacity: 0.9;">${currentUser.studyStreak || 0} day streak 🔥</p>
-                            </div>
-                            <div style="text-align: right;">
-                                <h2>${totalStudyHours.toFixed(1)}h</h2>
-                                <p style="opacity: 0.9;">today</p>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 16px; margin-top: 16px;">
-                            <div style="flex: 1; background: rgba(255,255,255,0.2); border-radius: 12px; padding: 8px; text-align: center;">
-                                <div>🏆</div>
-                                <div><strong>${currentUser.points || 0}</strong></div>
-                                <div style="font-size: 11px;">Points</div>
-                            </div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.2); border-radius: 12px; padding: 8px; text-align: center;">
-                                <div>👥</div>
-                                <div><strong>${currentUser.followers || 0}</strong></div>
-                                <div style="font-size: 11px;">Followers</div>
-                            </div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.2); border-radius: 12px; padding: 8px; text-align: center;">
-                                <div>📚</div>
-                                <div><strong>${studySessions.length}</strong></div>
-                                <div style="font-size: 11px;">Sessions</div>
-                            </div>
-                        </div>
+                <div class="nav-bar">
+                    <div class="logo">
+                        <span>🎓✨</span>
+                        <span>StudyBuddy AI</span>
                     </div>
-                    
-                    <!-- AI Insight Card -->
-                    <div class="ai-insight" onclick="showAIAnalysis()">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <i class="fas fa-robot" style="font-size: 24px;"></i>
-                            <div style="flex: 1;">
-                                <strong>AI Study Insight</strong>
-                                <p style="font-size: 13px; opacity: 0.9;">${aiTip}</p>
-                            </div>
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
-                        ${studyPattern ? `<div style="margin-top: 12px; font-size: 12px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px;">
-                            📊 Best study time: ${studyPattern.bestTimeToStudy} | Consistency: ${studyPattern.consistency} days
-                        </div>` : ''}
-                    </div>
-                    
-                    <!-- Stories -->
-                    <div class="stories-container">
-                        <div class="story-item" onclick="showStudyTimer()">
-                            <div class="story-ring">
-                                <div class="story-ring-inner story-avatar">
-                                    <i class="fas fa-stopwatch" style="font-size: 32px;"></i>
-                                </div>
-                            </div>
-                            <span style="font-size: 12px;">Timer</span>
-                        </div>
-                        <div class="story-item" onclick="showLeaderboard()">
-                            <div class="story-ring">
-                                <div class="story-ring-inner story-avatar">
-                                    <i class="fas fa-trophy" style="font-size: 32px;"></i>
-                                </div>
-                            </div>
-                            <span style="font-size: 12px;">Leaderboard</span>
-                        </div>
-                        <div class="story-item" onclick="showCreatePost()">
-                            <div class="story-ring">
-                                <div class="story-ring-inner story-avatar">
-                                    <i class="fas fa-plus" style="font-size: 32px;"></i>
-                                </div>
-                            </div>
-                            <span style="font-size: 12px;">Share</span>
-                        </div>
-                        <div class="story-item" onclick="showProfile()">
-                            <div class="story-ring">
-                                <div class="story-ring-inner story-avatar">
-                                    <i class="fas fa-user" style="font-size: 32px;"></i>
-                                </div>
-                            </div>
-                            <span style="font-size: 12px;">Profile</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Posts Feed -->
-                    <div id="postsFeed">
-                        ${posts.map(post => renderPost(post)).join('')}
+                    <div class="nav-links">
+                        <div class="nav-link ${currentScreen === 'dashboard' ? 'active' : ''}" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link" onclick="renderStudyTools()">📚 Study Tools</div>
+                        <div class="nav-link" onclick="renderFlashcards()">🃏 Flashcards</div>
+                        <div class="nav-link" onclick="renderLectureTools()">🎙️ Lectures</div>
+                        <div class="nav-link" onclick="renderWellness()">💖 Wellness</div>
+                        <div class="nav-link" onclick="logout()">🚪 Logout</div>
                     </div>
                 </div>
                 
-                <!-- Bottom Navigation -->
-                <div class="bottom-nav">
-                    <div class="nav-item ${currentScreen === 'home' ? 'active' : ''}" onclick="renderHome()">
-                        <i class="fas fa-home"></i>
-                        <span>Home</span>
-                    </div>
-                    <div class="nav-item" onclick="showStudyTimer()">
-                        <i class="fas fa-stopwatch"></i>
-                        <span>Study</span>
-                    </div>
-                    <div class="nav-item" onclick="showLeaderboard()">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Rank</span>
-                    </div>
-                    <div class="nav-item" onclick="showProfile()">
-                        <i class="fas fa-user"></i>
-                        <span>Profile</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderPost(post) {
-            const isLiked = false; // Would check user's likes in real implementation
-            return `
-                <div class="post-card">
-                    <div class="post-header">
-                        <div class="post-avatar">${post.userAvatar || post.userName[0]}</div>
-                        <div class="post-info">
-                            <div class="post-name">${post.userName}</div>
-                            <div class="post-time">${formatTimeAgo(new Date(post.time))}</div>
-                        </div>
-                        <div class="post-options">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </div>
-                    </div>
-                    <div class="post-image">
-                        ${post.image ? `<img src="${post.image}" style="width:100%; height:100%; object-fit:cover;">` : `
-                            <div style="text-align: center; padding: 40px;">
-                                <i class="fas fa-graduation-cap" style="font-size: 60px; margin-bottom: 16px;"></i>
-                                <p style="font-size: 18px;">📚 Studied ${post.studyHours || 2} hours today!</p>
-                                <p style="font-size: 14px; margin-top: 8px;">${post.content || 'Keep grinding! 💪'}</p>
-                            </div>
-                        `}
-                    </div>
-                    <div class="post-stats">
-                        <div class="post-stat" onclick="likePost(${post.id})">
-                            <i class="fas fa-heart"></i>
-                            <span>${post.likes || 0}</span>
-                        </div>
-                        <div class="post-stat">
-                            <i class="fas fa-comment"></i>
-                            <span>${post.comments || 0}</span>
-                        </div>
-                        <div class="post-stat">
-                            <i class="fas fa-book-open"></i>
-                            <span>${post.studyHours || 0}h studied</span>
-                        </div>
-                    </div>
-                    <div class="post-caption">
-                        <strong>${post.userName}</strong> ${post.content || 'Just finished a productive study session! 🎯'}
-                    </div>
-                </div>
-            `;
-        }
-
-        function formatTimeAgo(date) {
-            const seconds = Math.floor((new Date() - date) / 1000);
-            if (seconds < 60) return `${seconds}s ago`;
-            const minutes = Math.floor(seconds / 60);
-            if (minutes < 60) return `${minutes}m ago`;
-            const hours = Math.floor(minutes / 60);
-            if (hours < 24) return `${hours}h ago`;
-            return `${Math.floor(hours / 24)}d ago`;
-        }
-
-        function showStudyTimer() {
-            document.getElementById('app').innerHTML = `
                 <div class="main-container">
-                    <div class="post-card timer-card">
-                        <h2>📚 Study Timer</h2>
-                        <div class="timer-display" id="timerDisplay">00:00:00</div>
-                        <div style="display: flex; gap: 12px; justify-content: center;">
-                            <button class="btn-primary" onclick="startTimer()" style="background: #405DE6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">Start</button>
-                            <button class="btn-primary" onclick="pauseTimer()" style="background: #E4405F; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">Pause</button>
-                            <button class="btn-primary" onclick="resetTimer()" style="background: #8E8E8E; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">Reset</button>
-                        </div>
-                        <div style="margin-top: 24px;">
-                            <button class="btn-primary" onclick="completeStudySession()" style="background: #00C851; width: 100%;">✓ Complete Session & Share</button>
+                    <!-- Welcome Banner -->
+                    <div class="welcome-banner">
+                        <h1>Hello, ${currentUser.name}! 👋</h1>
+                        <p>Ready for a productive and happy study session? Let's go! 🚀</p>
+                        <div style="margin-top: 15px;">
+                            <span class="stress-indicator stress-${stressData.level}"></span>
+                            Stress Level: ${stressData.level} (${stressData.score}%)
                         </div>
                     </div>
                     
-                    <div class="ai-insight" style="margin-top: 20px;">
-                        <i class="fas fa-lightbulb"></i> AI Tip: Take a 5-minute break every 25 minutes for optimal focus!
-                    </div>
-                </div>
-                <div class="bottom-nav">
-                    <div class="nav-item" onclick="renderHome()"><i class="fas fa-home"></i><span>Home</span></div>
-                    <div class="nav-item active"><i class="fas fa-stopwatch"></i><span>Study</span></div>
-                    <div class="nav-item" onclick="showLeaderboard()"><i class="fas fa-chart-line"></i><span>Rank</span></div>
-                    <div class="nav-item" onclick="showProfile()"><i class="fas fa-user"></i><span>Profile</span></div>
-                </div>
-            `;
-            currentScreen = 'timer';
-            resetTimer();
-        }
-
-        function startTimer() {
-            if (!isTimerRunning) {
-                isTimerRunning = true;
-                timerInterval = setInterval(() => {
-                    timerSeconds++;
-                    updateTimerDisplay();
-                }, 1000);
-            }
-        }
-
-        function pauseTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                isTimerRunning = false;
-            }
-        }
-
-        function resetTimer() {
-            pauseTimer();
-            timerSeconds = 0;
-            updateTimerDisplay();
-        }
-
-        function updateTimerDisplay() {
-            const hours = Math.floor(timerSeconds / 3600);
-            const minutes = Math.floor((timerSeconds % 3600) / 60);
-            const seconds = timerSeconds % 60;
-            const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            const timerElement = document.getElementById('timerDisplay');
-            if (timerElement) timerElement.textContent = display;
-        }
-
-        function completeStudySession() {
-            const hours = timerSeconds / 3600;
-            if (hours < 0.1) {
-                alert("Study for at least 10 minutes to earn points!");
-                return;
-            }
-            
-            // Save study session
-            const session = {
-                time: new Date().toISOString(),
-                hours: hours,
-                productivity: Math.min(95, Math.floor(60 + hours * 10))
-            };
-            DB.saveStudySession(session);
-            
-            // Update user points and streak
-            const pointsEarned = Math.floor(hours * 50);
-            currentUser.points = (currentUser.points || 0) + pointsEarned;
-            currentUser.studyStreak = (currentUser.studyStreak || 0) + 1;
-            DB.updateUser(currentUser.email, { points: currentUser.points, studyStreak: currentUser.studyStreak });
-            DB.setCurrentUser(currentUser);
-            
-            // Create post about study session
-            const newPost = {
-                id: Date.now(),
-                userId: currentUser.email,
-                userName: currentUser.name,
-                userAvatar: currentUser.name[0],
-                content: `Just finished a ${hours.toFixed(1)} hour study session! ${pointsEarned} points earned! 🎯`,
-                image: null,
-                likes: 0,
-                comments: 0,
-                time: new Date().toISOString(),
-                studyHours: hours
-            };
-            DB.savePost(newPost);
-            
-            alert(`🎉 Great job! You earned ${pointsEarned} points for studying ${hours.toFixed(1)} hours!`);
-            renderHome();
-        }
-
-        function showLeaderboard() {
-            const users = DB.getUsers();
-            const leaderboard = [...users].sort((a, b) => (b.points || 0) - (a.points || 0)).slice(0, 20);
-            
-            document.getElementById('app').innerHTML = `
-                <div class="main-container">
-                    <div class="post-card">
-                        <h2 style="text-align: center; margin-bottom: 20px;">🏆 Study Leaderboard</h2>
-                        ${leaderboard.map((user, index) => `
-                            <div class="leaderboard-item">
-                                <div class="leaderboard-rank">#${index + 1}</div>
-                                <div class="leaderboard-avatar">${user.avatar || user.name[0]}</div>
-                                <div style="flex: 1;">
-                                    <strong>${user.name}</strong>
-                                    <p style="font-size: 12px; color: #8E8E8E;">${user.studyStreak || 0} day streak</p>
+                    <div class="grid-3">
+                        <!-- Stress Meter Card -->
+                        <div class="glass-card" style="padding: 20px;">
+                            <h3>💖 Your Stress Analysis</h3>
+                            <div class="stress-meter" style="margin-top: 15px;">
+                                <div class="stress-level">
+                                    <canvas id="stressChart" width="150" height="150"></canvas>
                                 </div>
-                                <div style="text-align: right;">
-                                    <strong>${user.points || 0}</strong>
-                                    <p style="font-size: 11px;">points</p>
-                                </div>
+                                <p style="margin-top: 10px;">${stressData.emoji} ${stressData.advice}</p>
                             </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <div class="bottom-nav">
-                    <div class="nav-item" onclick="renderHome()"><i class="fas fa-home"></i><span>Home</span></div>
-                    <div class="nav-item" onclick="showStudyTimer()"><i class="fas fa-stopwatch"></i><span>Study</span></div>
-                    <div class="nav-item active"><i class="fas fa-chart-line"></i><span>Rank</span></div>
-                    <div class="nav-item" onclick="showProfile()"><i class="fas fa-user"></i><span>Profile</span></div>
-                </div>
-            `;
-            currentScreen = 'leaderboard';
-        }
-
-        function showProfile() {
-            document.getElementById('app').innerHTML = `
-                <div class="main-container">
-                    <div class="post-card" style="text-align: center;">
-                        <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                            <i class="fas fa-user" style="font-size: 50px; color: white;"></i>
-                        </div>
-                        <h2>${currentUser.name}</h2>
-                        <p style="color: #8E8E8E;">@${currentUser.username || currentUser.name.toLowerCase().replace(' ', '')}</p>
-                        <p style="margin: 16px 0;">${currentUser.bio || "Studying to be better every day! 📚"}</p>
-                        
-                        <div style="display: flex; justify-content: space-around; margin: 20px 0; padding: 16px 0; border-top: 1px solid #DBDBDB; border-bottom: 1px solid #DBDBDB;">
-                            <div>
-                                <h3>${currentUser.points || 0}</h3>
-                                <p style="font-size: 12px;">Points</p>
-                            </div>
-                            <div>
-                                <h3>${currentUser.studyStreak || 0}</h3>
-                                <p style="font-size: 12px;">Day Streak</p>
-                            </div>
-                            <div>
-                                <h3>${currentUser.followers || 0}</h3>
-                                <p style="font-size: 12px;">Followers</p>
+                            <div style="margin-top: 15px;">
+                                <h4>✨ Quick Tips:</h4>
+                                <ul style="margin-left: 20px;">
+                                    ${stressTips.slice(0, 3).map(tip => `<li>${tip}</li>`).join('')}
+                                </ul>
                             </div>
                         </div>
                         
-                        <button onclick="logout()" style="width: 100%; padding: 12px; background: #E4405F; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 16px;">
-                            Logout
-                        </button>
+                        <!-- Study Progress -->
+                        <div class="glass-card" style="padding: 20px;">
+                            <h3>📊 Study Stats</h3>
+                            <div style="margin-top: 20px;">
+                                <p>🔥 Study Streak: <strong>${currentUser.studyStreak || 0} days</strong></p>
+                                <p>⭐ Points Earned: <strong>${currentUser.points || 0}</strong></p>
+                                <p>📚 Study Guides: <strong>${guides.length}</strong></p>
+                                <p>🃏 Flashcards: <strong>${flashcardsList.length}</strong></p>
+                                <p>🎙️ Lecture Notes: <strong>${transcripts.length}</strong></p>
+                            </div>
+                            <button class="btn-primary" style="margin-top: 20px; width: 100%;" onclick="recordStudySession()">📝 Log Study Session</button>
+                        </div>
+                        
+                        <!-- AI Recommendation -->
+                        <div class="glass-card" style="padding: 20px; background: linear-gradient(135deg, #FFE8F0, #FFE0F0);">
+                            <h3>🤖 AI Recommendation</h3>
+                            <div style="margin-top: 15px;">
+                                <p>Based on your stress level (${stressData.score}%), I recommend:</p>
+                                <p style="margin-top: 10px; font-style: italic;">"${stressTips[0]}"</p>
+                            </div>
+                            <button class="btn-primary" style="margin-top: 20px; width: 100%;" onclick="openChatbot()">💬 Chat with AI Buddy</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="grid-4" style="margin-top: 24px;">
+                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderStudyTools()">
+                            <div class="cute-icon">📚</div>
+                            <h4>Study Guide</h4>
+                            <p>Generate personalized guides</p>
+                        </div>
+                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderFlashcards()">
+                            <div class="cute-icon">🃏</div>
+                            <h4>Flashcards</h4>
+                            <p>Learn with fun flashcards</p>
+                        </div>
+                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderLectureTools()">
+                            <div class="cute-icon">🎙️</div>
+                            <h4>Lecture Transcriber</h4>
+                            <p>Record & summarize lectures</p>
+                        </div>
+                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderWellness()">
+                            <div class="cute-icon">💖</div>
+                            <h4>Wellness Check</h4>
+                            <p>Track your wellbeing</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Study Guides -->
+                    ${guides.length > 0 ? `
+                        <div class="glass-card" style="margin-top: 24px; padding: 20px;">
+                            <h3>📖 Recent Study Guides</h3>
+                            <div class="grid-2" style="margin-top: 15px;">
+                                ${guides.slice(0, 2).map(guide => `
+                                    <div class="study-guide-section" style="cursor: pointer;" onclick="viewStudyGuide('${guide.id}')">
+                                        <h4>${guide.title}</h4>
+                                        <p>Created: ${new Date(guide.createdAt).toLocaleDateString()}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <!-- Chatbot -->
+                <div class="chatbot-container">
+                    <div class="chatbot-toggle" onclick="toggleChatbot()">
+                        <i class="fas fa-robot" style="font-size: 32px; color: white;"></i>
+                    </div>
+                    <div class="chatbot-window" id="chatbotWindow">
+                        <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 15px; color: white; display: flex; justify-content: space-between;">
+                            <span>🤖 Study Buddy AI</span>
+                            <i class="fas fa-times" style="cursor: pointer;" onclick="toggleChatbot()"></i>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message bot">
+                                <div class="message-bubble">Hi ${currentUser.name}! I'm your happy study companion! 🌈 How can I help you today? Ask me about study tips, stress relief, motivation, or just chat!</div>
+                            </div>
+                        </div>
+                        <div style="padding: 15px; border-top: 1px solid #E0E0E0; display: flex; gap: 10px;">
+                            <input type="text" id="chatInput" placeholder="Type your message..." style="flex: 1; padding: 10px; border: 1px solid #E0E0E0; border-radius: 20px;">
+                            <button onclick="sendChatMessage()" style="background: var(--primary); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; cursor: pointer;">→</button>
+                        </div>
                     </div>
                 </div>
-                <div class="bottom-nav">
-                    <div class="nav-item" onclick="renderHome()"><i class="fas fa-home"></i><span>Home</span></div>
-                    <div class="nav-item" onclick="showStudyTimer()"><i class="fas fa-stopwatch"></i><span>Study</span></div>
-                    <div class="nav-item" onclick="showLeaderboard()"><i class="fas fa-chart-line"></i><span>Rank</span></div>
-                    <div class="nav-item active"><i class="fas fa-user"></i><span>Profile</span></div>
-                </div>
             `;
-            currentScreen = 'profile';
+            
+            // Draw stress chart
+            const ctx = document.getElementById('stressChart')?.getContext('2d');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Stress', 'Calm'],
+                        datasets: [{
+                            data: [stressData.score, 100 - stressData.score],
+                            backgroundColor: [stressData.color, '#E0E0E0'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        cutout: '70%',
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
         }
 
-        function showCreatePost() {
-            const content = prompt("Share your study progress:", "Just finished a productive study session! 🎯");
-            if (content) {
-                const newPost = {
+        function renderStudyTools() {
+            currentScreen = 'study';
+            document.getElementById('app').innerHTML = `
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ StudyBuddy AI</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link active">📚 Study Tools</div>
+                        <div class="nav-link" onclick="renderFlashcards()">🃏 Flashcards</div>
+                        <div class="nav-link" onclick="renderLectureTools()">🎙️ Lectures</div>
+                        <div class="nav-link" onclick="renderWellness()">💖 Wellness</div>
+                        <div class="nav-link" onclick="logout()">🚪 Logout</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="grid-2">
+                        <div class="glass-card" style="padding: 30px;">
+                            <h3>✨ Generate Personalized Study Guide</h3>
+                            <form id="guideForm" style="margin-top: 20px;">
+                                <input type="text" id="topic" placeholder="Enter topic (e.g., Math, Science, Programming)" required style="width: 100%; padding: 14px; margin-bottom: 15px; border: 2px solid #E0E0E0; border-radius: 12px;">
+                                <select id="complexity" style="width: 100%; padding: 14px; margin-bottom: 20px; border: 2px solid #E0E0E0; border-radius: 12px;">
+                                    <option value="easy">Easy Peasy 😊</option>
+                                    <option value="medium" selected>Just Right 🎯</option>
+                                    <option value="hard">Challenge Mode 💪</option>
+                                </select>
+                                <button type="submit" class="btn-primary" style="width: 100%;">Generate Study Guide ✨</button>
+                            </form>
+                        </div>
+                        
+                        <div class="glass-card" style="padding: 30px;">
+                            <h3>📤 Upload Problem Set</h3>
+                            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: var(--primary);"></i>
+                                <p>Click to upload PDF or image</p>
+                                <p style="font-size: 12px; margin-top: 10px;">We'll analyze and provide step-by-step guidance!</p>
+                            </div>
+                            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.jpg,.png">
+                            <div id="uploadResult" style="margin-top: 20px;"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="generatedGuide" style="margin-top: 24px;"></div>
+                </div>
+            `;
+            
+            document.getElementById('guideForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const topic = document.getElementById('topic').value;
+                const complexity = document.getElementById('complexity').value;
+                const guide = studyGuideGen.generateGuide(topic, complexity);
+                
+                const guideWithId = {
                     id: Date.now(),
-                    userId: currentUser.email,
-                    userName: currentUser.name,
-                    userAvatar: currentUser.name[0],
-                    content: content,
-                    image: null,
-                    likes: 0,
-                    comments: 0,
-                    time: new Date().toISOString(),
-                    studyHours: 0
+                    ...guide,
+                    topic,
+                    complexity,
+                    createdAt: new Date().toISOString()
                 };
-                DB.savePost(newPost);
-                renderHome();
+                Storage.saveStudyGuide(guideWithId);
+                
+                document.getElementById('generatedGuide').innerHTML = `
+                    <div class="glass-card" style="padding: 30px;">
+                        <h3>📖 ${guide.title}</h3>
+                        <div style="margin-top: 20px;">
+                            ${guide.segments.map(segment => `<p style="margin: 10px 0;">${segment}</p>`).join('')}
+                        </div>
+                        <div style="margin-top: 20px; padding: 15px; background: #F0F0FF; border-radius: 12px;">
+                            <strong>💡 Pro Tip:</strong> ${guide.tips}
+                        </div>
+                        <button class="btn-primary" style="margin-top: 20px;" onclick="createFlashcardsFromGuide('${topic}')">📝 Create Flashcards from this Guide</button>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('fileInput').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    document.getElementById('uploadResult').innerHTML = `
+                        <div style="background: #E8F5E9; padding: 15px; border-radius: 12px;">
+                            <p>✅ "${file.name}" uploaded successfully!</p>
+                            <p>🤖 AI is analyzing your problem set...</p>
+                            <p>📝 Step-by-step guidance will appear here shortly.</p>
+                            <p><em>Sample solution approach: Break down the problem, identify key concepts, solve step by step, and verify your answer!</em></p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function renderFlashcards() {
+            currentScreen = 'flashcards';
+            const savedCards = Storage.getFlashcards();
+            flashcards = savedCards;
+            currentFlashcardIndex = 0;
+            
+            document.getElementById('app').innerHTML = `
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ StudyBuddy AI</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link" onclick="renderStudyTools()">📚 Study Tools</div>
+                        <div class="nav-link active">🃏 Flashcards</div>
+                        <div class="nav-link" onclick="renderLectureTools()">🎙️ Lectures</div>
+                        <div class="nav-link" onclick="renderWellness()">💖 Wellness</div>
+                        <div class="nav-link" onclick="logout()">🚪 Logout</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="grid-2">
+                        <div class="glass-card" style="padding: 30px;">
+                            <h3>✨ Create New Flashcards</h3>
+                            <form id="flashcardForm">
+                                <input type="text" id="flashcardTopic" placeholder="Topic" required style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 12px; border: 2px solid #E0E0E0;">
+                                <input type="text" id="flashcardQuestion" placeholder="Question" required style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 12px; border: 2px solid #E0E0E0;">
+                                <input type="text" id="flashcardAnswer" placeholder="Answer" required style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 12px; border: 2px solid #E0E0E0;">
+                                <button type="submit" class="btn-primary" style="width: 100%;">➕ Add Flashcard</button>
+                            </form>
+                        </div>
+                        
+                        <div class="glass-card" style="padding: 30px; text-align: center;">
+                            <h3>🃏 Study Mode</h3>
+                            ${flashcards.length > 0 ? `
+                                <div class="flashcard" id="flashcardDisplay" onclick="flipCurrentCard()">
+                                    <div id="flashcardContent">
+                                        <p style="font-size: 18px;">${flashcards[currentFlashcardIndex]?.question || 'No flashcards yet'}</p>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-primary" onclick="previousFlashcard()">◀ Previous</button>
+                                    <button class="btn-primary" onclick="nextFlashcard()">Next ▶</button>
+                                </div>
+                                <p style="margin-top: 10px;">Card ${flashcards.length > 0 ? currentFlashcardIndex + 1 : 0} of ${flashcards.length}</p>
+                            ` : '<p>No flashcards yet. Create your first one!</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('flashcardForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const topic = document.getElementById('flashcardTopic').value;
+                const question = document.getElementById('flashcardQuestion').value;
+                const answer = document.getElementById('flashcardAnswer').value;
+                
+                const newCard = { id: Date.now(), topic, question, answer, createdAt: new Date().toISOString() };
+                Storage.saveFlashcard(newCard);
+                renderFlashcards();
+            });
+        }
+
+        function flipCurrentCard() {
+            const card = flashcards[currentFlashcardIndex];
+            if (!card) return;
+            
+            const contentDiv = document.getElementById('flashcardContent');
+            const isShowingQuestion = contentDiv.innerHTML.includes(card.question);
+            
+            if (isShowingQuestion) {
+                contentDiv.innerHTML = `<p style="font-size: 18px;">💡 ${card.answer}</p><p style="margin-top: 10px; font-size: 12px;">Click to see question</p>`;
+            } else {
+                contentDiv.innerHTML = `<p style="font-size: 18px;">❓ ${card.question}</p><p style="margin-top: 10px; font-size: 12px;">Click for answer</p>`;
             }
         }
 
-        function showAIAnalysis() {
-            const sessions = DB.getStudySessions();
-            const pattern = aiEngine.analyzeStudyPattern(sessions);
-            alert(`🤖 AI Study Analysis\n\n${pattern ? 
-                `Best Study Time: ${pattern.bestTimeToStudy}\nTotal Sessions: ${pattern.consistency}\nAvg Productivity: ${Math.round(pattern.averageProductivity)}%\n\nTip: Study during your peak hours for best results!` : 
-                "Complete more study sessions for AI insights!"}`);
+        function previousFlashcard() {
+            if (flashcards.length > 0) {
+                currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcards.length) % flashcards.length;
+                renderFlashcards();
+            }
         }
 
-        function likePost(postId) {
-            DB.updatePost(postId, { likes: (DB.getPosts().find(p => p.id === postId)?.likes || 0) + 1 });
-            renderHome();
+        function nextFlashcard() {
+            if (flashcards.length > 0) {
+                currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcards.length;
+                renderFlashcards();
+            }
+        }
+
+        function renderLectureTools() {
+            currentScreen = 'lecture';
+            const transcripts = Storage.getTranscripts();
+            let isRecording = false;
+            
+            document.getElementById('app').innerHTML = `
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ StudyBuddy AI</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link" onclick="renderStudyTools()">📚 Study Tools</div>
+                        <div class="nav-link" onclick="renderFlashcards()">🃏 Flashcards</div>
+                        <div class="nav-link active">🎙️ Lectures</div>
+                        <div class="nav-link" onclick="renderWellness()">💖 Wellness</div>
+                        <div class="nav-link" onclick="logout()">🚪 Logout</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="grid-2">
+                        <div class="glass-card" style="padding: 30px;">
+                            <h3>🎙️ Live Lecture Transcriber</h3>
+                            <div style="text-align: center; margin: 20px 0;">
+                                <button id="recordBtn" class="btn-primary" style="font-size: 24px; padding: 20px 40px;">
+                                    🎤 Start Recording
+                                </button>
+                            </div>
+                            <div id="liveTranscript" style="background: #F9F9FF; border-radius: 12px; padding: 15px; min-height: 150px; margin-top: 15px;">
+                                <p style="color: #999;">Click the microphone to start transcribing your lecture...</p>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-card" style="padding: 30px;">
+                            <h3>📝 Recent Transcripts</h3>
+                            <div id="transcriptList">
+                                ${transcripts.slice(0, 5).map(t => `
+                                    <div class="transcript-item" onclick="viewTranscript('${t.id}')">
+                                        <strong>${t.title || 'Lecture'}</strong>
+                                        <p style="font-size: 12px; color: #999;">${new Date(t.createdAt).toLocaleString()}</p>
+                                        <p>${t.summary?.substring(0, 100)}...</p>
+                                    </div>
+                                `).join('')}
+                                ${transcripts.length === 0 ? '<p>No transcripts yet. Record your first lecture!</p>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            let currentTranscript = '';
+            const recordBtn = document.getElementById('recordBtn');
+            
+            recordBtn?.addEventListener('click', () => {
+                if (!isRecording) {
+                    transcriber.startRecording(
+                        (text) => {
+                            currentTranscript += ' ' + text;
+                            document.getElementById('liveTranscript').innerHTML = `
+                                <p><strong>🎙️ Recording...</strong></p>
+                                <p>${currentTranscript}</p>
+                            `;
+                        },
+                        () => {
+                            isRecording = false;
+                            recordBtn.textContent = '🎤 Start Recording';
+                            const summary = transcriber.generateSummary(currentTranscript);
+                            const newTranscript = {
+                                id: Date.now(),
+                                text: currentTranscript,
+                                summary: summary.summary,
+                                keyPoints: summary.keyPoints,
+                                title: prompt('Enter a title for this lecture:', 'Lecture Notes'),
+                                createdAt: new Date().toISOString()
+                            };
+                            Storage.saveTranscript(newTranscript);
+                            alert('Recording saved! Check your transcripts.');
+                            renderLectureTools();
+                        }
+                    );
+                    isRecording = true;
+                    recordBtn.textContent = '⏹️ Stop Recording';
+                } else {
+                    transcriber.stopRecording();
+                }
+            });
+        }
+
+        function renderWellness() {
+            currentScreen = 'wellness';
+            const stressData = stressAnalyzer.calculateStressLevel(currentUser);
+            
+            document.getElementById('app').innerHTML = `
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ StudyBuddy AI</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link" onclick="renderStudyTools()">📚 Study Tools</div>
+                        <div class="nav-link" onclick="renderFlashcards()">🃏 Flashcards</div>
+                        <div class="nav-link" onclick="renderLectureTools()">🎙️ Lectures</div>
+                        <div class="nav-link active">💖 Wellness</div>
+                        <div class="nav-link" onclick="logout()">🚪 Logout</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="grid-2">
+                        <div class="glass-card" style="padding: 30px;">
+                            <h3>💖 Wellness Check-in</h3>
+                            <form id="wellnessForm">
+                                <label>How many hours of sleep did you get? 💤</label>
+                                <input type="range" id="sleep" min="0" max="10" value="${currentUser.sleepQuality || 7}" style="width: 100%; margin: 10px 0;">
+                                <span id="sleepVal">${currentUser.sleepQuality || 7} hours</span>
+                                
+                                <label style="margin-top: 15px;">How anxious are you feeling? 😟</label>
+                                <input type="range" id="anxiety" min="0" max="10" value="${currentUser.anxietyLevel || 3}" style="width: 100%; margin: 10px 0;">
+                                <span id="anxietyVal">${currentUser.anxietyLevel || 3}/10</span>
+                                
+                                <label style="margin-top: 15px;">Physical symptoms (headaches, tension)? 🤕</label>
+                                <input type="range" id="physical" min="0" max="10" value="${currentUser.physicalSymptoms || 2}" style="width: 100%; margin: 10px 0;">
+                                <span id="physicalVal">${currentUser.physicalSymptoms || 2}/10</span>
+                                
+                                <label style="margin-top: 15px;">Current workload level? 📚</label>
+                                <input type="range" id="workload" min="0" max="10" value="${currentUser.workload || 3}" style="width: 100%; margin: 10px 0;">
+                                <span id="workloadVal">${currentUser.workload || 3}/10</span>
+                                
+                                <button type="submit" class="btn-primary" style="margin-top: 20px; width: 100%;">Update Wellness Profile 💖</button>
+                            </form>
+                        </div>
+                        
+                        <div class="glass-card" style="padding: 30px;">
+                            <h3>🧘 Relaxation Corner</h3>
+                            <div style="text-align: center;">
+                                <div class="cute-icon">🌈</div>
+                                <button class="btn-primary" onclick="startBreathingExercise()" style="margin: 10px;">🌬️ Breathing Exercise</button>
+                                <button class="btn-primary" onclick="showPositiveAffirmation()" style="margin: 10px;">✨ Positive Affirmation</button>
+                                <button class="btn-primary" onclick="playCalmMusic()" style="margin: 10px;">🎵 Calm Music</button>
+                            </div>
+                            <div style="margin-top: 20px; padding: 15px; background: #F0F0FF; border-radius: 12px;">
+                                <h4>💡 Current Stress Level: ${stressData.level}</h4>
+                                <p>${stressData.advice}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Update range sliders
+            const updateVal = (id, valId) => {
+                const val = document.getElementById(id).value;
+                document.getElementById(valId).textContent = val + (id === 'sleep' ? ' hours' : '/10');
+            };
+            
+            ['sleep', 'anxiety', 'physical', 'workload'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', () => updateVal(id, `${id}Val`));
+                }
+            });
+            
+            document.getElementById('wellnessForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                currentUser.sleepQuality = parseInt(document.getElementById('sleep').value);
+                currentUser.anxietyLevel = parseInt(document.getElementById('anxiety').value);
+                currentUser.physicalSymptoms = parseInt(document.getElementById('physical').value);
+                currentUser.workload = parseInt(document.getElementById('workload').value);
+                Storage.updateUser(currentUser.email, currentUser);
+                Storage.setCurrent(currentUser);
+                alert('Wellness profile updated! 💖');
+                renderDashboard();
+            });
+        }
+
+        // Helper functions
+        function recordStudySession() {
+            const hours = prompt('How many hours did you study today?', '2');
+            if (hours && !isNaN(hours)) {
+                currentUser.studyStreak = (currentUser.studyStreak || 0) + 1;
+                currentUser.points = (currentUser.points || 0) + Math.floor(hours * 10);
+                Storage.updateUser(currentUser.email, { studyStreak: currentUser.studyStreak, points: currentUser.points });
+                Storage.setCurrent(currentUser);
+                alert(`🎉 Great job! You earned ${Math.floor(hours * 10)} points!`);
+                renderDashboard();
+            }
+        }
+
+        function createFlashcardsFromGuide(topic) {
+            const newCards = studyGuideGen.generateFlashcards(topic, 3);
+            newCards.forEach(card => {
+                Storage.saveFlashcard({ ...card, topic, createdAt: new Date().toISOString() });
+            });
+            alert(`✨ Created ${newCards.length} flashcards for ${topic}!`);
+            renderFlashcards();
+        }
+
+        function viewStudyGuide(guideId) {
+            const guides = Storage.getStudyGuides();
+            const guide = guides.find(g => g.id == guideId);
+            if (guide) {
+                alert(`📖 ${guide.title}\n\n${guide.segments.join('\n')}\n\n💡 ${guide.tips}`);
+            }
+        }
+
+        function viewTranscript(transcriptId) {
+            const transcripts = Storage.getTranscripts();
+            const transcript = transcripts.find(t => t.id == transcriptId);
+            if (transcript) {
+                alert(`📝 ${transcript.title}\n\nSummary: ${transcript.summary}\n\nKey Points:\n${transcript.keyPoints?.join('\n')}`);
+            }
+        }
+
+        function startBreathingExercise() {
+            alert("🧘 4-7-8 Breathing Exercise 🧘\n\n1. Inhale quietly through nose for 4 seconds\n2. Hold breath for 7 seconds\n3. Exhale completely through mouth for 8 seconds\n\nRepeat 4 times for instant calm!");
+        }
+
+        function showPositiveAffirmation() {
+            const affirmations = [
+                "I am capable and strong 💪",
+                "Every day, I'm learning and growing 🌱",
+                "I deserve to feel calm and happy 🌈",
+                "My hard work will pay off ✨",
+                "I am proud of my progress 🎯"
+            ];
+            const random = affirmations[Math.floor(Math.random() * affirmations.length)];
+            alert(`✨ Affirmation: ${random} ✨`);
+        }
+
+        function playCalmMusic() {
+            alert("🎵 Calm Music Recommendation 🎵\n\nTry these for relaxation:\n• Lo-fi study beats\n• Nature sounds (rain, ocean)\n• Classical piano\n• Meditation music");
+        }
+
+        function openChatbot() {
+            const window = document.getElementById('chatbotWindow');
+            if (window) window.classList.add('open');
+        }
+
+        function toggleChatbot() {
+            const window = document.getElementById('chatbotWindow');
+            if (window) window.classList.toggle('open');
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const chatDiv = document.getElementById('chatMessages');
+            chatDiv.innerHTML += `<div class="message user"><div class="message-bubble">${message}</div></div>`;
+            input.value = '';
+            
+            setTimeout(() => {
+                const response = chatbot.getResponse(message, currentUser);
+                chatDiv.innerHTML += `<div class="message bot"><div class="message-bubble">${response}</div></div>`;
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            }, 500);
         }
 
         function logout() {
-            DB.clearCurrentUser();
+            Storage.clearCurrent();
             currentUser = null;
             renderLogin();
         }
 
         // Make functions global
-        window.renderHome = renderHome;
-        window.showStudyTimer = showStudyTimer;
-        window.showLeaderboard = showLeaderboard;
-        window.showProfile = showProfile;
-        window.showCreatePost = showCreatePost;
-        window.showAIAnalysis = showAIAnalysis;
-        window.likePost = likePost;
-        window.startTimer = startTimer;
-        window.pauseTimer = pauseTimer;
-        window.resetTimer = resetTimer;
-        window.completeStudySession = completeStudySession;
+        window.renderDashboard = renderDashboard;
+        window.renderStudyTools = renderStudyTools;
+        window.renderFlashcards = renderFlashcards;
+        window.renderLectureTools = renderLectureTools;
+        window.renderWellness = renderWellness;
+        window.flipCurrentCard = flipCurrentCard;
+        window.previousFlashcard = previousFlashcard;
+        window.nextFlashcard = nextFlashcard;
+        window.recordStudySession = recordStudySession;
+        window.createFlashcardsFromGuide = createFlashcardsFromGuide;
+        window.viewStudyGuide = viewStudyGuide;
+        window.viewTranscript = viewTranscript;
+        window.startBreathingExercise = startBreathingExercise;
+        window.showPositiveAffirmation = showPositiveAffirmation;
+        window.playCalmMusic = playCalmMusic;
+        window.openChatbot = openChatbot;
+        window.toggleChatbot = toggleChatbot;
+        window.sendChatMessage = sendChatMessage;
         window.logout = logout;
         window.renderLogin = renderLogin;
         window.renderRegister = renderRegister;
