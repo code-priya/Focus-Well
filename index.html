@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -16,58 +15,26 @@
         }
 
         :root {
-            --primary: #FF6B9D;
-            --primary-dark: #FF5277;
-            --secondary: #6C63FF;
-            --accent: #FFD166;
-            --success: #06D6A0;
-            --warning: #FF9F1C;
-            --danger: #EF476F;
-            --dark: #2D3047;
-            --light: #F9F9FF;
-            --white: #FFFFFF;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --shadow-lg: 0 20px 40px rgba(0,0,0,0.12);
-            --radius: 20px;
-            --radius-sm: 12px;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --radius: 1rem;
         }
 
         body {
             font-family: 'Nunito', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            overflow-x: hidden;
         }
-
-        /* Animations */
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 5px rgba(108,99,255,0.3); }
-            50% { box-shadow: 0 0 20px rgba(108,99,255,0.6); }
-        }
-
-        .floating { animation: float 3s ease-in-out infinite; }
-        .pulse { animation: pulse 2s infinite; }
-        .glow { animation: glow 2s infinite; }
 
         /* Glass Card */
         .glass-card {
@@ -80,7 +47,7 @@
         }
 
         .glass-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             box-shadow: var(--shadow-lg);
         }
 
@@ -94,9 +61,8 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .logo {
@@ -112,7 +78,7 @@
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
@@ -122,6 +88,7 @@
             border-radius: 30px;
             transition: all 0.3s;
             font-weight: 600;
+            font-size: 14px;
         }
 
         .nav-link:hover, .nav-link.active {
@@ -137,30 +104,158 @@
         }
 
         /* Grid Layouts */
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
 
-        /* Stress Meter */
-        .stress-meter {
-            background: linear-gradient(135deg, #FFE8E8, #FFE0F0);
+        /* Buttons */
+        .btn-primary, .btn-secondary {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: var(--dark);
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: scale(1.02);
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: var(--radius);
-            padding: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd166, #ff9f1c);
+            transition: width 0.5s;
+        }
+
+        /* Flashcard */
+        .flashcard {
+            background: linear-gradient(135deg, #fff, #f0f0ff);
+            border-radius: var(--radius);
+            padding: 40px 20px;
             text-align: center;
+            cursor: pointer;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.02);
+        }
+
+        /* Quiz Option */
+        .quiz-option {
+            background: #f1f5f9;
+            padding: 12px 16px;
+            margin: 10px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        /* Timer */
+        .pomodoro-timer {
+            font-size: 64px;
+            font-family: monospace;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        /* Study Room */
+        .study-room-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: var(--radius);
+            padding: 30px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .study-room-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Achievement Badge */
+        .achievement-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: var(--radius);
+            background: white;
+        }
+
+        .achievement-badge {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ffd166, #ff9f1c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
         }
 
         /* Chatbot */
         .chatbot-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 20px;
+            right: 20px;
             z-index: 1000;
         }
 
         .chatbot-toggle {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 50%;
             display: flex;
@@ -168,16 +263,20 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: var(--shadow-lg);
-            transition: all 0.3s;
             animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .chatbot-window {
             position: absolute;
-            bottom: 80px;
+            bottom: 70px;
             right: 0;
-            width: 380px;
-            height: 550px;
+            width: 350px;
+            height: 500px;
             background: white;
             border-radius: 20px;
             box-shadow: var(--shadow-lg);
@@ -191,11 +290,11 @@
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 15px;
         }
 
         .message {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             display: flex;
         }
 
@@ -204,13 +303,13 @@
 
         .message-bubble {
             max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 13px;
         }
 
         .message.bot .message-bubble {
-            background: #F0F0FF;
+            background: #f1f5f9;
             color: var(--dark);
         }
 
@@ -219,361 +318,196 @@
             color: white;
         }
 
-        /* Flashcard */
-        .flashcard {
-            background: white;
-            border-radius: var(--radius);
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow);
-        }
-
-        /* Upload Area */
-        .upload-area {
-            border: 2px dashed var(--primary);
-            border-radius: var(--radius);
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        /* Buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(108,99,255,0.3);
-        }
-
-        /* Achievement Badge */
-        .achievement-badge {
-            background: linear-gradient(135deg, #FFD166, #FF9F1C);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            margin: 0 auto;
-        }
-
-        /* Study Room */
-        .study-room {
-            background: linear-gradient(135deg, #2D3047, #1a1c2c);
-            border-radius: var(--radius);
-            padding: 20px;
-            color: white;
-            text-align: center;
-        }
-
-        /* Pomodoro Timer */
-        .pomodoro-timer {
-            font-size: 48px;
-            font-family: monospace;
-            font-weight: bold;
-        }
-
-        /* Quiz Card */
-        .quiz-option {
-            background: #F0F0FF;
+        .task-item {
+            background: #f8fafc;
             padding: 12px;
             margin: 8px 0;
-            border-radius: 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .quiz-option:hover {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        /* Responsive */
-        @media (max-width: 1000px) {
-            .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); }
-            .grid-3 { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 768px) {
-            .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .chatbot-window { width: 300px; right: -20px; }
-        }
-
-        .cute-icon { font-size: 48px; margin-bottom: 16px; }
-        
-        .welcome-banner {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: var(--radius);
-            padding: 40px;
-            color: white;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: #E0E0E0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: width 0.5s;
-        }
+        .task-item:hover { background: #e2e8f0; }
     </style>
 </head>
 <body>
     <div id="app"></div>
 
     <script>
-        // ============ ENHANCED STRESS ANALYSIS ALGORITHM ============
-        class StressAnalyzer {
-            constructor() {
-                this.weights = {
-                    sleepQuality: 0.20,
-                    anxietyLevel: 0.25,
-                    physicalSymptoms: 0.15,
-                    workload: 0.15,
-                    socialSupport: 0.10,
-                    exercise: 0.08,
-                    nutrition: 0.07
-                };
-            }
-
-            calculateStressLevel(userData) {
-                const factors = {
-                    sleepQuality: userData.sleepQuality || 7,
-                    anxietyLevel: userData.anxietyLevel || 3,
-                    physicalSymptoms: userData.physicalSymptoms || 2,
-                    workload: userData.workload || 3,
-                    socialSupport: userData.socialSupport || 4,
-                    exercise: userData.exercise || 3,
-                    nutrition: userData.nutrition || 4
-                };
-
-                let stressScore = 0;
-                for (const [factor, value] of Object.entries(factors)) {
-                    const normalizedValue = value / 10;
-                    stressScore += normalizedValue * this.weights[factor];
-                }
-
-                stressScore = Math.min(1, Math.max(0, stressScore)) * 100;
-                
-                let level = 'low';
-                let color = '#06D6A0';
-                let emoji = '😊';
-                let advice = '';
-                
-                if (stressScore < 30) {
-                    level = 'low';
-                    color = '#06D6A0';
-                    emoji = '😊✨';
-                    advice = "You're doing great! Keep maintaining your healthy habits! 🌟";
-                } else if (stressScore < 60) {
-                    level = 'medium';
-                    color = '#FF9F1C';
-                    emoji = '😌🌿';
-                    advice = "Take some deep breaths. A short break or a walk might help! 🚶‍♀️";
-                } else {
-                    level = 'high';
-                    color = '#EF476F';
-                    emoji = '😰💙';
-                    advice = "You need some rest! Try our relaxation exercises. You're not alone! 🤗";
-                }
-                
-                return { score: Math.round(stressScore), level, color, emoji, advice };
-            }
-
-            generateStressReductionTips(stressLevel) {
-                const tips = {
-                    low: ["🎯 Keep up your great routine!", "📚 Challenge yourself with new topics", "💪 Maintain your healthy habits"],
-                    medium: ["🧘 Try 5 minutes of deep breathing", "🚶 Take a 10-minute walk outside", "🎵 Listen to calming music", "📝 Journal your thoughts"],
-                    high: ["🛑 Take an immediate break", "💆 Try progressive muscle relaxation", "🗣️ Talk to a friend", "😴 Prioritize sleep tonight"]
-                };
-                return tips[stressLevel] || tips.medium;
-            }
-        }
-
-        // ============ STUDY GUIDE GENERATOR ============
-        class StudyGuideGenerator {
-            generateGuide(topic, complexity = 'medium') {
-                const guides = {
-                    'math': { title: 'Mastering Mathematics 📐', segments: ['1. Basic Concepts', '2. Practice Problems', '3. Common Mistakes', '4. Advanced Topics', '5. Quiz Yourself!'], tips: 'Practice daily for 30 minutes!' },
-                    'science': { title: 'Science Explorer 🔬', segments: ['1. Key Principles', '2. Experiments', '3. Real-world Applications', '4. Review Questions', '5. Lab Safety'], tips: 'Connect concepts to real life!' },
-                    'programming': { title: 'Coding Adventure 💻', segments: ['1. Syntax Fundamentals', '2. Practice Exercises', '3. Debugging Techniques', '4. Project Ideas', '5. Code Review'], tips: 'Code every day, even for 15 minutes!' }
-                };
-                return guides[topic.toLowerCase()] || { title: `Study Guide: ${topic} 📚`, segments: ['1. Introduction', '2. Key Concepts', '3. Practice', '4. Challenges', '5. Summary'], tips: 'Take breaks every 45 minutes!' };
-            }
-
-            generateFlashcards(topic, count = 5) {
-                const flashcards = [];
-                for (let i = 1; i <= count; i++) {
-                    flashcards.push({ id: i, question: `${topic} - Concept ${i}: What have you learned?`, answer: `Review your notes for ${topic} concept ${i}!` });
-                }
-                return flashcards;
-            }
-        }
-
-        // ============ LECTURE TRANSCRIBER ============
-        class LectureTranscriber {
-            constructor() { this.transcripts = []; this.isRecording = false; this.recognition = null; }
-            initSpeechRecognition() {
-                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    this.recognition = new SpeechRecognition();
-                    this.recognition.continuous = true;
-                    this.recognition.interimResults = true;
-                    return true;
-                }
-                return false;
-            }
-            startRecording(onResult, onEnd) {
-                if (!this.recognition && !this.initSpeechRecognition()) { alert("Speech recognition not supported."); return false; }
-                this.isRecording = true;
-                this.recognition.onresult = (event) => {
-                    let transcript = '';
-                    for (let i = event.resultIndex; i < event.results.length; i++) transcript += event.results[i][0].transcript;
-                    if (onResult) onResult(transcript);
-                };
-                this.recognition.onend = () => { this.isRecording = false; if (onEnd) onEnd(); };
-                this.recognition.start();
-                return true;
-            }
-            stopRecording() { if (this.recognition && this.isRecording) { this.recognition.stop(); this.isRecording = false; } }
-            generateSummary(transcript) {
-                const sentences = transcript.split(/[.!?]+/).filter(s => s.trim().length > 20);
-                const keyPoints = sentences.slice(0, 5).map(s => s.trim());
-                return { summary: keyPoints.join('. ') + '.', keyPoints: keyPoints, wordCount: transcript.split(' ').length, readingTime: Math.ceil(transcript.split(' ').length / 200) };
-            }
-        }
-
-        // ============ AI CHATBOT ============
-        class StudyChatbot {
-            getResponse(message, userData) {
-                const msg = message.toLowerCase();
-                if (msg.includes('stress') || msg.includes('anxious')) return "💙 I hear you! Take 5 deep breaths with me. You've got this! 🌸";
-                if (msg.includes('study tip')) return "📚 Try the Pomodoro method: 25 min study, 5 min dance break! 🎵";
-                if (msg.includes('motivation')) return "🌟 You are capable of amazing things! Every small step counts! ⭐";
-                if (msg.includes('break') || msg.includes('tired')) return "😴 Time for a cozy break! Stretch and hydrate! 💤";
-                if (msg.includes('exam')) return "📝 Trust yourself! Get good sleep and eat well. You'll do great! 🎯";
-                return "🎓 Hi study buddy! I'm here to help with study tips, stress relief, or just to chat! 💫";
-            }
-        }
-
-        // ============ STORAGE ============
+        // ============ DATA STORAGE ============
         const Storage = {
             getUsers: () => JSON.parse(localStorage.getItem('focuswell_users') || '[]'),
-            saveUser: (user) => { const users = Storage.getUsers(); users.push(user); localStorage.setItem('focuswell_users', JSON.stringify(users)); },
+            saveUser: (user) => {
+                const users = Storage.getUsers();
+                users.push(user);
+                localStorage.setItem('focuswell_users', JSON.stringify(users));
+            },
             getUser: (email) => Storage.getUsers().find(u => u.email === email),
             updateUser: (email, data) => {
                 const users = Storage.getUsers();
                 const idx = users.findIndex(u => u.email === email);
-                if (idx !== -1) { users[idx] = { ...users[idx], ...data }; localStorage.setItem('focuswell_users', JSON.stringify(users)); }
+                if (idx !== -1) {
+                    users[idx] = { ...users[idx], ...data };
+                    localStorage.setItem('focuswell_users', JSON.stringify(users));
+                }
             },
             getCurrent: () => JSON.parse(localStorage.getItem('focuswell_current')),
             setCurrent: (user) => localStorage.setItem('focuswell_current', JSON.stringify(user)),
             clearCurrent: () => localStorage.removeItem('focuswell_current'),
-            getStudyGuides: () => JSON.parse(localStorage.getItem('focuswell_guides') || '[]'),
-            saveStudyGuide: (guide) => { const guides = Storage.getStudyGuides(); guides.push(guide); localStorage.setItem('focuswell_guides', JSON.stringify(guides.slice(-20))); },
+            
+            getTasks: () => JSON.parse(localStorage.getItem('focuswell_tasks') || '[]'),
+            saveTask: (task) => {
+                const tasks = Storage.getTasks();
+                tasks.push(task);
+                localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+            },
+            updateTask: (taskId, updates) => {
+                const tasks = Storage.getTasks();
+                const idx = tasks.findIndex(t => t.id === taskId);
+                if (idx !== -1) {
+                    tasks[idx] = { ...tasks[idx], ...updates };
+                    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+                }
+            },
+            
             getFlashcards: () => JSON.parse(localStorage.getItem('focuswell_flashcards') || '[]'),
-            saveFlashcard: (card) => { const cards = Storage.getFlashcards(); cards.push(card); localStorage.setItem('focuswell_flashcards', JSON.stringify(cards)); },
-            getTranscripts: () => JSON.parse(localStorage.getItem('focuswell_transcripts') || '[]'),
-            saveTranscript: (transcript) => { const transcripts = Storage.getTranscripts(); transcripts.unshift(transcript); localStorage.setItem('focuswell_transcripts', JSON.stringify(transcripts.slice(0, 20))); },
-            getAchievements: () => JSON.parse(localStorage.getItem('focuswell_achievements') || '[]'),
-            saveAchievement: (achievement) => { const ach = Storage.getAchievements(); if (!ach.find(a => a.id === achievement.id)) { ach.push(achievement); localStorage.setItem('focuswell_achievements', JSON.stringify(ach)); } },
+            saveFlashcard: (card) => {
+                const cards = Storage.getFlashcards();
+                cards.push(card);
+                localStorage.setItem('focuswell_flashcards', JSON.stringify(cards));
+            },
+            
+            getStudySessions: () => JSON.parse(localStorage.getItem('focuswell_sessions') || '[]'),
+            saveStudySession: (session) => {
+                const sessions = Storage.getStudySessions();
+                sessions.push(session);
+                localStorage.setItem('focuswell_sessions', JSON.stringify(sessions.slice(-30)));
+            },
+            
             getQuizzes: () => JSON.parse(localStorage.getItem('focuswell_quizzes') || '[]'),
-            saveQuizResult: (result) => { const quizzes = Storage.getQuizzes(); quizzes.push(result); localStorage.setItem('focuswell_quizzes', JSON.stringify(quizzes.slice(-50))); }
+            saveQuizResult: (result) => {
+                const quizzes = Storage.getQuizzes();
+                quizzes.push(result);
+                localStorage.setItem('focuswell_quizzes', JSON.stringify(quizzes.slice(-20)));
+            }
         };
 
-        // ============ INITIALIZE ============
+        // ============ INITIALIZE SAMPLE DATA ============
+        function initSampleData() {
+            if (Storage.getUsers().length === 0) {
+                Storage.saveUser({ name: 'Demo Student', email: 'student@focuswell.com', password: '123', studyStreak: 0, points: 0, level: 1, xp: 0, sleepQuality: 7, anxietyLevel: 3 });
+            }
+        }
+
+        // ============ STRESS ANALYZER ============
+        class StressAnalyzer {
+            calculateStressLevel(user) {
+                const sleep = user.sleepQuality || 7;
+                const anxiety = user.anxietyLevel || 3;
+                let score = ((10 - sleep) * 8) + (anxiety * 7);
+                score = Math.min(100, Math.max(0, score));
+                
+                let level = 'low', color = '#10b981', emoji = '😊', advice = "You're doing great! Keep it up! 🌟";
+                if (score > 60) { level = 'high'; color = '#ef4444'; emoji = '😰'; advice = "Take a break! Try our breathing exercise. 💙"; }
+                else if (score > 30) { level = 'medium'; color = '#f59e0b'; emoji = '😌'; advice = "A short walk might help! 🚶"; }
+                
+                return { score, level, color, emoji, advice };
+            }
+        }
+
+        // ============ AI CHATBOT ============
+        class Chatbot {
+            getResponse(message) {
+                const msg = message.toLowerCase();
+                if (msg.includes('stress') || msg.includes('anxious')) return "💙 I hear you! Take 5 deep breaths: Inhale 4s, hold 4s, exhale 4s. You've got this! 🌸";
+                if (msg.includes('study tip')) return "📚 Try the Pomodoro method: 25 min study, 5 min break. It boosts focus by 50%! 🍅";
+                if (msg.includes('motivation')) return "🌟 You are capable of amazing things! Every small step counts toward your dreams! ⭐";
+                if (msg.includes('exam')) return "📝 Trust your preparation! Get good sleep, eat well, and stay confident. You'll do great! 🎯";
+                if (msg.includes('procrastinate')) return "⏰ Start with just 5 minutes - that's all it takes to build momentum! You can do it! 🚀";
+                return "🎓 Hi! I'm your study buddy! Ask me about study tips, stress relief, motivation, or just chat! 💫";
+            }
+        }
+
+        // ============ MAIN APP ============
         let currentUser = null;
         let currentScreen = 'dashboard';
         let stressAnalyzer = new StressAnalyzer();
-        let studyGuideGen = new StudyGuideGenerator();
-        let transcriber = new LectureTranscriber();
-        let chatbot = new StudyChatbot();
-        let currentFlashcardIndex = 0;
-        let flashcards = [];
+        let chatbot = new Chatbot();
         let pomodoroInterval = null;
-        let pomodoroSeconds = 0;
+        let pomodoroSeconds = 25 * 60;
         let isPomodoroRunning = false;
+        let currentFlashcardIndex = 0;
         let currentQuiz = null;
         let quizAnswers = [];
+        let quizIndex = 0;
 
         function init() {
+            initSampleData();
             const saved = Storage.getCurrent();
-            if (saved) { currentUser = saved; renderDashboard(); }
-            else { renderLogin(); }
+            if (saved) {
+                currentUser = saved;
+                renderDashboard();
+            } else {
+                renderLogin();
+            }
         }
 
         function renderLogin() {
             document.getElementById('app').innerHTML = `
                 <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
-                    <div class="glass-card" style="max-width: 450px; width: 100%; padding: 40px; text-align: center;">
-                        <div class="floating"><div style="font-size: 70px;">🎓✨</div></div>
-                        <h1 style="font-size: 36px; margin: 20px 0 10px;">FocusWell</h1>
-                        <p style="color: #666;">Your Ultimate AI Study Companion</p>
+                    <div class="glass-card" style="max-width: 400px; width: 100%; padding: 40px; text-align: center;">
+                        <div style="font-size: 60px;">🎓✨</div>
+                        <h1 style="font-size: 32px; margin: 15px 0;">FocusWell</h1>
+                        <p>Your AI Study Companion</p>
                         <form id="loginForm" style="margin-top: 30px;">
-                            <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 14px; margin-bottom: 12px; border: 2px solid #E0E0E0; border-radius: 12px;">
-                            <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 14px; margin-bottom: 20px; border: 2px solid #E0E0E0; border-radius: 12px;">
-                            <button type="submit" class="btn-primary" style="width: 100%;">Login →</button>
+                            <input type="email" id="email" placeholder="Email" required style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:10px;">
+                            <input type="password" id="password" placeholder="Password" required style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #ddd; border-radius:10px;">
+                            <button type="submit" class="btn-primary" style="width:100%;">Login →</button>
                         </form>
-                        <p style="margin-top: 20px;">New? <a href="#" onclick="renderRegister(); return false;" style="color: var(--primary);">Create Account 🎉</a></p>
-                        <p style="margin-top: 15px; font-size: 12px;">Demo: student@focuswell.com / 123</p>
+                        <p style="margin-top: 20px;">New? <a href="#" onclick="renderRegister(); return false;" style="color:var(--primary);">Create Account</a></p>
+                        <p style="margin-top: 10px; font-size:12px;">Demo: student@focuswell.com / 123</p>
                     </div>
-                </div>`;
+                </div>
+            `;
             document.getElementById('loginForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('email').value;
                 const pwd = document.getElementById('password').value;
                 const user = Storage.getUser(email);
-                if (user && user.password === pwd) { currentUser = user; Storage.setCurrent(user); renderDashboard(); }
-                else { alert('Invalid credentials'); }
+                if (user && user.password === pwd) {
+                    currentUser = user;
+                    Storage.setCurrent(user);
+                    renderDashboard();
+                } else {
+                    alert('Invalid credentials. Use student@focuswell.com / 123');
+                }
             });
         }
 
         function renderRegister() {
             document.getElementById('app').innerHTML = `
                 <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
-                    <div class="glass-card" style="max-width: 450px; width: 100%; padding: 40px;">
-                        <h2 style="text-align: center;">Create Account 🌟</h2>
+                    <div class="glass-card" style="max-width: 400px; width: 100%; padding: 40px;">
+                        <h2 style="text-align:center;">Create Account</h2>
                         <form id="registerForm" style="margin-top: 20px;">
-                            <input type="text" id="name" placeholder="Full Name" required style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 12px; border: 2px solid #E0E0E0;">
-                            <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 12px; border: 2px solid #E0E0E0;">
-                            <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 12px; border: 2px solid #E0E0E0;">
-                            <button type="submit" class="btn-primary" style="width: 100%;">Sign Up 🎉</button>
+                            <input type="text" id="name" placeholder="Full Name" required style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:10px;">
+                            <input type="email" id="email" placeholder="Email" required style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:10px;">
+                            <input type="password" id="password" placeholder="Password" required style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #ddd; border-radius:10px;">
+                            <button type="submit" class="btn-primary" style="width:100%;">Sign Up</button>
                         </form>
-                        <p style="text-align: center; margin-top: 20px;"><a href="#" onclick="renderLogin(); return false;">Back to Login</a></p>
+                        <p style="text-align:center; margin-top:20px;"><a href="#" onclick="renderLogin(); return false;">Back to Login</a></p>
                     </div>
-                </div>`;
+                </div>
+            `;
             document.getElementById('registerForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const name = document.getElementById('name').value;
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
                 if (Storage.getUser(email)) { alert('User exists!'); return; }
-                const newUser = { name, email, password, sleepQuality: 7, anxietyLevel: 3, physicalSymptoms: 2, workload: 3, socialSupport: 4, exercise: 3, nutrition: 4, studyStreak: 0, points: 0, level: 1, xp: 0, createdAt: new Date().toISOString() };
+                const newUser = { name, email, password, studyStreak: 0, points: 0, level: 1, xp: 0, sleepQuality: 7, anxietyLevel: 3 };
                 Storage.saveUser(newUser);
                 currentUser = newUser;
                 Storage.setCurrent(newUser);
@@ -583,238 +517,631 @@
 
         function renderDashboard() {
             const stressData = stressAnalyzer.calculateStressLevel(currentUser);
-            const stressTips = stressAnalyzer.generateStressReductionTips(stressData.level);
-            const transcripts = Storage.getTranscripts();
-            const guides = Storage.getStudyGuides();
-            const flashcardsList = Storage.getFlashcards();
-            const achievements = Storage.getAchievements();
-            const nextLevelXP = currentUser.level * 100;
-            const xpProgress = (currentUser.xp / nextLevelXP) * 100;
+            const tasks = Storage.getTasks();
+            const pendingTasks = tasks.filter(t => !t.completed).length;
+            const flashcards = Storage.getFlashcards();
+            const sessions = Storage.getStudySessions();
+            const todayHours = sessions.filter(s => new Date(s.date).toDateString() === new Date().toDateString()).reduce((sum, s) => sum + s.hours, 0);
+            const xpProgress = ((currentUser.xp % 100) / 100) * 100;
             
             document.getElementById('app').innerHTML = `
                 <div class="nav-bar">
                     <div class="logo"><span>🎓✨</span><span>FocusWell</span></div>
                     <div class="nav-links">
                         <div class="nav-link ${currentScreen === 'dashboard' ? 'active' : ''}" onclick="renderDashboard()">🏠 Home</div>
-                        <div class="nav-link" onclick="renderStudyTools()">📚 Study</div>
+                        <div class="nav-link" onclick="renderTasks()">✅ Tasks</div>
                         <div class="nav-link" onclick="renderFlashcards()">🃏 Cards</div>
                         <div class="nav-link" onclick="renderPomodoro()">🍅 Timer</div>
                         <div class="nav-link" onclick="renderQuizzes()">📝 Quiz</div>
-                        <div class="nav-link" onclick="renderStudyRoom()">🎮 Study Room</div>
-                        <div class="nav-link" onclick="renderLectureTools()">🎙️ Lectures</div>
+                        <div class="nav-link" onclick="renderStudyRoom()">🎮 Study</div>
                         <div class="nav-link" onclick="renderWellness()">💖 Wellness</div>
                         <div class="nav-link" onclick="renderAchievements()">🏆 Awards</div>
                         <div class="nav-link" onclick="logout()">🚪 Exit</div>
                     </div>
                 </div>
+                
                 <div class="main-container">
                     <div class="welcome-banner">
-                        <h1>Welcome back, ${currentUser.name}! 👋</h1>
-                        <p>Ready for a productive and happy study session? Let's go! 🚀</p>
-                        <div style="margin-top: 15px;"><span class="stress-indicator stress-${stressData.level}"></span> Stress Level: ${stressData.level} (${stressData.score}%)</div>
-                        <div style="margin-top: 15px;"><div class="progress-bar"><div class="progress-fill" style="width: ${xpProgress}%"></div></div><p style="margin-top: 5px;">Level ${currentUser.level} • ${currentUser.xp}/${nextLevelXP} XP</p></div>
+                        <h1>Hello, ${currentUser.name}! 👋</h1>
+                        <p>Ready to boost your productivity? Let's study together! 🚀</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; flex-wrap: wrap; gap: 10px;">
+                            <div><span style="background:rgba(255,255,255,0.2); padding:5px 12px; border-radius:20px;">🔥 ${currentUser.studyStreak} day streak</span></div>
+                            <div><span style="background:rgba(255,255,255,0.2); padding:5px 12px; border-radius:20px;">⭐ ${currentUser.points} points</span></div>
+                            <div><span style="background:rgba(255,255,255,0.2); padding:5px 12px; border-radius:20px;">Level ${currentUser.level}</span></div>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: ${xpProgress}%"></div></div>
+                        <p style="margin-top: 5px; font-size:12px;">${currentUser.xp % 100}/100 XP to next level</p>
                     </div>
                     
                     <div class="grid-4">
-                        <div class="glass-card" style="padding: 20px;"><h3>💖 Stress Analysis</h3><div class="stress-meter"><canvas id="stressChart" width="120" height="120"></canvas></div><p>${stressData.emoji} ${stressData.advice}</p></div>
-                        <div class="glass-card" style="padding: 20px;"><h3>📊 Study Stats</h3><p>🔥 Streak: ${currentUser.studyStreak || 0} days</p><p>⭐ Points: ${currentUser.points || 0}</p><p>📚 Guides: ${guides.length}</p><p>🃏 Cards: ${flashcardsList.length}</p></div>
-                        <div class="glass-card" style="padding: 20px; background: linear-gradient(135deg, #FFE8F0, #FFE0F0);"><h3>🤖 AI Recommendation</h3><p>"${stressTips[0]}"</p><button class="btn-primary" style="margin-top: 15px;" onclick="openChatbot()">💬 Chat with AI</button></div>
-                        <div class="glass-card" style="padding: 20px;"><h3>🎯 Daily Goal</h3><p>Study 2 hours today</p><div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div><button class="btn-primary" style="margin-top: 15px;" onclick="recordStudySession()">📝 Log Session</button></div>
+                        <div class="glass-card" style="padding:20px; text-align:center;">
+                            <div style="font-size:36px;">📚</div>
+                            <h3>Study Time</h3>
+                            <p style="font-size:28px; font-weight:bold;">${todayHours.toFixed(1)}h</p>
+                            <p>today</p>
+                        </div>
+                        <div class="glass-card" style="padding:20px; text-align:center;">
+                            <div style="font-size:36px;">✅</div>
+                            <h3>Tasks</h3>
+                            <p style="font-size:28px; font-weight:bold;">${pendingTasks}</p>
+                            <p>pending</p>
+                        </div>
+                        <div class="glass-card" style="padding:20px; text-align:center;">
+                            <div style="font-size:36px;">🃏</div>
+                            <h3>Flashcards</h3>
+                            <p style="font-size:28px; font-weight:bold;">${flashcards.length}</p>
+                            <p>total</p>
+                        </div>
+                        <div class="glass-card" style="padding:20px; text-align:center; background: linear-gradient(135deg, #ffe8f0, #ffe0f0);">
+                            <div style="font-size:36px;">${stressData.emoji}</div>
+                            <h3>Stress Level</h3>
+                            <p style="font-size:28px; font-weight:bold; color:${stressData.color};">${stressData.score}%</p>
+                            <p>${stressData.level}</p>
+                        </div>
                     </div>
                     
-                    <div class="grid-5" style="margin-top: 24px;">
-                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderStudyTools()"><div class="cute-icon">📚</div><h4>Study Guide</h4></div>
-                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderFlashcards()"><div class="cute-icon">🃏</div><h4>Flashcards</h4></div>
-                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderPomodoro()"><div class="cute-icon">🍅</div><h4>Pomodoro</h4></div>
-                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderQuizzes()"><div class="cute-icon">📝</div><h4>Quiz</h4></div>
-                        <div class="glass-card" style="padding: 20px; text-align: center; cursor: pointer;" onclick="renderStudyRoom()"><div class="cute-icon">🎮</div><h4>Study Room</h4></div>
+                    <div class="grid-3" style="margin-top: 20px;">
+                        <div class="glass-card" style="padding:20px; cursor:pointer;" onclick="renderStudyTools()">
+                            <h3>✨ Generate Study Guide</h3>
+                            <p>Create personalized study plans for any topic</p>
+                            <button class="btn-primary" style="margin-top:10px;">Create →</button>
+                        </div>
+                        <div class="glass-card" style="padding:20px; cursor:pointer;" onclick="startQuickQuiz()">
+                            <h3>📝 Quick Quiz</h3>
+                            <p>Test your knowledge with AI-generated questions</p>
+                            <button class="btn-primary" style="margin-top:10px;">Start →</button>
+                        </div>
+                        <div class="glass-card" style="padding:20px; background: linear-gradient(135deg, #667eea, #764ba2); color:white; cursor:pointer;" onclick="recordStudySession()">
+                            <h3>🎯 Log Study Session</h3>
+                            <p>Track your progress and earn XP!</p>
+                            <button class="btn-primary" style="margin-top:10px; background:white; color:#667eea;">Log Now →</button>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="chatbot-container">
-                    <div class="chatbot-toggle" onclick="toggleChatbot()"><i class="fas fa-robot" style="font-size: 32px; color: white;"></i></div>
+                    <div class="chatbot-toggle" onclick="toggleChatbot()"><i class="fas fa-robot" style="font-size:28px; color:white;"></i></div>
                     <div class="chatbot-window" id="chatbotWindow">
-                        <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 15px; color: white; display: flex; justify-content: space-between;"><span>🤖 FocusWell AI</span><i class="fas fa-times" style="cursor: pointer;" onclick="toggleChatbot()"></i></div>
-                        <div class="chat-messages" id="chatMessages"><div class="message bot"><div class="message-bubble">Hi ${currentUser.name}! I'm your study companion! Ask me anything! 🌈</div></div></div>
-                        <div style="padding: 15px; border-top: 1px solid #E0E0E0; display: flex; gap: 10px;"><input type="text" id="chatInput" placeholder="Type your message..." style="flex: 1; padding: 10px; border-radius: 20px;"><button onclick="sendChatMessage()" style="background: var(--primary); border: none; width: 40px; height: 40px; border-radius: 50%; color: white;">→</button></div>
+                        <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding:15px; color:white; display:flex; justify-content:space-between;">
+                            <span>🤖 FocusWell AI</span>
+                            <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatbot()"></i>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message bot"><div class="message-bubble">Hi ${currentUser.name}! I'm your study assistant. Ask me anything about studying! 📚</div></div>
+                        </div>
+                        <div style="padding:15px; border-top:1px solid #ddd; display:flex; gap:10px;">
+                            <input type="text" id="chatInput" placeholder="Type your message..." style="flex:1; padding:10px; border-radius:20px; border:1px solid #ddd;">
+                            <button onclick="sendChatMessage()" class="btn-primary" style="padding:10px 15px;">Send</button>
+                        </div>
                     </div>
-                </div>`;
-            
-            const ctx = document.getElementById('stressChart')?.getContext('2d');
-            if (ctx) { new Chart(ctx, { type: 'doughnut', data: { labels: ['Stress', 'Calm'], datasets: [{ data: [stressData.score, 100 - stressData.score], backgroundColor: [stressData.color, '#E0E0E0'], borderWidth: 0 }] }, options: { cutout: '70%', plugins: { legend: { display: false } } } }); }
+                </div>
+            `;
         }
 
-        function renderStudyTools() {
-            currentScreen = 'study';
+        function renderTasks() {
+            currentScreen = 'tasks';
+            const tasks = Storage.getTasks();
+            
             document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div><div class="nav-links"><div class="nav-link" onclick="renderDashboard()">🏠 Home</div><div class="nav-link active">📚 Study</div><div class="nav-link" onclick="renderFlashcards()">🃏 Cards</div><div class="nav-link" onclick="renderPomodoro()">🍅 Timer</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
-                <div class="main-container"><div class="grid-2"><div class="glass-card" style="padding: 30px;"><h3>✨ Generate Study Guide</h3><form id="guideForm"><input type="text" id="topic" placeholder="Topic" required style="width:100%;padding:12px;margin-bottom:12px;border-radius:12px;"><select id="complexity" style="width:100%;padding:12px;margin-bottom:20px;border-radius:12px;"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select><button type="submit" class="btn-primary">Generate ✨</button></form></div>
-                <div class="glass-card" style="padding: 30px;"><h3>📤 Upload Problem Set</h3><div class="upload-area" onclick="document.getElementById('fileInput').click()"><i class="fas fa-cloud-upload-alt" style="font-size: 48px;"></i><p>Click to upload PDF/image</p></div><input type="file" id="fileInput" style="display:none;"><div id="uploadResult"></div></div></div><div id="generatedGuide" style="margin-top:24px;"></div></div>`;
-            document.getElementById('guideForm').addEventListener('submit', (e) => {
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ FocusWell</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link active">✅ Tasks</div>
+                        <div class="nav-link" onclick="renderFlashcards()">🃏 Cards</div>
+                        <div class="nav-link" onclick="renderPomodoro()">🍅 Timer</div>
+                        <div class="nav-link" onclick="logout()">🚪 Exit</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="glass-card" style="padding:25px; margin-bottom:20px;">
+                        <h3>➕ Add New Task</h3>
+                        <form id="taskForm" style="margin-top:15px;">
+                            <input type="text" id="taskTitle" placeholder="Task title" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:10px;">
+                            <input type="date" id="taskDeadline" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:10px;">
+                            <select id="taskPriority" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:10px;">
+                                <option value="low">Low Priority</option>
+                                <option value="medium" selected>Medium Priority</option>
+                                <option value="high">High Priority</option>
+                            </select>
+                            <button type="submit" class="btn-primary">Add Task</button>
+                        </form>
+                    </div>
+                    
+                    <div class="glass-card" style="padding:25px;">
+                        <h3>📋 My Tasks</h3>
+                        <div id="tasksList">
+                            ${tasks.length === 0 ? '<p>No tasks yet. Add your first task!</p>' : tasks.map(task => `
+                                <div class="task-item">
+                                    <div style="display:flex; align-items:center; gap:10px;">
+                                        <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')">
+                                        <div>
+                                            <strong style="${task.completed ? 'text-decoration:line-through; opacity:0.6' : ''}">${task.title}</strong>
+                                            <p style="font-size:12px;">Due: ${task.deadline} • ${task.priority}</p>
+                                        </div>
+                                    </div>
+                                    <button class="btn-secondary" style="padding:5px 10px;" onclick="deleteTask('${task.id}')">Delete</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('taskForm').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const topic = document.getElementById('topic').value;
-                const guide = studyGuideGen.generateGuide(topic);
-                const guideWithId = { id: Date.now(), ...guide, topic, createdAt: new Date().toISOString() };
-                Storage.saveStudyGuide(guideWithId);
-                document.getElementById('generatedGuide').innerHTML = `<div class="glass-card" style="padding:30px;"><h3>📖 ${guide.title}</h3>${guide.segments.map(s => `<p>${s}</p>`).join('')}<div style="margin-top:20px;padding:15px;background:#F0F0FF;border-radius:12px;">💡 ${guide.tips}</div><button class="btn-primary" style="margin-top:20px;" onclick="createFlashcardsFromGuide('${topic}')">📝 Create Flashcards</button></div>`;
+                const title = document.getElementById('taskTitle').value;
+                const deadline = document.getElementById('taskDeadline').value;
+                const priority = document.getElementById('taskPriority').value;
+                const newTask = { id: Date.now().toString(), title, deadline, priority, completed: false, createdAt: new Date().toISOString() };
+                Storage.saveTask(newTask);
+                renderTasks();
             });
-            document.getElementById('fileInput').addEventListener('change', (e) => { if(e.target.files[0]){ document.getElementById('uploadResult').innerHTML = `<div style="background:#E8F5E9;padding:15px;border-radius:12px;"><p>✅ "${e.target.files[0].name}" uploaded! AI analyzing...</p><p>Step-by-step guidance: Break down problems, identify key concepts, solve systematically!</p></div>`; } });
+        }
+
+        function toggleTask(taskId) {
+            const tasks = Storage.getTasks();
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed;
+                localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+                if (task.completed) {
+                    currentUser.points = (currentUser.points || 0) + 10;
+                    currentUser.xp = (currentUser.xp || 0) + 10;
+                    if (currentUser.xp >= 100) {
+                        currentUser.level++;
+                        currentUser.xp -= 100;
+                        alert(`🎊 Level Up! You're now Level ${currentUser.level}! 🎊`);
+                    }
+                    Storage.updateUser(currentUser.email, { points: currentUser.points, xp: currentUser.xp, level: currentUser.level });
+                }
+                renderTasks();
+            }
+        }
+
+        function deleteTask(taskId) {
+            let tasks = Storage.getTasks();
+            tasks = tasks.filter(t => t.id !== taskId);
+            localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+            renderTasks();
         }
 
         function renderFlashcards() {
             currentScreen = 'flashcards';
-            flashcards = Storage.getFlashcards();
-            currentFlashcardIndex = 0;
+            let flashcards = Storage.getFlashcards();
+            
             document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div><div class="nav-links"><div class="nav-link" onclick="renderDashboard()">🏠 Home</div><div class="nav-link" onclick="renderStudyTools()">📚 Study</div><div class="nav-link active">🃏 Cards</div><div class="nav-link" onclick="renderPomodoro()">🍅 Timer</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
-                <div class="main-container"><div class="grid-2"><div class="glass-card" style="padding:30px;"><h3>✨ Create Flashcard</h3><form id="flashcardForm"><input type="text" id="flashcardTopic" placeholder="Topic" required style="width:100%;padding:12px;margin-bottom:12px;border-radius:12px;"><input type="text" id="flashcardQuestion" placeholder="Question" required style="width:100%;padding:12px;margin-bottom:12px;border-radius:12px;"><input type="text" id="flashcardAnswer" placeholder="Answer" required style="width:100%;padding:12px;margin-bottom:20px;border-radius:12px;"><button type="submit" class="btn-primary">➕ Add</button></form></div>
-                <div class="glass-card" style="padding:30px;text-align:center;"><h3>🃏 Study Mode</h3>${flashcards.length > 0 ? `<div class="flashcard" id="flashcardDisplay" onclick="flipCurrentCard()"><div id="flashcardContent"><p>❓ ${flashcards[0]?.question}</p></div></div><div style="margin-top:20px;"><button class="btn-primary" onclick="previousFlashcard()">◀</button> <button class="btn-primary" onclick="nextFlashcard()">▶</button></div><p>Card 1 of ${flashcards.length}</p>` : '<p>No flashcards yet. Create your first!</p>'}</div></div></div>`;
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ FocusWell</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link" onclick="renderTasks()">✅ Tasks</div>
+                        <div class="nav-link active">🃏 Cards</div>
+                        <div class="nav-link" onclick="renderPomodoro()">🍅 Timer</div>
+                        <div class="nav-link" onclick="logout()">🚪 Exit</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="grid-2">
+                        <div class="glass-card" style="padding:25px;">
+                            <h3>✨ Create Flashcard</h3>
+                            <form id="flashcardForm" style="margin-top:15px;">
+                                <input type="text" id="cardTopic" placeholder="Topic" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:10px;">
+                                <input type="text" id="cardQuestion" placeholder="Question" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:10px;">
+                                <input type="text" id="cardAnswer" placeholder="Answer" required style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:10px;">
+                                <button type="submit" class="btn-primary">Add Flashcard</button>
+                            </form>
+                        </div>
+                        
+                        <div class="glass-card" style="padding:25px; text-align:center;">
+                            <h3>🃏 Study Mode</h3>
+                            ${flashcards.length > 0 ? `
+                                <div class="flashcard" id="flashcardDisplay" onclick="flipCurrentCard()">
+                                    <div id="flashcardContent">
+                                        <p style="font-size:18px;">❓ ${flashcards[0]?.question || 'No cards'}</p>
+                                        <p style="margin-top:15px; font-size:12px;">Click to flip</p>
+                                    </div>
+                                </div>
+                                <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
+                                    <button class="btn-secondary" onclick="previousFlashcard()">◀ Previous</button>
+                                    <button class="btn-secondary" onclick="nextFlashcard()">Next ▶</button>
+                                </div>
+                                <p style="margin-top:10px;">Card 1 of ${flashcards.length}</p>
+                            ` : '<p>No flashcards yet. Create your first!</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
             document.getElementById('flashcardForm')?.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const card = { id: Date.now(), topic: document.getElementById('flashcardTopic').value, question: document.getElementById('flashcardQuestion').value, answer: document.getElementById('flashcardAnswer').value, createdAt: new Date().toISOString() };
-                Storage.saveFlashcard(card);
+                const topic = document.getElementById('cardTopic').value;
+                const question = document.getElementById('cardQuestion').value;
+                const answer = document.getElementById('cardAnswer').value;
+                const newCard = { id: Date.now(), topic, question, answer, createdAt: new Date().toISOString() };
+                Storage.saveFlashcard(newCard);
                 renderFlashcards();
             });
         }
 
         function flipCurrentCard() {
+            const flashcards = Storage.getFlashcards();
             const card = flashcards[currentFlashcardIndex];
             if (!card) return;
             const contentDiv = document.getElementById('flashcardContent');
             const isShowingQuestion = contentDiv.innerHTML.includes(card.question);
-            if (isShowingQuestion) { contentDiv.innerHTML = `<p>💡 ${card.answer}</p><p style="font-size:12px;">Click for question</p>`; }
-            else { contentDiv.innerHTML = `<p>❓ ${card.question}</p><p style="font-size:12px;">Click for answer</p>`; }
+            if (isShowingQuestion) {
+                contentDiv.innerHTML = `<p style="font-size:18px;">💡 ${card.answer}</p><p style="margin-top:15px; font-size:12px;">Click for question</p>`;
+            } else {
+                contentDiv.innerHTML = `<p style="font-size:18px;">❓ ${card.question}</p><p style="margin-top:15px; font-size:12px;">Click for answer</p>`;
+            }
         }
 
-        function previousFlashcard() { if (flashcards.length) { currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcards.length) % flashcards.length; renderFlashcards(); } }
-        function nextFlashcard() { if (flashcards.length) { currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcards.length; renderFlashcards(); } }
+        function previousFlashcard() {
+            const flashcards = Storage.getFlashcards();
+            if (flashcards.length) {
+                currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcards.length) % flashcards.length;
+                renderFlashcards();
+            }
+        }
+
+        function nextFlashcard() {
+            const flashcards = Storage.getFlashcards();
+            if (flashcards.length) {
+                currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcards.length;
+                renderFlashcards();
+            }
+        }
 
         function renderPomodoro() {
             currentScreen = 'pomodoro';
             document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div><div class="nav-links"><div class="nav-link" onclick="renderDashboard()">🏠 Home</div><div class="nav-link" onclick="renderStudyTools()">📚 Study</div><div class="nav-link" onclick="renderFlashcards()">🃏 Cards</div><div class="nav-link active">🍅 Timer</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
-                <div class="main-container"><div class="glass-card" style="padding:40px;text-align:center;"><h2>🍅 Pomodoro Timer</h2><div class="pomodoro-timer" id="pomodoroDisplay">25:00</div><div><button class="btn-primary" onclick="startPomodoro()">▶ Start</button> <button class="btn-primary" onclick="pausePomodoro()">⏸ Pause</button> <button class="btn-primary" onclick="resetPomodoro()">🔄 Reset</button></div><div style="margin-top:20px;"><p>🎯 Study 25 min → Break 5 min → Repeat!</p></div></div></div>`;
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ FocusWell</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link" onclick="renderTasks()">✅ Tasks</div>
+                        <div class="nav-link" onclick="renderFlashcards()">🃏 Cards</div>
+                        <div class="nav-link active">🍅 Timer</div>
+                        <div class="nav-link" onclick="logout()">🚪 Exit</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="glass-card" style="padding:40px; text-align:center;">
+                        <h2>🍅 Pomodoro Timer</h2>
+                        <div class="pomodoro-timer" id="pomodoroDisplay">25:00</div>
+                        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                            <button class="btn-primary" onclick="startPomodoro()">▶ Start</button>
+                            <button class="btn-secondary" onclick="pausePomodoro()">⏸ Pause</button>
+                            <button class="btn-secondary" onclick="resetPomodoro()">🔄 Reset</button>
+                        </div>
+                        <p style="margin-top:20px;">🎯 Study for 25 minutes, then take a 5-minute break!</p>
+                    </div>
+                </div>
+            `;
             resetPomodoro();
         }
 
-        function startPomodoro() { if (!isPomodoroRunning) { isPomodoroRunning = true; pomodoroInterval = setInterval(() => { if (pomodoroSeconds > 0) { pomodoroSeconds--; updatePomodoroDisplay(); } else { pausePomodoro(); alert("🎉 Time's up! Take a 5-minute break!"); } }, 1000); } }
-        function pausePomodoro() { if (pomodoroInterval) { clearInterval(pomodoroInterval); pomodoroInterval = null; isPomodoroRunning = false; } }
-        function resetPomodoro() { pausePomodoro(); pomodoroSeconds = 25 * 60; updatePomodoroDisplay(); }
-        function updatePomodoroDisplay() { const minutes = Math.floor(pomodoroSeconds / 60); const seconds = pomodoroSeconds % 60; const display = document.getElementById('pomodoroDisplay'); if (display) display.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`; }
+        function startPomodoro() {
+            if (!isPomodoroRunning) {
+                isPomodoroRunning = true;
+                pomodoroInterval = setInterval(() => {
+                    if (pomodoroSeconds > 0) {
+                        pomodoroSeconds--;
+                        updatePomodoroDisplay();
+                    } else {
+                        pausePomodoro();
+                        alert("🎉 Time's up! Take a 5-minute break!");
+                        recordStudySession();
+                    }
+                }, 1000);
+            }
+        }
+
+        function pausePomodoro() {
+            if (pomodoroInterval) {
+                clearInterval(pomodoroInterval);
+                pomodoroInterval = null;
+                isPomodoroRunning = false;
+            }
+        }
+
+        function resetPomodoro() {
+            pausePomodoro();
+            pomodoroSeconds = 25 * 60;
+            updatePomodoroDisplay();
+        }
+
+        function updatePomodoroDisplay() {
+            const minutes = Math.floor(pomodoroSeconds / 60);
+            const seconds = pomodoroSeconds % 60;
+            const display = document.getElementById('pomodoroDisplay');
+            if (display) display.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        }
 
         function renderQuizzes() {
             currentScreen = 'quizzes';
-            const quizzes = [
-                { id: 1, topic: "Study Habits", questions: [{ text: "What's the best study duration for focus?", options: ["60 min", "25 min", "90 min", "120 min"], correct: 1 }, { text: "How often should you take breaks?", options: ["Every 25 min", "Every hour", "Every 2 hours", "Never"], correct: 0 }] },
-                { id: 2, topic: "Stress Management", questions: [{ text: "What helps reduce study stress?", options: ["Deep breathing", "More caffeine", "Skipping breaks", "Studying longer"], correct: 0 }] }
-            ];
+            const quizResults = Storage.getQuizzes();
+            
             document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div><div class="nav-links"><div class="nav-link" onclick="renderDashboard()">🏠 Home</div><div class="nav-link active">📝 Quiz</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
-                <div class="main-container"><div class="grid-2">${quizzes.map(quiz => `<div class="glass-card" style="padding:20px;cursor:pointer;" onclick="startQuiz(${quiz.id}, '${quiz.topic}')"><h3>📝 ${quiz.topic} Quiz</h3><p>${quiz.questions.length} questions</p></div>`).join('')}</div></div>`;
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ FocusWell</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link active">📝 Quiz</div>
+                        <div class="nav-link" onclick="logout()">🚪 Exit</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="glass-card" style="padding:30px; text-align:center;">
+                        <h3>📝 Study Habits Quiz</h3>
+                        <p>Test your knowledge about effective study techniques!</p>
+                        <button class="btn-primary" onclick="startQuiz()" style="margin-top:20px;">Start Quiz →</button>
+                    </div>
+                    ${quizResults.length > 0 ? `
+                        <div class="glass-card" style="padding:25px; margin-top:20px;">
+                            <h3>📊 Previous Results</h3>
+                            ${quizResults.slice(-5).reverse().map(r => `<p>${new Date(r.date).toLocaleDateString()}: ${r.score}/${r.total} (${Math.round(r.score/r.total*100)}%)</p>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
         }
 
-        function startQuiz(quizId, topic) {
-            const quizzes = [{ id: 1, topic: "Study Habits", questions: [{ text: "What's the best study duration for focus?", options: ["60 min", "25 min", "90 min", "120 min"], correct: 1 }, { text: "How often should you take breaks?", options: ["Every 25 min", "Every hour", "Every 2 hours", "Never"], correct: 0 }] }];
-            currentQuiz = quizzes.find(q => q.id === quizId);
+        function startQuiz() {
+            currentQuiz = {
+                questions: [
+                    { text: "What is the recommended study duration for the Pomodoro Technique?", options: ["15 min", "25 min", "45 min", "60 min"], correct: 1 },
+                    { text: "How often should you take breaks while studying?", options: ["Every 25 min", "Every hour", "Every 2 hours", "Never"], correct: 0 },
+                    { text: "Which is best for memory retention?", options: ["Passive reading", "Active recall", "Highlighting", "Re-reading"], correct: 1 },
+                    { text: "What helps reduce study stress?", options: ["Deep breathing", "More caffeine", "Skipping breaks", "Studying all night"], correct: 0 },
+                    { text: "How much sleep do students typically need?", options: ["4-5 hours", "6-7 hours", "7-9 hours", "10+ hours"], correct: 2 }
+                ]
+            };
             quizAnswers = [];
-            renderQuizQuestion(0);
+            quizIndex = 0;
+            renderQuizQuestion();
         }
 
-        function renderQuizQuestion(index) {
-            if (!currentQuiz || index >= currentQuiz.questions.length) {
+        function renderQuizQuestion() {
+            if (quizIndex >= currentQuiz.questions.length) {
                 const score = quizAnswers.filter((a, i) => a === currentQuiz.questions[i].correct).length;
-                alert(`🎉 Quiz complete! You scored ${score}/${currentQuiz.questions.length}! +${score * 10} XP!`);
-                currentUser.xp = (currentUser.xp || 0) + score * 10;
-                if (currentUser.xp >= (currentUser.level * 100)) { currentUser.level++; alert(`🎊 Level Up! You're now Level ${currentUser.level}! 🎊`); }
-                Storage.updateUser(currentUser.email, { xp: currentUser.xp, level: currentUser.level });
+                const pointsEarned = score * 20;
+                currentUser.points = (currentUser.points || 0) + pointsEarned;
+                currentUser.xp = (currentUser.xp || 0) + pointsEarned;
+                Storage.updateUser(currentUser.email, { points: currentUser.points, xp: currentUser.xp });
+                Storage.saveQuizResult({ date: new Date().toISOString(), score, total: currentQuiz.questions.length, points: pointsEarned });
+                alert(`🎉 Quiz complete! You scored ${score}/${currentQuiz.questions.length}! +${pointsEarned} points!`);
                 renderQuizzes();
                 return;
             }
-            const q = currentQuiz.questions[index];
+            
+            const q = currentQuiz.questions[quizIndex];
             document.getElementById('app').innerHTML = `
                 <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div></div>
-                <div class="main-container"><div class="glass-card" style="padding:30px;"><h3>${currentQuiz.topic} Quiz</h3><p>Question ${index + 1}/${currentQuiz.questions.length}</p><h4>${q.text}</h4>${q.options.map((opt, i) => `<div class="quiz-option" onclick="answerQuiz(${index}, ${i})">${opt}</div>`).join('')}</div></div>`;
+                <div class="main-container">
+                    <div class="glass-card" style="padding:30px;">
+                        <h3>📝 Quiz</h3>
+                        <p>Question ${quizIndex + 1}/${currentQuiz.questions.length}</p>
+                        <h4 style="margin:20px 0;">${q.text}</h4>
+                        ${q.options.map((opt, i) => `<div class="quiz-option" onclick="answerQuiz(${i})">${opt}</div>`).join('')}
+                    </div>
+                </div>
+            `;
         }
 
-        function answerQuiz(qIndex, answerIndex) { quizAnswers[qIndex] = answerIndex; renderQuizQuestion(qIndex + 1); }
+        function answerQuiz(answerIndex) {
+            quizAnswers[quizIndex] = answerIndex;
+            quizIndex++;
+            renderQuizQuestion();
+        }
 
         function renderStudyRoom() {
             currentScreen = 'studyroom';
             document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div><div class="nav-links"><div class="nav-link" onclick="renderDashboard()">🏠 Home</div><div class="nav-link active">🎮 Study Room</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
-                <div class="main-container"><div class="grid-3"><div class="study-room"><i class="fas fa-music" style="font-size:48px;"></i><h3>Lo-Fi Radio</h3><button class="btn-primary" onclick="playStudyMusic()">Play 🎵</button></div>
-                <div class="study-room"><i class="fas fa-tree" style="font-size:48px;"></i><h3>Virtual Garden</h3><p>Study to grow your garden! 🌱</p><button class="btn-primary" onclick="growPlant()">Study Session 🌿</button><div id="plantStatus"></div></div>
-                <div class="study-room"><i class="fas fa-users" style="font-size:48px;"></i><h3>Study Together</h3><p>Join virtual study groups!</p><button class="btn-primary" onclick="joinStudyGroup()">Join 👥</button></div></div></div>`;
-        }
-
-        function renderLectureTools() {
-            currentScreen = 'lecture';
-            let isRecording = false;
-            let currentTranscript = '';
-            document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div><div class="nav-links"><div class="nav-link" onclick="renderDashboard()">🏠 Home</div><div class="nav-link active">🎙️ Lectures</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
-                <div class="main-container"><div class="grid-2"><div class="glass-card" style="padding:30px;"><h3>🎙️ Lecture Transcriber</h3><button id="recordBtn" class="btn-primary" style="font-size:20px;">🎤 Start Recording</button><div id="liveTranscript" style="background:#F9F9FF;border-radius:12px;padding:15px;min-height:150px;margin-top:15px;"><p>Click to start transcribing...</p></div></div>
-                <div class="glass-card" style="padding:30px;"><h3>📝 Recent Transcripts</h3><div id="transcriptList">${Storage.getTranscripts().slice(0,5).map(t => `<div class="transcript-item" onclick="viewTranscript('${t.id}')"><strong>${t.title}</strong><p>${new Date(t.createdAt).toLocaleString()}</p></div>`).join('')}</div></div></div></div>`;
-            const recordBtn = document.getElementById('recordBtn');
-            recordBtn?.addEventListener('click', () => {
-                if (!isRecording) {
-                    transcriber.startRecording((text) => { currentTranscript += ' ' + text; document.getElementById('liveTranscript').innerHTML = `<p>🎙️ Recording... ${currentTranscript}</p>`; }, () => {
-                        isRecording = false; recordBtn.textContent = '🎤 Start Recording';
-                        const summary = transcriber.generateSummary(currentTranscript);
-                        const newTranscript = { id: Date.now(), text: currentTranscript, summary: summary.summary, title: prompt('Lecture title:'), createdAt: new Date().toISOString() };
-                        Storage.saveTranscript(newTranscript);
-                        alert('Recording saved!');
-                        renderLectureTools();
-                    });
-                    isRecording = true; recordBtn.textContent = '⏹️ Stop Recording';
-                } else { transcriber.stopRecording(); }
-            });
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ FocusWell</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link active">🎮 Study Room</div>
+                        <div class="nav-link" onclick="logout()">🚪 Exit</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="grid-3">
+                        <div class="study-room-card" onclick="playStudyMusic()">
+                            <i class="fas fa-music" style="font-size:48px;"></i>
+                            <h3 style="margin:15px 0;">Lo-Fi Radio</h3>
+                            <p>Calming beats for focus</p>
+                            <button class="btn-primary" style="margin-top:15px;">Play 🎵</button>
+                        </div>
+                        <div class="study-room-card" onclick="growVirtualPlant()">
+                            <i class="fas fa-seedling" style="font-size:48px;"></i>
+                            <h3 style="margin:15px 0;">Virtual Garden</h3>
+                            <p id="plantMessage">Study to grow your plant! 🌱</p>
+                            <button class="btn-primary" style="margin-top:15px;">Study Session</button>
+                        </div>
+                        <div class="study-room-card" onclick="joinStudyGroup()">
+                            <i class="fas fa-users" style="font-size:48px;"></i>
+                            <h3 style="margin:15px 0;">Study Together</h3>
+                            <p>Join virtual study groups</p>
+                            <button class="btn-primary" style="margin-top:15px;">Join 👥</button>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         function renderWellness() {
             currentScreen = 'wellness';
             const stressData = stressAnalyzer.calculateStressLevel(currentUser);
+            
             document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div><div class="nav-links"><div class="nav-link" onclick="renderDashboard()">🏠 Home</div><div class="nav-link active">💖 Wellness</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
-                <div class="main-container"><div class="grid-2"><div class="glass-card" style="padding:30px;"><h3>💖 Wellness Check-in</h3><form id="wellnessForm"><label>Sleep (0-10):</label><input type="range" id="sleep" min="0" max="10" value="${currentUser.sleepQuality||7}"><label>Anxiety (0-10):</label><input type="range" id="anxiety" min="0" max="10" value="${currentUser.anxietyLevel||3}"><label>Physical Symptoms:</label><input type="range" id="physical" min="0" max="10" value="${currentUser.physicalSymptoms||2}"><label>Workload:</label><input type="range" id="workload" min="0" max="10" value="${currentUser.workload||3}"><button type="submit" class="btn-primary" style="margin-top:20px;">Update 💖</button></form></div>
-                <div class="glass-card" style="padding:30px;"><h3>🧘 Relaxation Corner</h3><button class="btn-primary" onclick="startBreathingExercise()">🌬️ Breathing</button><button class="btn-primary" onclick="showPositiveAffirmation()">✨ Affirmation</button><button class="btn-primary" onclick="playCalmMusic()">🎵 Calm Music</button><div style="margin-top:20px;padding:15px;background:#F0F0FF;border-radius:12px;"><h4>Current Stress: ${stressData.level}</h4><p>${stressData.advice}</p></div></div></div></div>`;
-            document.getElementById('wellnessForm')?.addEventListener('submit', (e) => {
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ FocusWell</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link active">💖 Wellness</div>
+                        <div class="nav-link" onclick="logout()">🚪 Exit</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="grid-2">
+                        <div class="glass-card" style="padding:25px;">
+                            <h3>💖 Wellness Check-in</h3>
+                            <form id="wellnessForm" style="margin-top:20px;">
+                                <label>Sleep Quality (0-10):</label>
+                                <input type="range" id="sleep" min="0" max="10" value="${currentUser.sleepQuality || 7}" style="width:100%; margin:10px 0;">
+                                <span id="sleepVal">${currentUser.sleepQuality || 7}/10</span>
+                                
+                                <label style="margin-top:15px;">Anxiety Level (0-10):</label>
+                                <input type="range" id="anxiety" min="0" max="10" value="${currentUser.anxietyLevel || 3}" style="width:100%; margin:10px 0;">
+                                <span id="anxietyVal">${currentUser.anxietyLevel || 3}/10</span>
+                                
+                                <button type="submit" class="btn-primary" style="margin-top:20px; width:100%;">Update Wellness</button>
+                            </form>
+                        </div>
+                        
+                        <div class="glass-card" style="padding:25px;">
+                            <h3>🧘 Relaxation Corner</h3>
+                            <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                                <button class="btn-primary" onclick="startBreathing()">🌬️ Breathing Exercise</button>
+                                <button class="btn-secondary" onclick="showAffirmation()">✨ Positive Affirmation</button>
+                                <button class="btn-secondary" onclick="playCalmMusic()">🎵 Calm Music</button>
+                            </div>
+                            <div style="margin-top:20px; padding:15px; background:#f1f5f9; border-radius:12px;">
+                                <h4>Current Stress: ${stressData.level}</h4>
+                                <p>${stressData.advice}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('sleep').addEventListener('input', (e) => {
+                document.getElementById('sleepVal').textContent = e.target.value + '/10';
+            });
+            document.getElementById('anxiety').addEventListener('input', (e) => {
+                document.getElementById('anxietyVal').textContent = e.target.value + '/10';
+            });
+            
+            document.getElementById('wellnessForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 currentUser.sleepQuality = parseInt(document.getElementById('sleep').value);
                 currentUser.anxietyLevel = parseInt(document.getElementById('anxiety').value);
-                currentUser.physicalSymptoms = parseInt(document.getElementById('physical').value);
-                currentUser.workload = parseInt(document.getElementById('workload').value);
-                Storage.updateUser(currentUser.email, currentUser);
+                Storage.updateUser(currentUser.email, { sleepQuality: currentUser.sleepQuality, anxietyLevel: currentUser.anxietyLevel });
                 alert('Wellness updated! 💖');
                 renderDashboard();
             });
         }
 
         function renderAchievements() {
-            const achievements = Storage.getAchievements();
-            const allAchievements = [
-                { id: 1, name: "First Steps", desc: "Complete your first study session", icon: "🎯", earned: currentUser.studyStreak > 0 },
-                { id: 2, name: "Flashcard Master", desc: "Create 10 flashcards", icon: "🃏", earned: Storage.getFlashcards().length >= 10 },
-                { id: 3, name: "Quiz Champion", desc: "Score 100% on a quiz", icon: "🏆", earned: false },
-                { id: 4, name: "Stress Buster", desc: "Keep stress level low for 7 days", icon: "💪", earned: false },
-                { id: 5, name: "Study Streak", desc: "Study 7 days in a row", icon: "🔥", earned: (currentUser.studyStreak || 0) >= 7 }
+            currentScreen = 'achievements';
+            const tasks = Storage.getTasks();
+            const flashcards = Storage.getFlashcards();
+            const sessions = Storage.getStudySessions();
+            
+            const achievements = [
+                { name: "First Steps", desc: "Complete your first task", icon: "🎯", earned: tasks.some(t => t.completed) },
+                { name: "Flashcard Master", desc: "Create 5 flashcards", icon: "🃏", earned: flashcards.length >= 5 },
+                { name: "Study Streak", desc: "Study 3 days in a row", icon: "🔥", earned: (currentUser.studyStreak || 0) >= 3 },
+                { name: "Quiz Champion", desc: "Score 100% on a quiz", icon: "🏆", earned: Storage.getQuizzes().some(q => q.score === q.total) },
+                { name: "Focus Master", desc: "Complete 10 study sessions", icon: "⭐", earned: sessions.length >= 10 },
+                { name: "Level Up!", desc: "Reach Level 3", icon: "📈", earned: (currentUser.level || 1) >= 3 }
             ];
+            
             document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo">🎓✨ FocusWell</div><div class="nav-links"><div class="nav-link" onclick="renderDashboard()">🏠 Home</div><div class="nav-link active">🏆 Awards</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
-                <div class="main-container"><div class="grid-3">${allAchievements.map(ach => `<div class="glass-card" style="padding:20px;text-align:center;opacity:${ach.earned?1:0.5}"><div class="achievement-badge">${ach.icon}</div><h4>${ach.name}</h4><p>${ach.desc}</p>${ach.earned?'✅ Unlocked!':'🔒 Locked'}</div>`).join('')}</div></div>`;
+                <div class="nav-bar">
+                    <div class="logo">🎓✨ FocusWell</div>
+                    <div class="nav-links">
+                        <div class="nav-link" onclick="renderDashboard()">🏠 Home</div>
+                        <div class="nav-link active">🏆 Awards</div>
+                        <div class="nav-link" onclick="logout()">🚪 Exit</div>
+                    </div>
+                </div>
+                <div class="main-container">
+                    <div class="grid-3">
+                        ${achievements.map(ach => `
+                            <div class="achievement-card" style="opacity: ${ach.earned ? 1 : 0.5};">
+                                <div class="achievement-badge">${ach.icon}</div>
+                                <h4>${ach.name}</h4>
+                                <p style="font-size:12px;">${ach.desc}</p>
+                                ${ach.earned ? '<span style="color:#10b981;">✅ Unlocked!</span>' : '<span style="color:#94a3b8;">🔒 Locked</span>'}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
         }
 
         // Helper Functions
-        function recordStudySession() { const hours = prompt('Hours studied?', '2'); if(hours){ currentUser.studyStreak = (currentUser.studyStreak || 0) + 1; currentUser.points = (currentUser.points || 0) + Math.floor(hours * 10); currentUser.xp = (currentUser.xp || 0) + Math.floor(hours * 5); Storage.updateUser(currentUser.email, { studyStreak: currentUser.studyStreak, points: currentUser.points, xp: currentUser.xp }); alert(`🎉 +${Math.floor(hours*10)} points!`); renderDashboard(); } }
-        function createFlashcardsFromGuide(topic) { const cards = studyGuideGen.generateFlashcards(topic, 3); cards.forEach(c => Storage.saveFlashcard({ ...c, topic })); alert(`Created 3 flashcards for ${topic}!`); renderFlashcards(); }
-        function viewTranscript(id) { const t = Storage.getTranscripts().find(t => t.id == id); if(t) alert(`📝 ${t.title}\n\nSummary: ${t.summary}`); }
-        function startBreathingExercise() { alert("🧘 4-7-8 Breathing: Inhale 4s → Hold 7s → Exhale 8s. Repeat 4 times!"); }
-        function showPositiveAffirmation() { const affirmations = ["I am capable and strong 💪", "Every day I'm learning 🌱", "I deserve calm and happiness 🌈"]; alert(`✨ ${affirmations[Math.floor(Math.random()*affirmations.length)]} ✨`); }
-        function playCalmMusic() { alert("🎵 Try: Lo-fi beats, nature sounds, or classical piano for focus!"); }
-        function playStudyMusic() { alert("🎵 Playing lo-fi study beats in your imagination! 🎧"); }
-        function growPlant() { alert("🌱 Your virtual plant grew! Keep studying to watch it bloom! 🌸"); }
+        function recordStudySession() {
+            const hours = prompt('How many hours did you study?', '1');
+            if (hours && !isNaN(hours) && parseFloat(hours) > 0) {
+                const h = parseFloat(hours);
+                const session = { date: new Date().toISOString(), hours: h };
+                Storage.saveStudySession(session);
+                currentUser.studyStreak = (currentUser.studyStreak || 0) + 1;
+                currentUser.points = (currentUser.points || 0) + Math.floor(h * 25);
+                currentUser.xp = (currentUser.xp || 0) + Math.floor(h * 15);
+                if (currentUser.xp >= 100) {
+                    currentUser.level++;
+                    currentUser.xp -= 100;
+                    alert(`🎊 Level Up! You're now Level ${currentUser.level}! 🎊`);
+                }
+                Storage.updateUser(currentUser.email, { studyStreak: currentUser.studyStreak, points: currentUser.points, xp: currentUser.xp, level: currentUser.level });
+                alert(`🎉 Great job! +${Math.floor(h * 25)} points!`);
+                renderDashboard();
+            }
+        }
+
+        function renderStudyTools() {
+            const topic = prompt("Enter a topic for your study guide:", "Mathematics");
+            if (topic) {
+                const guide = `
+                    <div class="glass-card" style="padding:25px; margin-top:20px;">
+                        <h3>📖 Study Guide: ${topic}</h3>
+                        <p><strong>1. Introduction:</strong> Understanding the basics of ${topic}</p>
+                        <p><strong>2. Key Concepts:</strong> Core principles and formulas</p>
+                        <p><strong>3. Practice Problems:</strong> Work through examples</p>
+                        <p><strong>4. Common Mistakes:</strong> What to watch out for</p>
+                        <p><strong>5. Summary:</strong> Review and test yourself</p>
+                        <p style="margin-top:15px;"><strong>💡 Tip:</strong> Practice for 30 minutes daily!</p>
+                        <button class="btn-primary" style="margin-top:15px;" onclick="createFlashcardsFromGuide('${topic}')">Create Flashcards</button>
+                    </div>
+                `;
+                document.querySelector('.main-container').innerHTML += guide;
+            }
+        }
+
+        function createFlashcardsFromGuide(topic) {
+            for (let i = 1; i <= 3; i++) {
+                const card = { id: Date.now() + i, topic, question: `${topic} - Concept ${i}`, answer: `Review your notes for ${topic} concept ${i}!` };
+                Storage.saveFlashcard(card);
+            }
+            alert(`Created 3 flashcards for ${topic}!`);
+            renderFlashcards();
+        }
+
+        function startQuickQuiz() { startQuiz(); }
+        function playStudyMusic() { alert("🎵 Playing lo-fi study beats! 🎧"); }
+        function growVirtualPlant() { 
+            let plantStage = localStorage.getItem('plantStage') || 1;
+            if (plantStage < 5) {
+                plantStage++;
+                localStorage.setItem('plantStage', plantStage);
+                const plants = ['🌱', '🌿', '🌳', '🌸', '🍎'];
+                alert(`Your plant grew! ${plants[plantStage-1]} Keep studying to see it bloom!`);
+                document.getElementById('plantMessage').innerHTML = `Your plant: ${plants[plantStage-1]} Keep going!`;
+            } else {
+                alert("🌳 Your plant is fully grown! Great job staying consistent!");
+            }
+        }
         function joinStudyGroup() { alert("👥 You've joined a virtual study session! Stay focused! 💪"); }
-        function openChatbot() { document.getElementById('chatbotWindow')?.classList.add('open'); }
+        function startBreathing() { alert("🧘 4-7-8 Breathing: Inhale 4s → Hold 7s → Exhale 8s. Repeat 4 times!"); }
+        function showAffirmation() { const affirmations = ["I am capable and strong 💪", "Every day I'm learning 🌱", "I deserve calm and happiness 🌈"]; alert(`✨ ${affirmations[Math.floor(Math.random()*affirmations.length)]} ✨`); }
+        function playCalmMusic() { alert("🎵 Try: Nature sounds, classical piano, or meditation music for relaxation!"); }
+
         function toggleChatbot() { document.getElementById('chatbotWindow')?.classList.toggle('open'); }
         function sendChatMessage() {
             const input = document.getElementById('chatInput');
@@ -823,16 +1150,49 @@
             const chatDiv = document.getElementById('chatMessages');
             chatDiv.innerHTML += `<div class="message user"><div class="message-bubble">${msg}</div></div>`;
             input.value = '';
-            setTimeout(() => { const response = chatbot.getResponse(msg, currentUser); chatDiv.innerHTML += `<div class="message bot"><div class="message-bubble">${response}</div></div>`; chatDiv.scrollTop = chatDiv.scrollHeight; }, 500);
+            setTimeout(() => {
+                const response = chatbot.getResponse(msg);
+                chatDiv.innerHTML += `<div class="message bot"><div class="message-bubble">${response}</div></div>`;
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            }, 300);
         }
+
         function logout() { Storage.clearCurrent(); currentUser = null; renderLogin(); }
 
-        // Global exports
-        window.renderDashboard = renderDashboard; window.renderStudyTools = renderStudyTools; window.renderFlashcards = renderFlashcards; window.renderPomodoro = renderPomodoro; window.renderQuizzes = renderQuizzes; window.renderStudyRoom = renderStudyRoom; window.renderLectureTools = renderLectureTools; window.renderWellness = renderWellness; window.renderAchievements = renderAchievements;
-        window.flipCurrentCard = flipCurrentCard; window.previousFlashcard = previousFlashcard; window.nextFlashcard = nextFlashcard; window.startPomodoro = startPomodoro; window.pausePomodoro = pausePomodoro; window.resetPomodoro = resetPomodoro;
-        window.startQuiz = startQuiz; window.answerQuiz = answerQuiz; window.recordStudySession = recordStudySession; window.createFlashcardsFromGuide = createFlashcardsFromGuide; window.viewTranscript = viewTranscript;
-        window.startBreathingExercise = startBreathingExercise; window.showPositiveAffirmation = showPositiveAffirmation; window.playCalmMusic = playCalmMusic; window.playStudyMusic = playStudyMusic; window.growPlant = growPlant; window.joinStudyGroup = joinStudyGroup;
-        window.openChatbot = openChatbot; window.toggleChatbot = toggleChatbot; window.sendChatMessage = sendChatMessage; window.logout = logout; window.renderLogin = renderLogin; window.renderRegister = renderRegister;
+        // Make functions global
+        window.renderDashboard = renderDashboard;
+        window.renderTasks = renderTasks;
+        window.renderFlashcards = renderFlashcards;
+        window.renderPomodoro = renderPomodoro;
+        window.renderQuizzes = renderQuizzes;
+        window.renderStudyRoom = renderStudyRoom;
+        window.renderWellness = renderWellness;
+        window.renderAchievements = renderAchievements;
+        window.renderStudyTools = renderStudyTools;
+        window.renderLogin = renderLogin;
+        window.renderRegister = renderRegister;
+        window.toggleTask = toggleTask;
+        window.deleteTask = deleteTask;
+        window.flipCurrentCard = flipCurrentCard;
+        window.previousFlashcard = previousFlashcard;
+        window.nextFlashcard = nextFlashcard;
+        window.startPomodoro = startPomodoro;
+        window.pausePomodoro = pausePomodoro;
+        window.resetPomodoro = resetPomodoro;
+        window.startQuiz = startQuiz;
+        window.answerQuiz = answerQuiz;
+        window.recordStudySession = recordStudySession;
+        window.createFlashcardsFromGuide = createFlashcardsFromGuide;
+        window.startQuickQuiz = startQuickQuiz;
+        window.playStudyMusic = playStudyMusic;
+        window.growVirtualPlant = growVirtualPlant;
+        window.joinStudyGroup = joinStudyGroup;
+        window.startBreathing = startBreathing;
+        window.showAffirmation = showAffirmation;
+        window.playCalmMusic = playCalmMusic;
+        window.toggleChatbot = toggleChatbot;
+        window.sendChatMessage = sendChatMessage;
+        window.logout = logout;
 
         init();
     </script>
