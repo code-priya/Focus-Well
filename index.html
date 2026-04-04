@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FocusWell | AI Study Buddy & Stress Care</title>
+    <title>FocusWell | AI Study Suite with Voice & Quiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -13,8 +13,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-        /* Day Theme (Default) */
         :root {
             --primary: #2b7a4b;
             --primary-dark: #1e5a3a;
@@ -28,641 +26,323 @@
             --shadow: 0 8px 30px rgba(0,0,0,0.05);
             --shadow-hover: 0 20px 35px -12px rgba(0,0,0,0.12);
             --border-light: #e2e8f0;
-            --animal-glow: rgba(43,122,75,0.2);
         }
-
-        /* Night Theme */
         body.night-theme {
             --primary: #6abf8a;
             --primary-dark: #4e9a6e;
             --primary-light: #2a3a32;
-            --secondary: #FFB74D;
-            --accent: #b39ddb;
             --bg-main: #1a1f2e;
             --bg-card: #252b3d;
             --text-dark: #eef2ff;
             --text-muted: #a0a8c0;
-            --shadow: 0 8px 30px rgba(0,0,0,0.3);
-            --shadow-hover: 0 20px 35px -12px rgba(0,0,0,0.4);
             --border-light: #3a4055;
-            --animal-glow: rgba(106,191,138,0.3);
         }
-
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-main);
             color: var(--text-dark);
-            scroll-behavior: smooth;
-            transition: background 0.3s ease, color 0.2s ease;
+            transition: all 0.3s ease;
         }
-
-        /* Navigation */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 5%;
             background: var(--bg-card);
-            backdrop-filter: blur(10px);
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
             z-index: 100;
             flex-wrap: wrap;
-            gap: 1rem;
         }
-
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .theme-toggle {
-            display: flex;
-            gap: 8px;
-            background: var(--bg-main);
-            padding: 6px 12px;
-            border-radius: 40px;
-        }
-
-        .theme-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: transform 0.2s;
-        }
-
-        .theme-btn:hover { transform: scale(1.1); }
-        .theme-day { background: #FFE0B5; color: #d68b2c; }
-        .theme-night { background: #2d2f4e; color: #b8b8ff; }
-
-        /* Animal Companion */
-        .animal-companion {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            z-index: 999;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .animal-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            box-shadow: var(--shadow-hover);
-            animation: bounce 2s infinite;
-            border: 3px solid white;
-        }
-
-        @keyframes bounce {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .animal-speech {
-            position: absolute;
-            bottom: 90px;
-            right: 10px;
-            background: var(--bg-card);
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            max-width: 180px;
-            box-shadow: var(--shadow);
-            white-space: nowrap;
-        }
-
-        /* Main Content */
-        .hero {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            padding: 3rem 5%;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-main) 70%);
-        }
-
-        .hero-text h2 { font-size: 2.8rem; font-weight: 800; }
-        .hero-stats { display: flex; gap: 2rem; margin: 2rem 0; }
-        .stat h3 { font-size: 2rem; color: var(--primary); }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            padding: 0.9rem 2rem;
-            border-radius: 40px;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-        /* Stress Card */
-        .detection-section { padding: 3rem 5%; }
-        .section-title { font-size: 2rem; text-align: center; margin-bottom: 1rem; font-weight: 700; }
-        .stress-card {
-            max-width: 700px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            border-radius: 28px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-        }
-        .input-group { margin-bottom: 1.5rem; }
-        label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
-        textarea, select, input[type="range"] {
-            width: 100%;
-            padding: 0.9rem;
-            border-radius: 28px;
-            border: 1px solid var(--border-light);
-            background: var(--bg-main);
-            color: var(--text-dark);
-        }
-        .detect-btn {
-            background: var(--primary);
-            color: white;
-            width: 100%;
-            padding: 1rem;
-            border-radius: 40px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-        }
-        .result-area {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            border-radius: 24px;
-            background: var(--primary-light);
-            display: none;
-        }
-
-        /* Study Tools Grid */
-        .tools-section { padding: 3rem 5%; background: var(--bg-main); }
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.8rem;
-            margin-top: 2rem;
-        }
-        .tool-card {
-            background: var(--bg-card);
-            border-radius: 28px;
-            padding: 1.8rem;
-            text-align: center;
-            transition: 0.2s;
-            cursor: pointer;
-            border: 1px solid var(--border-light);
-        }
+        .logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .theme-btn { width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer; margin: 0 4px; }
+        .theme-day { background: #FFE0B5; }
+        .theme-night { background: #2d2f4e; color: white; }
+        .hero { padding: 3rem 5%; background: linear-gradient(135deg, var(--primary-light), var(--bg-main)); display: flex; flex-wrap: wrap; gap: 2rem; }
+        .hero-text { flex: 1; }
+        .hero-text h2 { font-size: 2.5rem; font-weight: 800; }
+        .btn-primary { background: var(--primary); color: white; padding: 0.8rem 1.8rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary:hover { transform: translateY(-2px); background: var(--primary-dark); }
+        .section-title { font-size: 1.8rem; text-align: center; margin: 2rem 0 1rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 0 5%; }
+        .tool-card { background: var(--bg-card); border-radius: 28px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); border: 1px solid var(--border-light); }
         .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
         .tool-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
-        .tool-card h3 { margin-bottom: 0.5rem; }
-
-        /* Pomodoro Timer */
-        .pomodoro-display {
-            font-size: 3.5rem;
-            font-weight: 800;
-            font-family: monospace;
-            margin: 1rem 0;
-            color: var(--primary);
-        }
-
-        /* To-Do List */
-        .todo-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: var(--bg-main);
-            border-radius: 20px;
-            margin-bottom: 8px;
-        }
-        .todo-text.completed { text-decoration: line-through; opacity: 0.6; }
-
-        /* Flashcards */
-        .flashcard {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 2rem;
-            border-radius: 28px;
-            text-align: center;
-            cursor: pointer;
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Community Feed */
-        .post-card {
-            background: var(--bg-card);
-            border-radius: 24px;
-            padding: 1.2rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-light);
-        }
-
-        footer {
-            background: var(--primary-dark);
-            color: white;
-            padding: 2rem 5%;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        @media (max-width: 768px) {
-            .hero h2 { font-size: 1.8rem; }
-            .tools-grid { grid-template-columns: 1fr; }
-        }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+        .modal-content { background: var(--bg-card); border-radius: 32px; padding: 2rem; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
+        .quiz-option { display: block; margin: 10px 0; padding: 12px; background: var(--primary-light); border-radius: 20px; cursor: pointer; }
+        .quiz-option:hover { background: var(--primary); color: white; }
+        .animal-companion { position: fixed; bottom: 100px; right: 20px; z-index: 999; cursor: pointer; }
+        .animal-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 40px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .animal-speech { position: absolute; bottom: 80px; right: 10px; background: var(--bg-card); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap; box-shadow: var(--shadow); }
+        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 1.5rem; cursor: pointer; color: white; }
+        .chat-message { padding: 10px; margin: 8px 0; border-radius: 20px; max-width: 85%; }
+        .user-msg { background: var(--primary); color: white; margin-left: auto; text-align: right; }
+        .bot-msg { background: var(--primary-light); color: var(--text-dark); }
+        .notes-list { max-height: 300px; overflow-y: auto; }
+        .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+        @media (max-width: 768px) { .hero h2 { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
     <div class="logo"><h1>FOCUSWELL 🧠</h1></div>
-    <div class="theme-toggle">
+    <div>
         <button class="theme-btn theme-day" onclick="setTheme('day')">☀️</button>
         <button class="theme-btn theme-night" onclick="setTheme('night')">🌙</button>
     </div>
 </nav>
 
-<!-- Hero -->
 <section class="hero">
     <div class="hero-text">
-        <h2>Navigate stress, <br>study with <span style="color:var(--primary);">AI & animals</span>.</h2>
-        <p>Your personal study companion — detect stress, get tailored advice, use smart study tools, and grow with your cute animal buddy.</p>
-        <div class="hero-stats">
-            <div class="stat"><h3>200M+</h3><p>Students helped</p></div>
-            <div class="stat"><h3>50+</h3><p>Study tools</p></div>
-            <div class="stat"><h3>🐼🐨🐰</h3><p>Animal friends</p></div>
-        </div>
-        <button class="btn-primary" id="scrollToDetect"><i class="fas fa-brain"></i> Check Stress Level</button>
+        <h2>AI Study Assistant <br>+ <span style="color:var(--primary);">Stress Care</span></h2>
+        <p>Quiz generator • Topic explainer • Voice notes • Smart chatbot • Save notes</p>
+        <button class="btn-primary" id="stressBtn"><i class="fas fa-brain"></i> Check Stress Level</button>
     </div>
-    <div class="hero-image">
-        <i class="fas fa-seedling" style="font-size: 8rem; color: var(--primary);"></i>
-    </div>
+    <div><i class="fas fa-robot" style="font-size: 6rem; color: var(--primary);"></i></div>
 </section>
 
-<!-- AI Stress Detection -->
-<section class="detection-section" id="detectSection">
-    <h2 class="section-title">🧠 AI Stress Detection & Guidance</h2>
-    <div class="stress-card">
-        <div class="input-group">
-            <label>😟 Stress level (1-10)</label>
-            <input type="range" id="stressSlider" min="1" max="10" value="5">
-            <span id="sliderVal" style="display: inline-block; margin-top: 8px;">5/10</span>
-        </div>
-        <div class="input-group">
-            <label>📝 Describe how you feel (optional)</label>
-            <textarea id="userText" rows="2" placeholder="e.g., Can't focus, exam pressure..."></textarea>
-        </div>
-        <div class="input-group">
-            <label>📚 Workload this week</label>
-            <select id="workloadSelect">
-                <option value="light">Light</option>
-                <option value="moderate" selected>Moderate</option>
-                <option value="heavy">Heavy</option>
-                <option value="extreme">Extreme</option>
-            </select>
-        </div>
-        <button class="detect-btn" id="detectBtn">🔍 Analyze with AI</button>
-        <div id="resultBox" class="result-area">
-            <div id="stressLevelText" class="stress-level"></div>
-            <div id="recommendationList"></div>
-        </div>
+<!-- Stress Detection Card -->
+<div id="stressModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>🧠 AI Stress Detection</h3>
+        <label>Stress level (1-10):</label>
+        <input type="range" id="stressSlider" min="1" max="10" value="5" style="width:100%"><span id="sliderVal">5</span>
+        <label>How are you feeling?</label>
+        <textarea id="stressText" rows="2" placeholder="e.g., exams, anxiety..."></textarea>
+        <label>Workload:</label>
+        <select id="workload"><option>Light</option><option selected>Moderate</option><option>Heavy</option><option>Extreme</option></select>
+        <button class="btn-primary" id="analyzeStressBtn" style="margin-top:1rem">Analyze</button>
+        <div id="stressResult" style="margin-top:1rem"></div>
+        <button class="btn-primary" onclick="closeModal('stressModal')">Close</button>
     </div>
-</section>
+</div>
 
-<!-- Study Tools (Full Features) -->
-<section class="tools-section">
-    <h2 class="section-title">📚 Smart Study Tools</h2>
-    <div class="tools-grid">
-        <div class="tool-card" onclick="openPomodoro()">
-            <i class="fas fa-hourglass-half"></i>
-            <h3>🍅 Pomodoro Timer</h3>
-            <p>25 min focus / 5 min break</p>
-        </div>
-        <div class="tool-card" onclick="openTodo()">
-            <i class="fas fa-check-circle"></i>
-            <h3>✅ To-Do List</h3>
-            <p>Organize tasks</p>
-        </div>
-        <div class="tool-card" onclick="openFlashcards()">
-            <i class="fas fa-layer-group"></i>
-            <h3>📇 Smart Flashcards</h3>
-            <p>Create & review</p>
-        </div>
-        <div class="tool-card" onclick="openStudyMusic()">
-            <i class="fas fa-headphones"></i>
-            <h3>🎵 Focus Music</h3>
-            <p>Lo-fi / Nature sounds</p>
-        </div>
-        <div class="tool-card" onclick="openStudyBuddy()">
-            <i class="fas fa-users"></i>
-            <h3>🐣 Study Buddy Chat</h3>
-            <p>Motivation & tips</p>
-        </div>
-        <div class="tool-card" onclick="openBreathing()">
-            <i class="fas fa-lungs"></i>
-            <h3>🧘 Breathing Exercise</h3>
-            <p>Reduce anxiety instantly</p>
-        </div>
-    </div>
-</section>
-
-<!-- Community Feed -->
-<section class="tools-section" style="background: var(--bg-main);">
-    <h2 class="section-title">🌟 Student Community Feed</h2>
-    <div style="max-width: 700px; margin: 0 auto;">
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <input type="text" id="newPostInput" placeholder="Share your study win or struggle..." style="flex:1; padding: 12px; border-radius: 40px; border: 1px solid var(--border-light); background: var(--bg-card);">
-            <button class="btn-primary" id="postBtn">Post</button>
-        </div>
-        <div id="postsFeed"></div>
-    </div>
-</section>
-
-<footer>
-    <div><h3>FOCUSWELL</h3><p>© 2026 | Student Wellbeing First</p></div>
-    <div><i class="fab fa-instagram"></i> <i class="fab fa-twitter"></i> <i class="fab fa-discord"></i></div>
-</footer>
+<!-- Tools Grid -->
+<div class="tools-grid">
+    <div class="tool-card" onclick="openQuizGenerator()"><i class="fas fa-question-circle"></i><h3>📝 AI Quiz Generator</h3><p>Generate quiz on any topic</p></div>
+    <div class="tool-card" onclick="openTopicExplainer()"><i class="fas fa-chalkboard-teacher"></i><h3>📖 Topic Explainer</h3><p>Get AI explanations</p></div>
+    <div class="tool-card" onclick="openChatbot()"><i class="fas fa-comment-dots"></i><h3>🤖 AI Study Chatbot</h3><p>Ask anything + voice</p></div>
+    <div class="tool-card" onclick="openNotes()"><i class="fas fa-save"></i><h3>📓 Save Notes</h3><p>Store & retrieve notes</p></div>
+    <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>🍅 Pomodoro Timer</h3><p>Focus session</p></div>
+    <div class="tool-card" onclick="openFlashcards()"><i class="fas fa-layer-group"></i><h3>📇 Flashcards</h3><p>Self-test</p></div>
+</div>
 
 <!-- Animal Companion -->
 <div class="animal-companion" id="animalCompanion">
     <div class="animal-avatar" id="animalAvatar">🐼</div>
-    <div class="animal-speech" id="animalSpeech">Hey! I'm your study buddy 🐼</div>
+    <div class="animal-speech" id="animalSpeech">I'm your AI buddy!</div>
 </div>
 
 <script>
-    // ========== THEME SYSTEM ==========
+    // ========== CONFIG ==========
+    const OPENAI_API_KEY = "sk-uvwx5678uvwx5678uvwx5678uvwx5678uvwx5678";
+    let currentTheme = 'day';
     function setTheme(theme) {
-        if (theme === 'night') document.body.classList.add('night-theme');
+        currentTheme = theme;
+        if(theme === 'night') document.body.classList.add('night-theme');
         else document.body.classList.remove('night-theme');
         localStorage.setItem('focuswell_theme', theme);
-        updateAnimalMessage();
     }
-    function loadTheme() {
-        const saved = localStorage.getItem('focuswell_theme');
-        if (saved === 'night') setTheme('night');
-        else setTheme('day');
+    function loadTheme() { const t = localStorage.getItem('focuswell_theme'); if(t) setTheme(t); }
+    
+    // Helper: AI API call
+    async function callAI(prompt, system = "You are a helpful study assistant for students.") {
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${OPENAI_API_KEY}` },
+                body: JSON.stringify({ model: "gpt-3.5-turbo", messages: [{ role: "system", content: system }, { role: "user", content: prompt }], temperature: 0.7 })
+            });
+            const data = await response.json();
+            if(data.choices && data.choices[0]) return data.choices[0].message.content;
+            return "API Error. Please check your key or try again.";
+        } catch(e) { return "Network error: " + e.message; }
     }
-
-    // ========== ANIMAL COMPANION (Cute animal with mood) ==========
-    const animals = ['🐼', '🐨', '🦊', '🐰', '🐱', '🦝'];
-    let currentAnimal = localStorage.getItem('focuswell_animal') || '🐼';
-    document.getElementById('animalAvatar').innerText = currentAnimal;
     
-    function updateAnimalMessage() {
-        const msgDiv = document.getElementById('animalSpeech');
-        const messages = [
-            "Ready to study? 📚", "Take deep breaths 🌬️", "You've got this! 💪",
-            "Try the Pomodoro timer 🍅", "Log your stress level 🧠", "Want a flashcard quiz?",
-            "I believe in you! ✨", "Stretch for 2 minutes 🧘"
-        ];
-        msgDiv.innerText = messages[Math.floor(Math.random() * messages.length)];
-        setTimeout(() => { if(msgDiv) msgDiv.innerText = "Need help? Tap me! 🐣"; }, 3000);
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function showModal(id) { document.getElementById(id).style.display = 'flex'; }
+    
+    // Stress Detection
+    document.getElementById('stressBtn').onclick = () => showModal('stressModal');
+    document.getElementById('stressSlider').oninput = (e) => document.getElementById('sliderVal').innerText = e.target.value;
+    document.getElementById('analyzeStressBtn').onclick = async () => {
+        const slider = parseInt(document.getElementById('stressSlider').value);
+        const text = document.getElementById('stressText').value;
+        const workload = document.getElementById('workload').value;
+        const prompt = `Student stress level: ${slider}/10, workload: ${workload}, description: "${text}". Give personalized stress management advice (2-3 sentences).`;
+        const advice = await callAI(prompt, "You are a caring mental health assistant for students.");
+        document.getElementById('stressResult').innerHTML = `<strong>🧘 Advice:</strong><br>${advice}`;
+    };
+    
+    // ========== 1. AI QUIZ GENERATOR ==========
+    async function openQuizGenerator() {
+        const topic = prompt("Enter topic for quiz (e.g., Photosynthesis, Calculus, World War II):");
+        if(!topic) return;
+        const modalDiv = document.createElement('div'); modalDiv.className = 'modal'; modalDiv.id = 'quizModal';
+        modalDiv.innerHTML = `<div class="modal-content"><h3>📝 AI Quiz: ${topic}</h3><div id="quizContent">Generating quiz questions... ⏳</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        document.body.appendChild(modalDiv);
+        const prompt = `Generate 3 multiple choice questions about "${topic}" for students. Format as JSON: [{"question":"Q1","options":["A","B","C","D"],"correct":0}] (correct is index 0-3). Only valid JSON.`;
+        const response = await callAI(prompt, "You are a quiz generator. Output only valid JSON array.");
+        try {
+            let quiz = JSON.parse(response);
+            if(!Array.isArray(quiz)) throw new Error();
+            let html = `<div id="quizQuestions"></div><button class="btn-primary" id="submitQuiz">Submit Answers</button><div id="quizResult"></div>`;
+            document.getElementById('quizContent').innerHTML = html;
+            let userAnswers = new Array(quiz.length).fill(-1);
+            const qDiv = document.getElementById('quizQuestions');
+            quiz.forEach((q, idx) => {
+                qDiv.innerHTML += `<div style="margin:20px 0"><strong>${idx+1}. ${q.question}</strong><br>`;
+                q.options.forEach((opt, optIdx) => {
+                    qDiv.innerHTML += `<label style="display:block"><input type="radio" name="q${idx}" value="${optIdx}"> ${opt}</label>`;
+                });
+                qDiv.innerHTML += `</div>`;
+                document.querySelectorAll(`input[name="q${idx}"]`).forEach(radio => {
+                    radio.addEventListener('change', (e) => userAnswers[idx] = parseInt(e.target.value));
+                });
+            });
+            document.getElementById('submitQuiz').onclick = () => {
+                let score = 0;
+                quiz.forEach((q, idx) => { if(userAnswers[idx] === q.correct) score++; });
+                document.getElementById('quizResult').innerHTML = `<strong>Your score: ${score}/${quiz.length}</strong><br>${score === quiz.length ? "🎉 Perfect!" : "Keep learning!"}`;
+            };
+        } catch(e) { document.getElementById('quizContent').innerHTML = `<p>Error generating quiz. ${response}</p>`; }
     }
-    setInterval(updateAnimalMessage, 20000);
     
-    document.getElementById('animalCompanion').addEventListener('click', () => {
-        const newAnimal = animals[Math.floor(Math.random() * animals.length)];
-        currentAnimal = newAnimal;
-        localStorage.setItem('focuswell_animal', newAnimal);
-        document.getElementById('animalAvatar').innerText = newAnimal;
-        const speech = document.getElementById('animalSpeech');
-        speech.innerText = `I'm now a ${newAnimal}! Let's study together 🎓`;
-        setTimeout(() => { if(speech) speech.innerText = "Tap me anytime 🐣"; }, 2500);
-    });
-
-    // ========== AI STRESS DETECTION ==========
-    const stressSlider = document.getElementById('stressSlider');
-    const sliderVal = document.getElementById('sliderVal');
-    stressSlider.addEventListener('input', () => sliderVal.innerText = stressSlider.value + '/10');
+    // ========== 2. TOPIC EXPLAINER ==========
+    async function openTopicExplainer() {
+        const topic = prompt("What topic would you like explained? (e.g., Quantum Physics, HTML basics)");
+        if(!topic) return;
+        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
+        modalDiv.innerHTML = `<div class="modal-content"><h3>📖 Explaining: ${topic}</h3><div id="explainContent">Generating explanation... ⏳</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        document.body.appendChild(modalDiv);
+        const explanation = await callAI(`Explain "${topic}" in simple terms for a student. Include key points and examples.`, "You are a friendly tutor.");
+        document.getElementById('explainContent').innerHTML = `<p>${explanation.replace(/\n/g, '<br>')}</p><button class="btn-primary" onclick="speakText('${explanation.replace(/'/g, "\\'")}')">🔊 Listen</button>`;
+    }
     
-    function analyzeStress(sliderVal, text, workload) {
-        let score = sliderVal;
-        let workloadFactor = { light: 0.6, moderate: 1, heavy: 1.4, extreme: 1.9 }[workload];
-        let textBoost = 0;
-        if (text) {
-            const lower = text.toLowerCase();
-            if (lower.includes('anxious') || lower.includes('panic')) textBoost += 1.2;
-            if (lower.includes('tired') || lower.includes('exhausted')) textBoost += 1;
-            if (lower.includes('exam') || lower.includes('deadline')) textBoost += 0.8;
-            textBoost = Math.min(textBoost, 2.5);
+    // ========== 3. AI CHATBOT + Voice + Speech-to-Text ==========
+    let chatHistory = [];
+    async function openChatbot() {
+        const modalDiv = document.createElement('div'); modalDiv.className = 'modal'; modalDiv.id = 'chatbotModal';
+        modalDiv.innerHTML = `<div class="modal-content" style="max-width:500px"><h3>🤖 AI Study Chatbot <button class="voice-btn" onclick="startVoiceInput()"><i class="fas fa-microphone"></i></button></h3><div id="chatMessages" style="height:300px; overflow-y:auto; margin-bottom:1rem;"></div><div style="display:flex; gap:8px;"><input type="text" id="chatInput" placeholder="Ask me anything..." style="flex:1; padding:12px; border-radius:40px; border:1px solid var(--border-light);"><button class="btn-primary" onclick="sendChatMessage()">Send</button><button class="voice-btn" onclick="speakLastResponse()"><i class="fas fa-volume-up"></i></button></div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        document.body.appendChild(modalDiv);
+        window.sendChatMessage = async () => {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if(!msg) return;
+            const chatDiv = document.getElementById('chatMessages');
+            chatDiv.innerHTML += `<div class="chat-message user-msg" style="margin-left:auto;">🧑‍🎓 ${msg}</div>`;
+            input.value = '';
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+            const aiReply = await callAI(msg, "You are a helpful study assistant. Answer concisely and supportively.");
+            chatDiv.innerHTML += `<div class="chat-message bot-msg">🤖 ${aiReply}</div>`;
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+            window.lastBotReply = aiReply;
+        };
+        window.startVoiceInput = () => {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if(!SpeechRecognition) { alert("Speech recognition not supported"); return; }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                document.getElementById('chatInput').value = text;
+                sendChatMessage();
+            };
+            recognition.start();
+        };
+        window.speakLastResponse = () => { if(window.lastBotReply) speakText(window.lastBotReply); else alert("No response yet"); };
+    }
+    
+    // ========== 4. SAVE NOTES FEATURE ==========
+    let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
+    function openNotes() {
+        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
+        modalDiv.innerHTML = `<div class="modal-content"><h3>📓 My Study Notes</h3><textarea id="noteTitle" placeholder="Title" style="width:100%; margin:8px 0; padding:10px;"></textarea><textarea id="noteContent" rows="4" placeholder="Write your note here..." style="width:100%; padding:10px;"></textarea><button class="btn-primary" onclick="saveNewNote()">Save Note</button><div id="notesList" class="notes-list" style="margin-top:1rem;"></div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        document.body.appendChild(modalDiv);
+        window.saveNewNote = () => {
+            const title = document.getElementById('noteTitle').value.trim() || "Untitled";
+            const content = document.getElementById('noteContent').value;
+            if(content) { savedNotes.push({ id: Date.now(), title, content, date: new Date().toLocaleString() }); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotesList(); document.getElementById('noteContent').value = ''; document.getElementById('noteTitle').value = ''; }
+        };
+        function renderNotesList() {
+            const container = document.getElementById('notesList');
+            if(!container) return;
+            container.innerHTML = savedNotes.map(note => `<div class="note-item"><div><strong>${note.title}</strong><br><small>${note.date}</small><p>${note.content.substring(0,80)}...</p></div><div><button class="btn-primary" style="padding:4px 12px; margin-right:4px;" onclick="viewNote(${note.id})">View</button><button class="btn-primary" style="background:red;" onclick="deleteNote(${note.id})">Delete</button></div></div>`).join('');
         }
-        let final = (score * 0.6) + (workloadFactor * 1.5) + textBoost;
-        final = Math.min(10, Math.max(1, final));
-        let level = '', tips = [];
-        if (final < 3.5) { level = 'Low Stress 😊'; tips = ['✨ Keep going! Take short breaks.', '📖 Review notes with music.', '🧘 5-min meditation.']; }
-        else if (final < 6) { level = 'Mild Stress 😐'; tips = ['🌿 Take a 10-min walk.', '📝 Use Pomodoro technique.', '💧 Drink water & stretch.']; }
-        else if (final < 8.5) { level = 'High Stress ⚠️'; tips = ['🛑 Stop & breathe deeply.', '📞 Talk to a friend.', '🧘 Progressive relaxation.']; }
-        else { level = 'Severe Stress 🔴'; tips = ['🚨 Take immediate break.', '📉 Reduce workload today.', '❤️ Self-compassion time.']; }
-        if (workload === 'extreme') tips.unshift('⏰ Break tasks into small steps!');
-        return { level, tips, score: final.toFixed(1) };
+        window.viewNote = (id) => { const note = savedNotes.find(n => n.id === id); if(note) alert(`${note.title}\n\n${note.content}`); };
+        window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotesList(); };
+        renderNotesList();
     }
     
-    document.getElementById('detectBtn').addEventListener('click', () => {
-        const slider = parseInt(stressSlider.value);
-        const text = document.getElementById('userText').value;
-        const workload = document.getElementById('workloadSelect').value;
-        const result = analyzeStress(slider, text, workload);
-        const resultBox = document.getElementById('resultBox');
-        document.getElementById('stressLevelText').innerHTML = `🧪 Stress Level: ${result.level} (${result.score}/10)`;
-        const recDiv = document.getElementById('recommendationList');
-        recDiv.innerHTML = `<strong>✨ What to do:</strong><ul>${result.tips.map(t => `<li><i class="fas fa-heart"></i> ${t}</li>`).join('')}</ul>`;
-        resultBox.style.display = 'block';
-        // Save mood log
-        let logs = JSON.parse(localStorage.getItem('focuswell_moods') || '[]');
-        logs.push({ date: new Date().toISOString(), stress: result.score });
-        localStorage.setItem('focuswell_moods', JSON.stringify(logs.slice(-30)));
-        // Animal reaction
-        const animalSpeech = document.getElementById('animalSpeech');
-        animalSpeech.innerText = result.level.includes('High') ? "😢 Let's relax together..." : "🐣 Great! You're aware!";
-        setTimeout(() => animalSpeech.innerText = "Tap me anytime", 3000);
-    });
+    // ========== TEXT TO SPEECH ==========
+    function speakText(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    }
     
-    document.getElementById('scrollToDetect').addEventListener('click', () => {
-        document.getElementById('detectSection').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // ========== STUDY TOOLS (All working modals) ==========
+    // ========== POMODORO TIMER ==========
     function openPomodoro() {
-        const minutes = prompt("Enter study minutes (default 25):", "25");
-        const mins = parseInt(minutes) || 25;
-        let seconds = mins * 60;
-        const modal = document.createElement('div');
-        modal.style.position = 'fixed'; modal.style.top='0'; modal.style.left='0'; modal.style.width='100%'; modal.style.height='100%';
-        modal.style.background='rgba(0,0,0,0.7)'; modal.style.display='flex'; modal.style.alignItems='center'; modal.style.justifyContent='center'; modal.style.zIndex='2000';
-        modal.innerHTML = `
-            <div style="background:var(--bg-card); padding:2rem; border-radius:40px; text-align:center; max-width:350px; width:90%;">
-                <h3>🍅 Pomodoro Timer</h3>
-                <div id="timerDisplay" class="pomodoro-display">${Math.floor(seconds/60)}:${(seconds%60).toString().padStart(2,'0')}</div>
-                <div style="display:flex; gap:12px; justify-content:center;">
-                    <button id="startTimer" class="btn-primary">Start</button>
-                    <button id="pauseTimer" class="btn-primary" style="background:gray;">Pause</button>
-                    <button id="closeModal" class="btn-primary" style="background:var(--primary-dark);">Close</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        let interval = null;
-        let running = false;
-        const timerDisplay = modal.querySelector('#timerDisplay');
-        const updateDisplay = () => {
-            const m = Math.floor(seconds/60);
-            const s = seconds%60;
-            timerDisplay.innerText = `${m}:${s.toString().padStart(2,'0')}`;
-            if(seconds === 0 && running) {
-                clearInterval(interval);
-                alert("🎉 Study session complete! Take a break!");
-                modal.remove();
-            }
-        };
-        document.getElementById('startTimer').onclick = () => {
-            if(running) return;
-            running = true;
-            interval = setInterval(() => { if(seconds > 0 && running) { seconds--; updateDisplay(); } else if(seconds===0){ clearInterval(interval); alert("Time's up! Great job!"); } }, 1000);
-        };
-        document.getElementById('pauseTimer').onclick = () => { running = false; clearInterval(interval); };
-        document.getElementById('closeModal').onclick = () => { if(interval) clearInterval(interval); modal.remove(); };
+        const mins = prompt("Study minutes:", "25");
+        let seconds = (parseInt(mins) || 25) * 60;
+        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
+        modalDiv.innerHTML = `<div class="modal-content" style="text-align:center"><h3>🍅 Pomodoro</h3><div id="timerDisplay" style="font-size:3rem; font-weight:bold;">${Math.floor(seconds/60)}:${(seconds%60).toString().padStart(2,'0')}</div><div><button id="startTimer" class="btn-primary">Start</button> <button id="pauseTimer" class="btn-primary">Pause</button> <button id="resetTimer" class="btn-primary">Reset</button></div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        document.body.appendChild(modalDiv);
+        let interval = null, running = false;
+        const updateDisplay = () => { const d = document.getElementById('timerDisplay'); if(d) d.innerText = `${Math.floor(seconds/60)}:${(seconds%60).toString().padStart(2,'0')}`; if(seconds===0 && running) { clearInterval(interval); alert("Session complete! Great focus!"); } };
+        document.getElementById('startTimer').onclick = () => { if(!running) { running=true; interval = setInterval(() => { if(seconds>0 && running) { seconds--; updateDisplay(); } else if(seconds===0) { clearInterval(interval); alert("Done!"); } },1000); } };
+        document.getElementById('pauseTimer').onclick = () => { running=false; clearInterval(interval); };
+        document.getElementById('resetTimer').onclick = () => { running=false; clearInterval(interval); seconds = (parseInt(mins) || 25)*60; updateDisplay(); };
         updateDisplay();
     }
     
-    function openTodo() {
-        let todos = JSON.parse(localStorage.getItem('focuswell_todos') || '[]');
-        const modal = document.createElement('div');
-        modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; z-index:2000;';
-        modal.innerHTML = `
-            <div style="background:var(--bg-card); border-radius:40px; padding:2rem; width:90%; max-width:450px;">
-                <h3>✅ To-Do List</h3>
-                <div style="display:flex; gap:8px; margin:1rem 0;">
-                    <input id="newTodoInput" placeholder="New task..." style="flex:1; padding:10px; border-radius:40px; border:1px solid var(--border-light);">
-                    <button id="addTodoBtn" class="btn-primary">Add</button>
-                </div>
-                <div id="todoList"></div>
-                <button id="closeTodo" class="btn-primary" style="margin-top:1rem;">Close</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        function renderTodos() {
-            const container = modal.querySelector('#todoList');
-            container.innerHTML = todos.map((todo, idx) => `
-                <div class="todo-item">
-                    <span class="${todo.done ? 'completed todo-text' : 'todo-text'}" onclick="toggleTodo(${idx})">${todo.text}</span>
-                    <button onclick="deleteTodo(${idx})" style="background:none; border:none; color:red; cursor:pointer;">🗑️</button>
-                </div>
-            `).join('');
-            if(todos.length === 0) container.innerHTML = '<p>No tasks yet. Add one!</p>';
-        }
-        window.toggleTodo = (idx) => { todos[idx].done = !todos[idx].done; localStorage.setItem('focuswell_todos', JSON.stringify(todos)); renderTodos(); };
-        window.deleteTodo = (idx) => { todos.splice(idx,1); localStorage.setItem('focuswell_todos', JSON.stringify(todos)); renderTodos(); };
-        modal.querySelector('#addTodoBtn').onclick = () => {
-            const input = modal.querySelector('#newTodoInput');
-            if(input.value.trim()) {
-                todos.push({ text: input.value.trim(), done: false });
-                localStorage.setItem('focuswell_todos', JSON.stringify(todos));
-                input.value = '';
-                renderTodos();
-            }
-        };
-        modal.querySelector('#closeTodo').onclick = () => modal.remove();
-        renderTodos();
-    }
-    
+    // ========== FLASHCARDS ==========
     function openFlashcards() {
-        let cards = JSON.parse(localStorage.getItem('focuswell_flashcards') || '[]');
-        if(cards.length === 0) cards = [{question:"What is active recall?", answer:"Testing yourself repeatedly!"},{question:"Pomodoro duration?", answer:"25 min focus, 5 min break"}];
-        let idx = 0, showAnswer = false;
-        const modal = document.createElement('div');
-        modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; z-index:2000;';
-        modal.innerHTML = `
-            <div style="background:var(--bg-card); border-radius:40px; padding:2rem; width:90%; max-width:500px; text-align:center;">
-                <h3>📇 Flashcards</h3>
-                <div id="flashcardBox" class="flashcard" style="cursor:pointer;">${cards[0].question}</div>
-                <div style="display:flex; gap:12px; justify-content:center; margin-top:1.5rem;">
-                    <button id="prevCard" class="btn-primary">◀ Previous</button>
-                    <button id="nextCard" class="btn-primary">Next ▶</button>
-                    <button id="closeFlash" class="btn-primary">Close</button>
-                </div>
-                <button id="addFlashBtn" style="margin-top:1rem; background:var(--secondary); border:none; padding:6px 16px; border-radius:40px;">+ New Card</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        const flashDiv = modal.querySelector('#flashcardBox');
-        function updateCard() {
-            flashDiv.innerText = showAnswer ? cards[idx].answer : cards[idx].question;
-        }
-        flashDiv.onclick = () => { showAnswer = !showAnswer; updateCard(); };
-        modal.querySelector('#prevCard').onclick = () => { idx = (idx-1+cards.length)%cards.length; showAnswer=false; updateCard(); };
-        modal.querySelector('#nextCard').onclick = () => { idx = (idx+1)%cards.length; showAnswer=false; updateCard(); };
-        modal.querySelector('#closeFlash').onclick = () => modal.remove();
-        modal.querySelector('#addFlashBtn').onclick = () => {
-            const q = prompt("Enter question:");
-            if(q) { const a = prompt("Enter answer:"); if(a) { cards.push({question:q, answer:a}); localStorage.setItem('focuswell_flashcards', JSON.stringify(cards)); idx = cards.length-1; showAnswer=false; updateCard(); } }
-        };
-        updateCard();
+        let cards = JSON.parse(localStorage.getItem('focuswell_flashcards') || '[{"question":"What is AI?","answer":"Artificial Intelligence"}]');
+        let idx=0, showAnswer=false;
+        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
+        modalDiv.innerHTML = `<div class="modal-content"><h3>📇 Flashcards</h3><div id="flashBox" style="background:var(--primary); color:white; padding:2rem; border-radius:28px; text-align:center; cursor:pointer; min-height:150px;">${cards[0].question}</div><div style="display:flex; gap:12px; margin-top:1rem;"><button class="btn-primary" id="prevFlash">◀ Prev</button><button class="btn-primary" id="nextFlash">Next ▶</button></div><button id="addFlashBtn" class="btn-primary">+ Add Card</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        document.body.appendChild(modalDiv);
+        const flashBox = document.getElementById('flashBox');
+        function updateFlash() { flashBox.innerText = showAnswer ? cards[idx].answer : cards[idx].question; }
+        flashBox.onclick = () => { showAnswer = !showAnswer; updateFlash(); };
+        document.getElementById('prevFlash').onclick = () => { idx = (idx-1+cards.length)%cards.length; showAnswer=false; updateFlash(); };
+        document.getElementById('nextFlash').onclick = () => { idx = (idx+1)%cards.length; showAnswer=false; updateFlash(); };
+        document.getElementById('addFlashBtn').onclick = () => { const q = prompt("Question:"); if(q) { const a = prompt("Answer:"); if(a) { cards.push({question:q, answer:a}); localStorage.setItem('focuswell_flashcards', JSON.stringify(cards)); idx=cards.length-1; showAnswer=false; updateFlash(); } } };
+        updateFlash();
     }
     
-    function openStudyMusic() {
-        window.open('https://www.youtube.com/watch?v=5qap5aO4i9A', '_blank');
-    }
-    function openStudyBuddy() {
-        alert("🐣 Study Buddy: 'You're doing amazing! Try the Pomodoro timer and take deep breaths. Remember, progress > perfection.'");
-    }
-    function openBreathing() {
-        alert("🧘 4-7-8 Breathing: Inhale 4 sec → Hold 7 sec → Exhale 8 sec. Repeat 5 times. Feel calmer instantly.");
-    }
-    
-    // Community Feed
-    let posts = JSON.parse(localStorage.getItem('focuswell_feed') || '[]');
-    if(posts.length === 0) posts = [{ author:"Riya📚", content:"Just finished my AI project! Stress detector helped me calm down 💚", likes:5, id:"1" }];
-    function renderFeed() {
-        const feedDiv = document.getElementById('postsFeed');
-        if(!feedDiv) return;
-        feedDiv.innerHTML = posts.map(post => `
-            <div class="post-card">
-                <div><strong>${post.author}</strong> <span style="font-size:12px;">✨</span></div>
-                <p>${post.content}</p>
-                <button class="like-feed-btn" data-id="${post.id}" style="background:none; border:none; color:var(--primary); cursor:pointer;">❤️ ${post.likes || 0}</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.like-feed-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = btn.getAttribute('data-id');
-                const p = posts.find(p => p.id === id);
-                if(p) { p.likes = (p.likes||0)+1; localStorage.setItem('focuswell_feed', JSON.stringify(posts)); renderFeed(); }
-            });
-        });
-    }
-    document.getElementById('postBtn')?.addEventListener('click', () => {
-        const input = document.getElementById('newPostInput');
-        if(input.value.trim()) {
-            posts.unshift({ author: "Student 🎓", content: input.value.trim(), likes: 0, id: Date.now().toString() });
-            localStorage.setItem('focuswell_feed', JSON.stringify(posts));
-            input.value = '';
-            renderFeed();
-        }
-    });
+    // Animal companion with random tips & speech
+    const animals = ['🐼', '🐨', '🦊', '🐰', '🐱'];
+    let animalIdx = 0;
+    document.getElementById('animalCompanion').onclick = () => {
+        animalIdx = (animalIdx+1)%animals.length;
+        document.getElementById('animalAvatar').innerText = animals[animalIdx];
+        const tips = ["Try the AI Quiz! 📝", "Ask chatbot anything 🤖", "Save your notes 📓", "Explain a topic with AI 📖", "Use voice to study 🎤"];
+        document.getElementById('animalSpeech').innerText = tips[Math.floor(Math.random()*tips.length)];
+        setTimeout(() => document.getElementById('animalSpeech').innerText = "Tap me again!", 2000);
+    };
+    setInterval(() => {
+        const speechDiv = document.getElementById('animalSpeech');
+        if(speechDiv && !document.querySelector('.modal')) speechDiv.innerText = "Need help? Tap me 🐣";
+    }, 15000);
     
     loadTheme();
-    renderFeed();
+    window.speakText = speakText;
+    window.openQuizGenerator = openQuizGenerator;
+    window.openTopicExplainer = openTopicExplainer;
+    window.openChatbot = openChatbot;
+    window.openNotes = openNotes;
+    window.openPomodoro = openPomodoro;
+    window.openFlashcards = openFlashcards;
+    window.closeModal = closeModal;
+    window.speakText = speakText;
 </script>
 </body>
 </html>
-````
+```
