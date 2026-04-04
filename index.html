@@ -1,150 +1,402 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FocusWell AI 🚀</title>
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-:root{
- --bg:#fff7f0; --card:#ffffff; --primary:#ff6b6b; --secondary:#4ecdc4; --text:#2d3436;
-}
-.dark{--bg:#121212;--card:#1e1e1e;--text:#fff;--primary:#9b59b6}
-.ocean{--bg:#e0f7fa;--primary:#0077b6;--secondary:#00b4d8}
-body{margin:0;font-family:Quicksand;background:var(--bg);color:var(--text)}
-.container{padding:20px;max-width:1000px;margin:auto}
-.card{background:var(--card);padding:20px;border-radius:20px;margin:15px 0}
-.btn{padding:10px 20px;border:none;border-radius:20px;background:var(--primary);color:#fff;cursor:pointer;margin:5px}
-input,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin:5px 0}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FocusWell Ultimate | AI Study Ecosystem with Analytics & Social</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #6D28D9;
+            --secondary: #EC4899;
+            --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1E1B2E;
+            --light: #F9F7FE;
+            --white: #FFFFFF;
+            --glass: rgba(255, 255, 255, 0.85);
+            --shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+            --radius: 28px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #F3E8FF 0%, #E0F2FE 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+        /* glass morphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: all 0.3s ease;
+        }
+        .glass:hover { transform: translateY(-4px); }
+        .nav-bar {
+            background: rgba(255,255,255,0.95);
+            border-radius: 60px;
+            padding: 12px 28px;
+            margin: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: var(--shadow);
+        }
+        .logo { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; display: flex; align-items: center; gap: 8px; }
+        .nav-link {
+            cursor: pointer;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .nav-link:hover, .nav-link.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(139,92,246,0.4); }
+        .grid-2, .grid-3, .grid-4 { display: grid; gap: 24px; }
+        .grid-2 { grid-template-columns: repeat(2,1fr); }
+        .grid-3 { grid-template-columns: repeat(3,1fr); }
+        .grid-4 { grid-template-columns: repeat(4,1fr); }
+        @media (max-width: 1000px) { .grid-4 { grid-template-columns: repeat(2,1fr); } .grid-3 { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 700px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+        
+        /* Pet evolution card */
+        .pet-card {
+            background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+            border-radius: 32px;
+            padding: 20px;
+            text-align: center;
+        }
+        .pet-emoji { font-size: 64px; transition: transform 0.3s; }
+        .badge { background: #FFE66D; border-radius: 40px; padding: 4px 12px; font-size: 12px; font-weight: 700; display: inline-block; }
+        .stress-fill { height: 10px; background: #ddd; border-radius: 10px; overflow: hidden; }
+        .stress-progress { height: 100%; width: 0%; transition: width 0.4s; border-radius: 10px; }
+        
+        /* Reels style */
+        .reels-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 16px;
+            padding: 16px 0;
+            scroll-snap-type: x mandatory;
+        }
+        .reel-card {
+            min-width: 280px;
+            background: black;
+            border-radius: 32px;
+            overflow: hidden;
+            scroll-snap-align: start;
+            position: relative;
+        }
+        .reel-video { width: 100%; height: 500px; object-fit: cover; }
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+        .theme-palette { display: flex; gap: 8px; margin-left: 12px; }
+        .theme-dot { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid white; }
+    </style>
 </head>
 <body>
-<div class="container">
-<h1>🐼 FocusWell AI (Startup Edition)</h1>
-
-<!-- THEMES -->
-<div class="card">
-<h3>🎨 Themes</h3>
-<button class="btn" onclick="setTheme('')">Default</button>
-<button class="btn" onclick="setTheme('dark')">Dark</button>
-<button class="btn" onclick="setTheme('ocean')">Ocean</button>
-</div>
-
-<!-- USER AUTH (DEMO) -->
-<div class="card">
-<h3>🔐 Auth (Demo)</h3>
-<input id="email" placeholder="Email">
-<input id="password" placeholder="Password" type="password">
-<button class="btn" onclick="login()">Login</button>
-</div>
-
-<!-- AI STUDY PLANNER -->
-<div class="card">
-<h3>🎯 AI Study Planner</h3>
-<textarea id="goal" placeholder="Enter your study goal"></textarea>
-<button class="btn" onclick="generatePlan()">Generate Plan</button>
-<p id="plan"></p>
-</div>
-
-<!-- NOTES + AI -->
-<div class="card">
-<h3>📝 Smart Notes</h3>
-<textarea id="notes" rows="4"></textarea>
-<button class="btn" onclick="readNotes()">🔊 Read</button>
-<button class="btn" onclick="summarizeNotes()">✨ Summarize</button>
-<button class="btn" onclick="quizNotes()">🧠 Make Quiz</button>
-</div>
-
-<!-- SPEECH -->
-<div class="card">
-<h3>🎤 Speech to Text</h3>
-<button class="btn" onclick="startSTT()">Start</button>
-<p id="speech"></p>
-</div>
-
-<!-- ANALYTICS -->
-<div class="card">
-<h3>📊 Progress Analytics</h3>
-<canvas id="chart"></canvas>
-<button class="btn" onclick="logStudy()">+ Study Hour</button>
-</div>
-
-<!-- SOCIAL FEED -->
-<div class="card">
-<h3>📱 Study Feed</h3>
-<input id="post" placeholder="Share progress">
-<button class="btn" onclick="addPost()">Post</button>
-<div id="feed"></div>
-</div>
-
-<!-- CHATBOT -->
-<div class="card">
-<h3>🤖 AI Assistant</h3>
-<input id="chatInput">
-<button class="btn" onclick="chat()">Send</button>
-<div id="chatBox"></div>
-</div>
-
-</div>
-
+<div id="app"></div>
 <script>
-let studyData = JSON.parse(localStorage.getItem('study')||'[1,2,3]');
-
-function setTheme(t){document.body.className=t}
-
-function login(){alert('Connected to backend (simulate Firebase/Auth)')}
-
-// AI CALL
-async function ai(prompt){
- let res = await fetch('https://api.openai.com/v1/chat/completions',{
- method:'POST',
- headers:{'Content-Type':'application/json','Authorization':'Bearer YOUR_API_KEY'},
- body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:prompt}]})
- });
- let d=await res.json(); return d.choices?.[0]?.message?.content;
-}
-
-async function generatePlan(){
- let goal=document.getElementById('goal').value;
- document.getElementById('plan').innerText = await ai("Create study plan for: "+goal);
-}
-
-function readNotes(){speechSynthesis.speak(new SpeechSynthesisUtterance(notes.value))}
-async function summarizeNotes(){alert(await ai("Summarize:\n"+notes.value))}
-async function quizNotes(){alert(await ai("Make quiz:\n"+notes.value))}
-
-function startSTT(){
- let r=new(window.SpeechRecognition||webkitSpeechRecognition)();
- r.onresult=e=>speech.innerText=e.results[0][0].transcript;
- r.start();
-}
-
-function logStudy(){studyData.push(Math.floor(Math.random()*5)+1);localStorage.setItem('study',JSON.stringify(studyData));drawChart()}
-
-function drawChart(){
- new Chart(document.getElementById('chart'),{
- type:'line',data:{labels:studyData.map((_,i)=>i+1),datasets:[{data:studyData}]}
- })
-}
-
-function addPost(){
- let p=post.value;
- let div=document.createElement('div');
- div.innerHTML="🐣 "+p;
- feed.prepend(div);
-}
-
-async function chat(){
- let msg=chatInput.value;
- chatBox.innerHTML+=`<p>You: ${msg}</p>`;
- let r=await ai(msg);
- chatBox.innerHTML+=`<p>Bot: ${r}</p>`;
-}
-
-// INIT
-drawChart();
+    // ----------------------------------------------
+    //  ADVANCED STORAGE + GLOBAL STATE
+    // ----------------------------------------------
+    let currentUser = null;
+    let currentScreen = 'dashboard';
+    let studyChart = null;
+    
+    // Themes
+    const themes = {
+        default: { bg: "linear-gradient(145deg, #F3E8FF 0%, #E0F2FE 100%)", primary: "#8B5CF6" },
+        dark: { bg: "#0F172A", primary: "#38BDF8" },
+        ocean: { bg: "linear-gradient(145deg, #CFFAFE 0%, #BAE6FD 100%)", primary: "#0284C7" }
+    };
+    
+    // Storage (mock backend with localStorage but ready for Firebase)
+    const Store = {
+        getUsers: () => JSON.parse(localStorage.getItem('fw_users') || '[]'),
+        saveUser: (u) => { const users = Store.getUsers(); users.push(u); localStorage.setItem('fw_users', JSON.stringify(users)); },
+        getUser: (email) => Store.getUsers().find(u => u.email === email),
+        updateUser: (email, data) => { let users = Store.getUsers(); const idx = users.findIndex(u => u.email === email); if(idx !== -1) { users[idx] = { ...users[idx], ...data }; localStorage.setItem('fw_users', JSON.stringify(users)); Store.setCurrent(users[idx]); } },
+        getCurrent: () => JSON.parse(localStorage.getItem('fw_current')),
+        setCurrent: (u) => localStorage.setItem('fw_current', JSON.stringify(u)),
+        clearCurrent: () => localStorage.removeItem('fw_current'),
+        getTasks: () => JSON.parse(localStorage.getItem('fw_tasks') || '[]'),
+        saveTask: (t) => { let tasks = Store.getTasks(); tasks.push(t); localStorage.setItem('fw_tasks', JSON.stringify(tasks)); },
+        updateTask: (id, updates) => { let tasks = Store.getTasks(); const idx = tasks.findIndex(t => t.id === id); if(idx !== -1) { tasks[idx] = { ...tasks[idx], ...updates }; localStorage.setItem('fw_tasks', JSON.stringify(tasks)); } },
+        deleteTask: (id) => { let tasks = Store.getTasks(); tasks = tasks.filter(t => t.id !== id); localStorage.setItem('fw_tasks', JSON.stringify(tasks)); },
+        getSessions: () => JSON.parse(localStorage.getItem('fw_sessions') || '[]'),
+        saveSession: (s) => { let sessions = Store.getSessions(); sessions.push(s); localStorage.setItem('fw_sessions', JSON.stringify(sessions.slice(-100))); },
+        getNotes: () => JSON.parse(localStorage.getItem('fw_notes') || '[]'),
+        saveNote: (n) => { let notes = Store.getNotes(); notes.unshift(n); localStorage.setItem('fw_notes', JSON.stringify(notes.slice(0, 30))); },
+        deleteNote: (id) => { let notes = Store.getNotes(); notes = notes.filter(n => n.id !== id); localStorage.setItem('fw_notes', JSON.stringify(notes)); },
+        getBadges: () => JSON.parse(localStorage.getItem('fw_badges') || '[]'),
+        addBadge: (badge) => { let badges = Store.getBadges(); if(!badges.find(b=>b.name===badge.name)) badges.push(badge); localStorage.setItem('fw_badges', JSON.stringify(badges)); }
+    };
+    
+    // Init demo data
+    if(Store.getUsers().length === 0) {
+        Store.saveUser({ name: "Alex Learner", email: "alex@focuswell.com", password: "123", avatar: "🧠", level: 3, xp: 230, points: 1240, studyStreak: 7, totalMins: 480, sleepQuality: 7, anxietyLevel: 4, petStage: 1, createdAt: Date.now() });
+        Store.saveUser({ name: "Demo Student", email: "demo@focuswell.com", password: "demo", avatar: "🐣", level: 1, xp: 45, points: 320, studyStreak: 2, totalMins: 120, sleepQuality: 6, anxietyLevel: 5, petStage: 1, createdAt: Date.now() });
+        Store.saveSession({ date: new Date().toISOString(), minutes: 45, type: "focus" });
+        Store.saveSession({ date: new Date(Date.now() - 86400000).toISOString(), minutes: 30, type: "focus" });
+        Store.saveNote({ id: "n1", title: "Study Tips", content: "Use active recall and spaced repetition! 🧠", createdAt: new Date().toISOString() });
+        Store.addBadge({ name: "First Focus", icon: "🎯", earned: true });
+    }
+    
+    // Helper: add XP & level up
+    function addXP(amount) {
+        currentUser.xp += amount;
+        currentUser.points += Math.floor(amount * 1.2);
+        let leveled = false;
+        while(currentUser.xp >= 100) {
+            currentUser.xp -= 100;
+            currentUser.level++;
+            leveled = true;
+            Store.addBadge({ name: `Level ${currentUser.level} Achieved`, icon: "⭐", earned: true });
+        }
+        Store.updateUser(currentUser.email, { xp: currentUser.xp, points: currentUser.points, level: currentUser.level });
+        if(leveled) showToast(`🎉 LEVEL UP! You're now Level ${currentUser.level}!`, "success");
+    }
+    
+    function showToast(msg, type = "info") {
+        const toast = document.createElement("div");
+        toast.innerText = msg;
+        toast.style.position = "fixed";
+        toast.style.bottom = "90px";
+        toast.style.left = "50%";
+        toast.style.transform = "translateX(-50%)";
+        toast.style.background = "white";
+        toast.style.padding = "12px 24px";
+        toast.style.borderRadius = "60px";
+        toast.style.boxShadow = "0 10px 25px rgba(0,0,0,0.1)";
+        toast.style.zIndex = "9999";
+        toast.style.fontWeight = "bold";
+        toast.style.borderLeft = `4px solid ${type === 'success' ? '#10B981' : '#8B5CF6'}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+    
+    // Stress detection (AI enhanced)
+    function analyzeStressDetailed(sleep, anxiety, recentSessions) {
+        let baseStress = ((10 - sleep) * 7) + (anxiety * 8);
+        let consistencyBonus = (recentSessions.length >= 5 ? -10 : 0);
+        let score = Math.min(100, Math.max(0, baseStress + consistencyBonus));
+        let level = "Low 😊", color = "#10B981", advice = "Keep your routine! You're doing great.";
+        if(score > 65) { level = "High ⚠️"; color = "#EF4444"; advice = "Take a break! Try deep breathing & take a walk outside. 🌿"; }
+        else if(score > 35) { level = "Medium 😐"; color = "#F59E0B"; advice = "A short meditation or stretching can help reduce tension."; }
+        return { score, level, color, advice, suggestions: ["Mindful minute", "Hydrate", "Listen to calm music"] };
+    }
+    
+    // AI Mock functions (ready for API key)
+    async function aiChat(prompt) {
+        const p = prompt.toLowerCase();
+        if(p.includes("study plan")) return "📚 Based on your history, focus on active recall for 45min blocks. Try Pomodoro!";
+        if(p.includes("stress")) return "😌 Your stress level is manageable. Try 4-7-8 breathing: Inhale 4s, hold 7s, exhale 8s.";
+        if(p.includes("quiz")) return "🧠 Here's a quick question: What is the best study technique? (A) Highlighting (B) Active Recall → Answer: B!";
+        return "✨ I'm your AI Study Coach! Ask for study plans, stress tips, or generate a daily schedule!";
+    }
+    
+    async function generateStudyPlan() {
+        let plan = `🎯 DAILY STUDY PLAN for ${currentUser.name}:\n• 09:00 - 09:45: Deep work (Pomodoro)\n• 10:00 - 10:30: Review flashcards\n• 11:00 - 12:00: Practice problems\n• Afternoon: Break & light revision\n🔥 Focus on weak topics.`;
+        showToast("✨ AI Study Plan generated! Check console/notification", "success");
+        return plan;
+    }
+    
+    // Image to notes mock (real API could use GPT-4 Vision)
+    function imageToNotes(file) { return new Promise(resolve => { setTimeout(() => resolve("📸 Extracted notes: Key concepts identified: active recall, spaced repetition, metacognition."), 1000); }); }
+    
+    // Pet evolution
+    function evolvePet() {
+        let stages = ["🐣", "🐥", "🦆", "🦅", "🐉"];
+        if(currentUser.petStage < 5) {
+            currentUser.petStage++;
+            Store.updateUser(currentUser.email, { petStage: currentUser.petStage });
+            showToast(`✨ Your pet evolved to ${stages[currentUser.petStage-1]}! Keep studying!`, "success");
+        } else { showToast("🐉 Your pet is a legendary dragon! Amazing dedication!", "info"); }
+        renderDashboard();
+    }
+    
+    // ----------------- RENDER LOGIN -----------------
+    function renderLogin() {
+        document.getElementById("app").innerHTML = `
+            <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;">
+                <div class="glass" style="max-width:420px; width:100%; padding:48px; text-align:center;">
+                    <div style="font-size:72px;">🎓✨</div>
+                    <h1 style="font-size:36px;">FocusWell</h1>
+                    <p>AI Study Ecosystem • Analytics • Gamification</p>
+                    <form id="loginForm" style="margin-top:32px;">
+                        <input type="email" id="email" placeholder="Email" required style="width:100%; padding:14px; border-radius:60px; margin-bottom:12px; border:1px solid #ddd;">
+                        <input type="password" id="password" placeholder="Password" required style="width:100%; padding:14px; border-radius:60px; margin-bottom:20px; border:1px solid #ddd;">
+                        <button type="submit" class="btn-primary" style="width:100%;">Login →</button>
+                    </form>
+                    <p style="margin-top:24px;">Demo: demo@focuswell.com / demo</p>
+                </div>
+            </div>
+        `;
+        document.getElementById("loginForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const pwd = document.getElementById("password").value;
+            const user = Store.getUser(email);
+            if(user && user.password === pwd) { currentUser = user; Store.setCurrent(user); renderDashboard(); }
+            else alert("Invalid credentials");
+        });
+    }
+    
+    // Analytics graph
+    function renderAnalytics() {
+        const sessions = Store.getSessions().filter(s => s.date).slice(-14);
+        const dates = sessions.map(s => new Date(s.date).toLocaleDateString()).reverse();
+        const mins = sessions.map(s => s.minutes).reverse();
+        const ctx = document.getElementById("studyChart")?.getContext("2d");
+        if(ctx && studyChart) studyChart.destroy();
+        if(ctx) studyChart = new Chart(ctx, { type: 'line', data: { labels: dates, datasets: [{ label: 'Study Minutes', data: mins, borderColor: '#8B5CF6', tension: 0.3, fill: true, backgroundColor: 'rgba(139,92,246,0.1)' }] }, options: { responsive: true } });
+    }
+    
+    // Dashboard with full gamification, stress meter, AI plan
+    function renderDashboard() {
+        currentScreen = "dashboard";
+        const sessions = Store.getSessions();
+        const totalMins = sessions.reduce((a,b)=>a+(b.minutes||0),0);
+        const todayMins = sessions.filter(s=>new Date(s.date).toDateString()===new Date().toDateString()).reduce((a,b)=>a+(b.minutes||0),0);
+        const stress = analyzeStressDetailed(currentUser.sleepQuality || 7, currentUser.anxietyLevel || 4, sessions);
+        const petEmojis = ["🐣", "🐥", "🦆", "🦅", "🐉"];
+        const badgesList = Store.getBadges();
+        document.getElementById("app").innerHTML = `
+            <div class="nav-bar">
+                <div class="logo"><i class="fas fa-brain"></i> FocusWell</div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <div class="nav-link active">📊 Dashboard</div>
+                    <div class="nav-link" onclick="renderSocialFeed()">📱 Social Feed</div>
+                    <div class="nav-link" onclick="renderStudyRoom()">🎮 Study Rooms</div>
+                    <div class="nav-link" onclick="renderAITools()">🤖 AI Tools</div>
+                    <div class="nav-link" onclick="renderProfile()">👤 Profile</div>
+                    <div class="nav-link" onclick="logout()">🚪 Exit</div>
+                </div>
+                <div class="theme-palette"><div class="theme-dot" style="background:#8B5CF6;" onclick="setTheme('default')"></div><div class="theme-dot" style="background:#0F172A;" onclick="setTheme('dark')"></div><div class="theme-dot" style="background:#0284C7;" onclick="setTheme('ocean')"></div></div>
+            </div>
+            <div class="main-container" style="max-width:1400px; margin:0 auto; padding:20px;">
+                <div class="glass" style="padding:28px; margin-bottom:24px;">
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+                        <div><h2>👋 Hello, ${currentUser.name}!</h2><p>🔥 ${currentUser.studyStreak} day streak • ⭐ ${currentUser.points} pts • Level ${currentUser.level}</p></div>
+                        <div class="pet-card" style="background:white;"><div class="pet-emoji" id="petEmoji">${petEmojis[currentUser.petStage-1]}</div><p>Study Pet</p><button class="btn-primary" style="padding:6px 16px;" onclick="evolvePet()">Evolve ✨</button></div>
+                    </div>
+                    <div class="stress-fill" style="margin:16px 0;"><div class="stress-progress" style="width:${stress.score}%; background:${stress.color};"></div></div>
+                    <p><strong>🧘 Stress Level: ${stress.level}</strong> — ${stress.advice}</p>
+                </div>
+                <div class="grid-4">
+                    <div class="glass" style="padding:20px; text-align:center;"><i class="fas fa-clock" style="font-size:40px;"></i><h3>Today</h3><p style="font-size:32px; font-weight:800;">${Math.floor(todayMins/60)}h ${todayMins%60}m</p></div>
+                    <div class="glass" style="padding:20px; text-align:center;"><i class="fas fa-chart-line"></i><h3>Total Focus</h3><p style="font-size:32px;">${Math.floor(totalMins/60)}h</p></div>
+                    <div class="glass" style="padding:20px; text-align:center;"><i class="fas fa-trophy"></i><h3>Badges</h3><p style="font-size:32px;">${badgesList.length}</p></div>
+                    <div class="glass" style="padding:20px; text-align:center; cursor:pointer;" onclick="generateStudyPlan()"><i class="fas fa-robot"></i><h3>AI Daily Plan</h3><p>Generate →</p></div>
+                </div>
+                <div class="glass" style="margin:24px 0; padding:20px;"><h3>📈 Analytics Trend (Last 14 days)</h3><canvas id="studyChart" height="150"></canvas></div>
+                <div class="grid-2">
+                    <div class="glass" style="padding:20px;"><h3>🎯 Quick Actions</h3><button class="btn-primary" onclick="logStudyMinutes()">➕ Log Study Session</button><button class="btn-secondary" style="margin-left:12px;" onclick="renderAITools()">🧠 Image to Notes</button></div>
+                    <div class="glass" style="padding:20px;"><h3>🏆 Recent Achievements</h3>${badgesList.slice(0,3).map(b=>`<div>🎖️ ${b.name}</div>`).join('') || 'Study to earn badges!'}</div>
+                </div>
+            </div>
+            <div class="chatbot-toggle" onclick="openChatbot()"><i class="fas fa-robot" style="font-size:28px; color:white;"></i></div>
+        `;
+        renderAnalytics();
+    }
+    
+    // Reels-style Study Videos Feed
+    function renderSocialFeed() {
+        currentScreen = "social";
+        const posts = [
+            { id:1, user:"Study Panda", avatar:"🐼", content:"Just finished my morning study session! 📚", video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", likes: 124 },
+            { id:2, user:"Koala Learner", avatar:"🐨", content:"Active recall changed my grades!", video: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFunflies.mp4", likes: 89 }
+        ];
+        document.getElementById("app").innerHTML = getNavHTML() + `
+            <div class="main-container" style="max-width:1000px; margin:0 auto; padding:20px;">
+                <div class="glass" style="padding:24px; margin-bottom:24px;"><h3>📸 Study Reels (Instagram Style)</h3><div class="reels-container">${posts.map(p => `
+                    <div class="reel-card"><video class="reel-video" src="${p.video}" controls loop muted poster=""></video><div style="padding:12px; background:white;"><strong>${p.avatar} ${p.user}</strong><p>${p.content}</p><i class="fas fa-heart" style="color:#EF4444;"></i> ${p.likes}</div></div>
+                `).join('')}</div></div>
+                <div class="glass" style="padding:24px;"><h3>💬 Study Community Feed</h3><textarea id="postContent" placeholder="Share your study victory..."></textarea><button class="btn-primary" onclick="addPost()">Post 🎉</button><div id="feedPosts"></div></div>
+            </div>
+        `;
+        loadFeed();
+    }
+    function loadFeed() { const feedDiv = document.getElementById("feedPosts"); if(feedDiv) feedDiv.innerHTML = `<p>✨ Join the community! Share your progress.</p>`; }
+    function addPost() { const content = document.getElementById("postContent")?.value; if(content) showToast("Post shared! 🎉", "success"); }
+    
+    // Multiplayer Study Rooms (mock websocket)
+    function renderStudyRoom() {
+        document.getElementById("app").innerHTML = getNavHTML() + `
+            <div class="main-container"><div class="grid-2"><div class="glass" style="padding:32px;"><h3>🌍 Live Study Rooms (WebSockets Ready)</h3><p>342 students online • Mathematics Room • Coding Lounge</p><button class="btn-primary" onclick="joinRoom()">Join Focus Room →</button><div id="chatRoom" style="margin-top:20px;"></div></div><div class="glass" style="padding:32px;"><h3>🎥 Study Together</h3><video controls style="width:100%; border-radius:24px;"><source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"></video></div></div></div>
+        `;
+    }
+    function joinRoom() { showToast("🔊 You joined 'Deep Work Squad'! Collaborate in real-time (WebSocket demo).", "success"); }
+    
+    // AI Tools: Image to notes, summarizer, etc.
+    function renderAITools() {
+        document.getElementById("app").innerHTML = getNavHTML() + `
+            <div class="main-container"><div class="grid-2"><div class="glass" style="padding:28px;"><h3>📸 Image to Notes AI</h3><input type="file" id="imageUpload" accept="image/*"><button class="btn-primary" onclick="processImage()">Extract Notes</button><p id="aiNoteResult"></p></div><div class="glass" style="padding:28px;"><h3>📝 Smart Notes + Text-to-Speech</h3><textarea id="noteText" placeholder="Write your note..."></textarea><button class="btn-primary" onclick="saveNote()">Save Note</button><button class="btn-secondary" onclick="speakNote()">🔊 Read Aloud</button><button class="btn-secondary" onclick="summarizeNote()">✨ AI Summarize</button><div id="notesList"></div></div></div></div>
+        `;
+        loadNotesUI();
+    }
+    async function processImage() { const file = document.getElementById("imageUpload").files[0]; if(file) { const text = await imageToNotes(file); document.getElementById("aiNoteResult").innerText = text; showToast("AI extracted notes!", "success"); } }
+    function saveNote() { const txt = document.getElementById("noteText").value; if(txt) { Store.saveNote({ id: Date.now(), title: "Quick Note", content: txt, createdAt: new Date().toISOString() }); showToast("Note saved", "success"); loadNotesUI(); } }
+    function loadNotesUI() { const notes = Store.getNotes(); document.getElementById("notesList").innerHTML = notes.map(n => `<div style="background:#f1f5f9; margin:8px 0; padding:12px; border-radius:20px;"><strong>${n.title}</strong><p>${n.content.substring(0,80)}</p><button onclick="deleteNote('${n.id}')">🗑️</button></div>`).join(''); }
+    function deleteNote(id) { Store.deleteNote(id); loadNotesUI(); }
+    function speakNote() { const text = document.getElementById("noteText").value; if(text) { const utterance = new SpeechSynthesisUtterance(text); speechSynthesis.cancel(); speechSynthesis.speak(utterance); } }
+    function summarizeNote() { const text = document.getElementById("noteText").value; if(text) showToast(`✨ Summary: ${text.substring(0,100)}... Keep key ideas!`, "info"); }
+    
+    function logStudyMinutes() { let mins = prompt("Minutes studied today?", "30"); if(mins) { Store.saveSession({ date: new Date().toISOString(), minutes: parseInt(mins) }); addXP(parseInt(mins)); currentUser.totalMins = (currentUser.totalMins || 0) + parseInt(mins); currentUser.studyStreak++; Store.updateUser(currentUser.email, { totalMins: currentUser.totalMins, studyStreak: currentUser.studyStreak }); showToast(`🎉 +${mins} mins logged! +${mins} XP`, "success"); renderDashboard(); } }
+    function renderProfile() { document.getElementById("app").innerHTML = getNavHTML() + `<div class="main-container"><div class="glass" style="padding:32px; text-align:center;"><div style="font-size:80px;">${currentUser.avatar || "🧠"}</div><h2>${currentUser.name}</h2><p>⭐ Level ${currentUser.level} • ${currentUser.points} points</p><p>🔥 Streak: ${currentUser.studyStreak} days</p><label>😴 Sleep Quality: <input type="range" id="sleepSlider" min="0" max="10" value="${currentUser.sleepQuality||7}"></label><label>😰 Anxiety: <input type="range" id="anxietySlider" min="0" max="10" value="${currentUser.anxietyLevel||4}"></label><button class="btn-primary" onclick="updateWellness()">Update Wellness</button></div></div>`; }
+    function updateWellness() { const sleep = document.getElementById("sleepSlider").value; const anxiety = document.getElementById("anxietySlider").value; Store.updateUser(currentUser.email, { sleepQuality: parseInt(sleep), anxietyLevel: parseInt(anxiety) }); currentUser.sleepQuality = parseInt(sleep); currentUser.anxietyLevel = parseInt(anxiety); showToast("Wellness data saved! Stress analysis updated.", "success"); renderDashboard(); }
+    function openChatbot() { let msg = prompt("🤖 Ask FocusWell AI (study plan, stress, quiz):"); if(msg) aiChat(msg).then(res => alert(res)); }
+    function setTheme(themeName) { const th = themes[themeName]; document.body.style.background = th.bg; document.documentElement.style.setProperty('--primary', th.primary); localStorage.setItem('theme', themeName); }
+    function getNavHTML() { return `<div class="nav-bar"><div class="logo"><i class="fas fa-graduation-cap"></i> FocusWell</div><div style="display:flex; gap:6px;"><div class="nav-link" onclick="renderDashboard()">📊 Dashboard</div><div class="nav-link" onclick="renderSocialFeed()">📱 Social</div><div class="nav-link" onclick="renderStudyRoom()">🎮 Rooms</div><div class="nav-link" onclick="renderAITools()">🤖 AI</div><div class="nav-link" onclick="renderProfile()">👤 Profile</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>`; }
+    function logout() { Store.clearCurrent(); renderLogin(); }
+    
+    window.renderDashboard = renderDashboard; window.renderSocialFeed = renderSocialFeed; window.renderStudyRoom = renderStudyRoom; window.renderAITools = renderAITools; window.renderProfile = renderProfile;
+    window.evolvePet = evolvePet; window.generateStudyPlan = generateStudyPlan; window.logStudyMinutes = logStudyMinutes; window.updateWellness = updateWellness; window.processImage = processImage; window.saveNote = saveNote; window.deleteNote = deleteNote; window.speakNote = speakNote; window.summarizeNote = summarizeNote; window.addPost = addPost; window.joinRoom = joinRoom; window.setTheme = setTheme; window.openChatbot = openChatbot; window.logout = logout;
+    
+    const savedTheme = localStorage.getItem('theme');
+    if(savedTheme && themes[savedTheme]) setTheme(savedTheme);
+    const current = Store.getCurrent();
+    if(current) { currentUser = current; renderDashboard(); } else renderLogin();
 </script>
 </body>
 </html>
-`
+```
