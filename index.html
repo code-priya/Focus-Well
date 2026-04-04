@@ -1,443 +1,298 @@
-Here is an improved, fully functional commercial website for your "FocusWell" project.
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FocusWell | AI Study Companion for Peak Performance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <title>FocusWell | AI Study Ecosystem | Ultimate Student Success</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #4f46e5;
-            --primary-light: #818cf8;
-            --primary-dark: #3730a3;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
             --secondary: #ec4899;
-            --accent: #14b8a6;
+            --accent: #06b6d4;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
             --dark: #0f172a;
-            --gray: #64748b;
-            --light: #f1f5f9;
+            --light: #f8fafc;
             --white: #ffffff;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            --radius: 1rem;
-            --radius-lg: 1.5rem;
+            --shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.25);
+            --radius: 1.5rem;
         }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #f8fafc 0%, #eef2ff 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(145deg, #f0f4ff 0%, #e8eeff 100%);
             min-height: 100vh;
-            color: var(--dark);
+            transition: background 0.3s, color 0.3s;
         }
-
-        /* Glassmorphism components */
+        body.dark-mode { background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; }
+        body.dark-mode .glass-card, body.dark-mode .nav-bar, body.dark-mode .achievement-card, body.dark-mode .task-item { background: rgba(30, 41, 59, 0.9); color: #e2e8f0; border-color: rgba(255,255,255,0.1); }
         .glass-card {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(12px);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            transition: all 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255,255,255,0.5);
         }
-        .glass-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            background: rgba(255, 255, 255, 0.97);
-        }
-
-        /* Modern Nav */
+        .glass-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
         .nav-bar {
-            background: rgba(255,255,255,0.98);
-            border-radius: 60px;
-            padding: 10px 28px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 80px;
+            padding: 12px 32px;
             margin: 20px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: var(--shadow);
-            backdrop-filter: blur(4px);
             flex-wrap: wrap;
             gap: 12px;
+            animation: slideDown 0.5s ease;
         }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 26px;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .nav-links {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .nav-link {
-            cursor: pointer;
-            padding: 8px 18px;
-            border-radius: 40px;
-            transition: all 0.2s;
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--gray);
-        }
-        .nav-link:hover, .nav-link.active {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: var(--shadow-sm);
-        }
-        .btn-primary, .btn-secondary {
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: var(--shadow-sm);
-        }
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: var(--shadow);
-        }
-        .btn-secondary {
-            background: var(--light);
-            color: var(--dark);
-        }
-        .btn-secondary:hover {
-            background: #e2e8f0;
-        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .nav-link { cursor: pointer; padding: 8px 20px; border-radius: 40px; transition: all 0.2s; font-weight: 600; }
+        .nav-link:hover, .nav-link.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; transform: scale(1.05); }
+        .btn-primary, .btn-secondary { border: none; padding: 12px 28px; border-radius: 60px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(99,102,241,0.6); }
         .welcome-banner {
-            background: linear-gradient(135deg, #4f46e5, #a855f7);
-            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            border-radius: 2rem;
             padding: 32px;
             color: white;
             margin-bottom: 28px;
-        }
-        .progress-bar {
-            height: 8px;
-            background: rgba(255,255,255,0.25);
-            border-radius: 10px;
+            position: relative;
             overflow: hidden;
+            animation: gradientShift 8s ease infinite;
+            background-size: 200% 200%;
         }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ffd166, #ff9f1c);
-            border-radius: 10px;
-            transition: width 0.4s ease;
-        }
-        .flashcard {
-            background: linear-gradient(145deg, #ffffff, #f5f3ff);
-            border-radius: var(--radius);
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            min-height: 260px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow);
-            transition: all 0.2s;
-        }
-        .quiz-option {
-            background: var(--light);
-            padding: 14px 18px;
-            margin: 10px 0;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-        .quiz-option:hover {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            transform: translateX(6px);
-        }
-        .pomodoro-timer {
-            font-size: 72px;
-            font-family: monospace;
-            font-weight: 800;
-            letter-spacing: 4px;
-            margin: 20px 0;
-            color: var(--primary-dark);
-        }
-        .study-room-card {
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            text-align: center;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        .study-room-card:hover {
-            transform: translateY(-8px);
-            background: linear-gradient(145deg, #2d3a4e, #1a2538);
-        }
-        .achievement-card {
-            text-align: center;
-            padding: 24px;
-            border-radius: var(--radius);
-            background: white;
-            transition: all 0.2s;
-        }
-        .achievement-badge {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #ffd166, #ff9f1c);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 38px;
-            margin: 0 auto 15px;
-        }
-        .task-item {
-            background: var(--light);
-            padding: 14px 16px;
-            margin: 10px 0;
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .progress-bar { height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ffd166, #ff9f1c); transition: width 0.5s; border-radius: 10px; }
+        .stress-meter {
+            background: linear-gradient(135deg, #10b981, #f59e0b, #ef4444);
             border-radius: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 4px;
             cursor: pointer;
-            transition: all 0.2s;
         }
-        .task-item:hover {
-            background: #e6edf5;
-            transform: translateX(4px);
+        .stress-fill { height: 12px; border-radius: 16px; background: white; transition: width 0.3s; }
+        .flashcard-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
         }
-        .grid-2, .grid-3, .grid-4 {
-            display: grid;
-            gap: 24px;
-        }
+        .flashcard-3d.flipped { transform: rotateY(180deg); }
+        .grid-2, .grid-3, .grid-4 { display: grid; gap: 24px; }
         .grid-2 { grid-template-columns: repeat(2,1fr); }
         .grid-3 { grid-template-columns: repeat(3,1fr); }
         .grid-4 { grid-template-columns: repeat(4,1fr); }
-        @media (max-width: 1000px) {
-            .grid-4 { grid-template-columns: repeat(2,1fr); }
-            .grid-3 { grid-template-columns: repeat(2,1fr); }
-        }
-        @media (max-width: 720px) {
-            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .pomodoro-timer { font-size: 48px; }
-        }
-        .chatbot-container {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 1000;
-        }
-        .chatbot-toggle {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            transition: all 0.2s;
-        }
-        .chatbot-window {
-            position: absolute;
-            bottom: 80px;
-            right: 0;
-            width: 360px;
-            height: 520px;
-            background: white;
-            border-radius: 28px;
-            box-shadow: var(--shadow-lg);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
+        @media (max-width: 1000px) { .grid-4 { grid-template-columns: repeat(2,1fr); } .grid-3 { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } .nav-links { display: none; } }
+        .chatbot-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; }
+        .chatbot-toggle { width: 70px; height: 70px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-lg); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        .chatbot-window { position: absolute; bottom: 80px; right: 0; width: 380px; height: 550px; background: white; border-radius: 32px; box-shadow: var(--shadow-lg); display: none; flex-direction: column; overflow: hidden; }
         .chatbot-window.open { display: flex; }
-        .message-bubble {
-            max-width: 80%;
-            padding: 10px 16px;
-            border-radius: 24px;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        .message.bot .message-bubble {
-            background: var(--light);
-            color: var(--dark);
-        }
-        .message.user .message-bubble {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-        input, select, textarea {
-            font-family: inherit;
-        }
-        .stats-ring {
-            background: white;
-            border-radius: 28px;
-            padding: 20px;
-        }
+        .typing-indicator { display: flex; gap: 4px; padding: 8px; }
+        .typing-dot { width: 8px; height: 8px; background: #94a3b8; border-radius: 50%; animation: typing 1.4s infinite; }
+        @keyframes typing { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+        .note-card { background: #fff9e8; border-left: 6px solid var(--primary); padding: 16px; border-radius: 20px; margin: 12px 0; }
+        .theme-selector { display: flex; gap: 8px; margin-left: 10px; }
+        .theme-dot { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; transition: transform 0.2s; border: 2px solid white; }
+        .theme-dot:hover { transform: scale(1.1); }
+        @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .floating { animation: float 3s ease-in-out infinite; }
     </style>
 </head>
 <body>
     <div id="app"></div>
     <script>
-        // ==================== ENHANCED STORAGE ====================
+        // ============ STORAGE ============
         const Storage = {
-            getUsers: () => JSON.parse(localStorage.getItem('focuswell_users_v2') || '[]'),
-            saveUser: (user) => { const users = Storage.getUsers(); users.push(user); localStorage.setItem('focuswell_users_v2', JSON.stringify(users)); },
+            getUsers: () => JSON.parse(localStorage.getItem('focuswell_users_v3') || '[]'),
+            saveUser: (u) => { const users = Storage.getUsers(); users.push(u); localStorage.setItem('focuswell_users_v3', JSON.stringify(users)); },
             getUser: (email) => Storage.getUsers().find(u => u.email === email),
-            updateUser: (email, data) => {
-                const users = Storage.getUsers();
-                const idx = users.findIndex(u => u.email === email);
-                if (idx !== -1) { users[idx] = { ...users[idx], ...data }; localStorage.setItem('focuswell_users_v2', JSON.stringify(users)); Storage.setCurrent(users[idx]); }
-            },
-            getCurrent: () => JSON.parse(localStorage.getItem('focuswell_current_v2')),
-            setCurrent: (user) => localStorage.setItem('focuswell_current_v2', JSON.stringify(user)),
-            clearCurrent: () => localStorage.removeItem('focuswell_current_v2'),
-            getTasks: () => JSON.parse(localStorage.getItem('focuswell_tasks_v2') || '[]'),
-            saveTask: (task) => { const tasks = Storage.getTasks(); tasks.push(task); localStorage.setItem('focuswell_tasks_v2', JSON.stringify(tasks)); },
-            updateTask: (taskId, updates) => { const tasks = Storage.getTasks(); const idx = tasks.findIndex(t => t.id === taskId); if(idx !== -1) { tasks[idx] = { ...tasks[idx], ...updates }; localStorage.setItem('focuswell_tasks_v2', JSON.stringify(tasks)); } },
-            deleteTask: (taskId) => { let tasks = Storage.getTasks(); tasks = tasks.filter(t => t.id !== taskId); localStorage.setItem('focuswell_tasks_v2', JSON.stringify(tasks)); },
-            getFlashcards: () => JSON.parse(localStorage.getItem('focuswell_flashcards_v2') || '[]'),
-            saveFlashcard: (card) => { const cards = Storage.getFlashcards(); cards.push(card); localStorage.setItem('focuswell_flashcards_v2', JSON.stringify(cards)); },
-            deleteFlashcard: (id) => { let cards = Storage.getFlashcards(); cards = cards.filter(c => c.id !== id); localStorage.setItem('focuswell_flashcards_v2', JSON.stringify(cards)); },
-            getStudySessions: () => JSON.parse(localStorage.getItem('focuswell_sessions_v2') || '[]'),
-            saveStudySession: (session) => { const sessions = Storage.getStudySessions(); sessions.push(session); localStorage.setItem('focuswell_sessions_v2', JSON.stringify(sessions.slice(-50))); },
-            getQuizzes: () => JSON.parse(localStorage.getItem('focuswell_quizzes_v2') || '[]'),
-            saveQuizResult: (result) => { const quizzes = Storage.getQuizzes(); quizzes.push(result); localStorage.setItem('focuswell_quizzes_v2', JSON.stringify(quizzes.slice(-30))); },
-            getPlantStage: () => parseInt(localStorage.getItem('focuswell_plant') || '1'),
-            setPlantStage: (stage) => localStorage.setItem('focuswell_plant', stage)
+            updateUser: (email, data) => { const users = Storage.getUsers(); const idx = users.findIndex(u => u.email === email); if(idx !== -1) { users[idx] = { ...users[idx], ...data }; localStorage.setItem('focuswell_users_v3', JSON.stringify(users)); Storage.setCurrent(users[idx]); } },
+            getCurrent: () => JSON.parse(localStorage.getItem('focuswell_current_v3')),
+            setCurrent: (u) => localStorage.setItem('focuswell_current_v3', JSON.stringify(u)),
+            clearCurrent: () => localStorage.removeItem('focuswell_current_v3'),
+            getTasks: () => JSON.parse(localStorage.getItem('focuswell_tasks_v3') || '[]'),
+            saveTask: (t) => { const tasks = Storage.getTasks(); tasks.push(t); localStorage.setItem('focuswell_tasks_v3', JSON.stringify(tasks)); },
+            updateTask: (id, updates) => { const tasks = Storage.getTasks(); const idx = tasks.findIndex(t => t.id === id); if(idx !== -1) { tasks[idx] = { ...tasks[idx], ...updates }; localStorage.setItem('focuswell_tasks_v3', JSON.stringify(tasks)); } },
+            deleteTask: (id) => { let tasks = Storage.getTasks(); tasks = tasks.filter(t => t.id !== id); localStorage.setItem('focuswell_tasks_v3', JSON.stringify(tasks)); },
+            getFlashcards: () => JSON.parse(localStorage.getItem('focuswell_flashcards_v3') || '[]'),
+            saveFlashcard: (c) => { const cards = Storage.getFlashcards(); cards.push(c); localStorage.setItem('focuswell_flashcards_v3', JSON.stringify(cards)); },
+            deleteFlashcard: (id) => { let cards = Storage.getFlashcards(); cards = cards.filter(c => c.id !== id); localStorage.setItem('focuswell_flashcards_v3', JSON.stringify(cards)); },
+            getStudySessions: () => JSON.parse(localStorage.getItem('focuswell_sessions_v3') || '[]'),
+            saveStudySession: (s) => { const sessions = Storage.getStudySessions(); sessions.push(s); localStorage.setItem('focuswell_sessions_v3', JSON.stringify(sessions.slice(-50))); },
+            getQuizzes: () => JSON.parse(localStorage.getItem('focuswell_quizzes_v3') || '[]'),
+            saveQuizResult: (r) => { const quizzes = Storage.getQuizzes(); quizzes.push(r); localStorage.setItem('focuswell_quizzes_v3', JSON.stringify(quizzes.slice(-30))); },
+            getNotes: () => JSON.parse(localStorage.getItem('focuswell_notes') || '[]'),
+            saveNote: (n) => { const notes = Storage.getNotes(); notes.push(n); localStorage.setItem('focuswell_notes', JSON.stringify(notes)); },
+            deleteNote: (id) => { let notes = Storage.getNotes(); notes = notes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(notes)); },
+            getTheme: () => localStorage.getItem('focuswell_theme') || 'light',
+            setTheme: (t) => localStorage.setItem('focuswell_theme', t)
         };
         
-        // sample init
         if(Storage.getUsers().length === 0){
-            Storage.saveUser({ name: 'Alex Chen', email: 'alex@focuswell.com', password: 'demo123', studyStreak: 0, points: 340, level: 2, xp: 45, sleepQuality: 7, anxietyLevel: 3, totalFocusMins: 0 });
-            Storage.saveUser({ name: 'Demo Student', email: 'student@focuswell.com', password: '123', studyStreak: 0, points: 0, level: 1, xp: 0, sleepQuality: 7, anxietyLevel: 3, totalFocusMins: 0 });
+            Storage.saveUser({ name: 'Sarah Johnson', email: 'sarah@focuswell.com', password: 'study123', studyStreak: 0, points: 520, level: 2, xp: 45, sleepQuality: 6, anxietyLevel: 5, totalFocusMins: 0, stressHistory: [] });
+            Storage.saveUser({ name: 'Demo Student', email: 'student@focuswell.com', password: '123', studyStreak: 0, points: 0, level: 1, xp: 0, sleepQuality: 7, anxietyLevel: 3, totalFocusMins: 0, stressHistory: [] });
         }
         
-        class StressAnalyzer {
-            calculateStressLevel(user) { const sleep = user.sleepQuality || 7; const anxiety = user.anxietyLevel || 3; let score = ((10 - sleep) * 8) + (anxiety * 7); score = Math.min(100, Math.max(0, score)); let level='low', color='#10b981', emoji='😊', advice="You're thriving! Keep balanced habits."; if(score>60){ level='high'; color='#ef4444'; emoji='😰'; advice="Time for a mindful break. Try breathing! 💙"; } else if(score>30){ level='medium'; color='#f59e0b'; emoji='😌'; advice="A short walk or stretch will refresh you."; } return { score, level, color, emoji, advice }; }
-        }
-        class Chatbot { getResponse(msg) { const m = msg.toLowerCase(); if(m.includes('stress')||m.includes('anxious')) return "💙 Breathe with me: Inhale 4, hold 4, exhale 6. You're not alone. 🌸"; if(m.includes('study tip')) return "📘 Try active recall & spaced repetition. Use flashcards daily! 🧠"; if(m.includes('motivation')) return "🔥 You've already taken the first step. Keep going — small wins build big results!"; if(m.includes('procrastinate')) return "⏳ The 5-minute rule: commit to just 5 minutes. You'll likely continue! 🚀"; return "🤖 I'm your AI study coach! Ask about stress, exams, focus, or just say hi! ✨"; } }
-        
-        let currentUser = null, currentScreen = 'dashboard', stressAnalyzer = new StressAnalyzer(), chatbot = new Chatbot();
+        let currentUser = null, currentScreen = 'dashboard';
         let pomodoroInterval = null, pomodoroSeconds = 25*60, isPomodoroRunning = false;
         let currentFlashcardIndex = 0, currentQuiz = null, quizAnswers = [], quizIndex = 0;
+        let speechRecognition = null;
+        let currentHighlightColor = '#fef08a';
+        
+        // AI Chatbot with free API (using OpenRouter demo endpoint fallback to smart local)
+        async function getAIResponse(message) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'HTTP-Referer': 'https://focuswell.app', 'X-Title': 'FocusWell' },
+                    body: JSON.stringify({ model: 'mistralai/mistral-7b-instruct:free', messages: [{ role: 'user', content: message }], max_tokens: 150 }),
+                    signal: controller.signal
+                }).catch(() => null);
+                clearTimeout(timeoutId);
+                if(response && response.ok) { const data = await response.json(); return data.choices?.[0]?.message?.content || getLocalResponse(message); }
+                return getLocalResponse(message);
+            } catch(e) { return getLocalResponse(message); }
+        }
+        function getLocalResponse(msg) {
+            const m = msg.toLowerCase();
+            if(m.includes('stress')) return "💙 Try the 4-7-8 breathing technique. Inhale 4s, hold 7s, exhale 8s. Repeat 4 times. Your stress will drop!";
+            if(m.includes('study tip')) return "📚 Use active recall & spaced repetition. Create flashcards and test yourself daily!";
+            if(m.includes('motivation')) return "🔥 You're doing amazing! Every minute you invest compounds into success!";
+            return "🤖 I'm your AI study coach! Tell me about stress, exams, focus, or anything!";
+        }
+        
+        // Stress detection with detailed analysis
+        function analyzeStressDetailed(sleep, anxiety) {
+            let score = ((10 - sleep) * 8) + (anxiety * 7);
+            score = Math.min(100, Math.max(0, score));
+            let level = 'Low', color = '#10b981', emoji = '😊', suggestions = [];
+            if(score > 65) { level = 'High'; color = '#ef4444'; emoji = '⚠️'; suggestions = ['Take a 10-min walk', 'Practice deep breathing (4-7-8)', 'Listen to calming music', 'Talk to a friend']; }
+            else if(score > 35) { level = 'Medium'; color = '#f59e0b'; emoji = '😌'; suggestions = ['Short meditation', 'Stretch breaks', 'Organize tasks', 'Hydrate well']; }
+            else { suggestions = ['Keep up the great work!', 'Maintain sleep schedule', 'Stay active']; }
+            return { score, level, color, emoji, suggestions };
+        }
         
         function addPointsAndXP(points, xpGain) {
-            currentUser.points = (currentUser.points || 0) + points;
-            currentUser.xp = (currentUser.xp || 0) + xpGain;
+            currentUser.points += points;
+            currentUser.xp += xpGain;
             let leveledUp = false;
-            while (currentUser.xp >= 100) { currentUser.level++; currentUser.xp -= 100; leveledUp = true; }
+            while(currentUser.xp >= 100) { currentUser.level++; currentUser.xp -= 100; leveledUp = true; }
             Storage.updateUser(currentUser.email, { points: currentUser.points, xp: currentUser.xp, level: currentUser.level });
-            if(leveledUp) setTimeout(() => alert(`🎉 LEVEL UP! You reached Level ${currentUser.level}! 🎉`), 100);
+            if(leveledUp) setTimeout(() => alert(`🎉 LEVEL UP! You're now Level ${currentUser.level}! 🎉`), 100);
         }
         
-        function recordStudySession(minutes=null) {
-            let mins = minutes;
-            if(mins === null){ const input = prompt('How many minutes did you study?', '25'); if(!input || isNaN(parseInt(input))) return; mins = parseInt(input); }
-            if(mins > 0){
-                const hours = mins/60;
-                Storage.saveStudySession({ date: new Date().toISOString(), hours, minutes: mins });
-                currentUser.totalFocusMins = (currentUser.totalFocusMins || 0) + mins;
-                currentUser.studyStreak = (currentUser.studyStreak || 0) + 1;
-                const pointsEarned = Math.floor(mins * 1.5);
-                const xpEarned = Math.floor(mins);
-                addPointsAndXP(pointsEarned, xpEarned);
-                alert(`✅ +${pointsEarned} points, +${xpEarned} XP! Keep crushing it!`);
-                renderDashboard();
-            }
-        }
+        // Speech to Text
+        function initSpeech() { if(!('webkitSpeechRecognition' in window)) { alert('Speech recognition not supported in this browser'); return null; } const recognition = new webkitSpeechRecognition(); recognition.continuous = false; recognition.interimResults = false; recognition.lang = 'en-US'; return recognition; }
+        function startSpeechToText(callback) { const recog = initSpeech(); if(!recog) return; recog.onresult = (event) => { const text = event.results[0][0].transcript; callback(text); }; recog.start(); }
         
-        // Helper render functions
-        function renderLogin() { document.getElementById('app').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;"><div class="glass-card" style="max-width:440px; width:100%; padding:44px; text-align:center;"><div style="font-size:70px;">🎓✨</div><h1 style="font-size:36px;">FocusWell</h1><p style="margin:8px 0 24px;">AI-powered study ecosystem</p><form id="loginForm"><input type="email" id="email" placeholder="Email" required style="width:100%; padding:14px; margin-bottom:14px; border-radius:60px; border:1px solid #ddd;"><input type="password" id="password" placeholder="Password" required style="width:100%; padding:14px; margin-bottom:24px; border-radius:60px; border:1px solid #ddd;"><button type="submit" class="btn-primary" style="width:100%;">Sign in →</button></form><p style="margin-top:24px;">New? <a href="#" onclick="renderRegister(); return false;" style="color:var(--primary); font-weight:600;">Create free account</a></p><p style="margin-top:16px; font-size:13px;">Demo: student@focuswell.com / 123</p></div></div>`; document.getElementById('loginForm').addEventListener('submit',(e)=>{ e.preventDefault(); const email=document.getElementById('email').value, pwd=document.getElementById('password').value; const user=Storage.getUser(email); if(user && user.password===pwd){ currentUser=user; Storage.setCurrent(user); renderDashboard(); } else alert('Invalid credentials. Use student@focuswell.com / 123'); }); }
-        function renderRegister(){ document.getElementById('app').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;"><div class="glass-card" style="max-width:440px; width:100%; padding:40px;"><h2 style="text-align:center;">Join FocusWell</h2><form id="registerForm"><input type="text" id="name" placeholder="Full Name" required style="width:100%; padding:14px; margin-bottom:14px; border-radius:60px;"><input type="email" id="email" placeholder="Email" required style="width:100%; padding:14px; margin-bottom:14px; border-radius:60px;"><input type="password" id="password" placeholder="Password" required style="width:100%; padding:14px; margin-bottom:24px; border-radius:60px;"><button type="submit" class="btn-primary" style="width:100%;">Start studying →</button></form><p style="text-align:center; margin-top:20px;"><a href="#" onclick="renderLogin(); return false;">Back to Login</a></p></div></div>`; document.getElementById('registerForm').addEventListener('submit',(e)=>{ e.preventDefault(); const name=document.getElementById('name').value, email=document.getElementById('email').value, password=document.getElementById('password').value; if(Storage.getUser(email)){ alert('User exists'); return; } const newUser={ name, email, password, studyStreak:0, points:0, level:1, xp:0, sleepQuality:7, anxietyLevel:3, totalFocusMins:0 }; Storage.saveUser(newUser); currentUser=newUser; Storage.setCurrent(newUser); renderDashboard(); }); }
+        // Text to Speech
+        function speakText(text) { const utterance = new SpeechSynthesisUtterance(text); utterance.rate = 0.9; utterance.pitch = 1; window.speechSynthesis.cancel(); window.speechSynthesis.speak(utterance); }
+        
+        // Note taking & highlighter
+        function saveNote(title, content) { Storage.saveNote({ id: Date.now(), title, content, createdAt: new Date().toISOString() }); renderNotes(); }
+        
+        function renderLogin() { document.getElementById('app').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;"><div class="glass-card" style="max-width:450px; width:100%; padding:48px; text-align:center;"><div class="floating" style="font-size:80px;">🎓✨</div><h1 style="font-size:40px;">FocusWell</h1><p style="margin:8px 0 24px;">AI-powered study ecosystem for peak performance</p><form id="loginForm"><input type="email" id="email" placeholder="Email" required style="width:100%; padding:14px; margin-bottom:14px; border-radius:60px; border:1px solid #ddd;"><input type="password" id="password" placeholder="Password" required style="width:100%; padding:14px; margin-bottom:24px; border-radius:60px; border:1px solid #ddd;"><button type="submit" class="btn-primary" style="width:100%;">Sign in →</button></form><p style="margin-top:24px;">New? <a href="#" onclick="renderRegister(); return false;" style="color:var(--primary);">Create free account</a></p><p style="margin-top:16px; font-size:13px;">Demo: student@focuswell.com / 123</p></div></div>`; document.getElementById('loginForm').addEventListener('submit',(e)=>{ e.preventDefault(); const email=document.getElementById('email').value, pwd=document.getElementById('password').value; const user=Storage.getUser(email); if(user && user.password===pwd){ currentUser=user; Storage.setCurrent(user); renderDashboard(); } else alert('Invalid credentials'); }); }
+        function renderRegister(){ document.getElementById('app').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;"><div class="glass-card" style="max-width:450px; width:100%; padding:48px;"><h2>Join FocusWell</h2><form id="registerForm"><input type="text" id="name" placeholder="Full Name" required><input type="email" id="email" placeholder="Email" required><input type="password" id="password" placeholder="Password" required><button type="submit" class="btn-primary">Start Learning →</button></form></div></div>`; document.getElementById('registerForm').addEventListener('submit',(e)=>{ e.preventDefault(); const name=document.getElementById('name').value, email=document.getElementById('email').value, password=document.getElementById('password').value; if(Storage.getUser(email)){ alert('User exists'); return; } const newUser={ name, email, password, studyStreak:0, points:0, level:1, xp:0, sleepQuality:7, anxietyLevel:3, totalFocusMins:0, stressHistory:[] }; Storage.saveUser(newUser); currentUser=newUser; Storage.setCurrent(newUser); renderDashboard(); }); }
         
         function renderDashboard() {
             currentScreen='dashboard';
-            const stress=stressAnalyzer.calculateStressLevel(currentUser);
-            const tasks=Storage.getTasks(); const pendingTasks=tasks.filter(t=>!t.completed).length;
-            const flashcards=Storage.getFlashcards(); const sessions=Storage.getStudySessions();
+            const stress = analyzeStressDetailed(currentUser.sleepQuality||7, currentUser.anxietyLevel||3);
+            const tasks = Storage.getTasks(); const pendingTasks = tasks.filter(t=>!t.completed).length;
+            const sessions = Storage.getStudySessions();
             const todayMins = sessions.filter(s=>new Date(s.date).toDateString()===new Date().toDateString()).reduce((sum,s)=>sum+(s.minutes||0),0);
             const xpProgress = ((currentUser.xp % 100) / 100) * 100;
             document.getElementById('app').innerHTML = `
-                <div class="nav-bar"><div class="logo"><span>🧠✨</span><span>FocusWell</span></div><div class="nav-links">
-                    ${['dashboard','tasks','flashcards','pomodoro','quizzes','studyroom','wellness','achievements'].map(s=>`<div class="nav-link ${currentScreen===s?'active':''}" onclick="render${s.charAt(0).toUpperCase()+s.slice(1)}()">${s==='dashboard'?'🏠 Home':s==='tasks'?'✅ Tasks':s==='flashcards'?'🃏 Cards':s==='pomodoro'?'🍅 Timer':s==='quizzes'?'📝 Quiz':s==='studyroom'?'🎮 Study':s==='wellness'?'💖 Wellness':'🏆 Awards'}</div>`).join('')}
-                    <div class="nav-link" onclick="logout()">🚪 Exit</div>
-                </div></div>
+                <div class="nav-bar"><div class="logo"><span>🧠✨</span><span>FocusWell</span></div><div class="theme-selector"><div class="theme-dot" style="background:#f8fafc; border:2px solid #4f46e5;" onclick="setTheme('light')"></div><div class="theme-dot" style="background:#1e293b;" onclick="setTheme('dark')"></div><div class="theme-dot" style="background:#fce7f3;" onclick="setTheme('pink')"></div></div><div class="nav-links">${['dashboard','tasks','notes','flashcards','pomodoro','quizzes','studyroom','wellness','achievements'].map(s=>`<div class="nav-link ${currentScreen===s?'active':''}" onclick="render${s.charAt(0).toUpperCase()+s.slice(1)}()">${s==='dashboard'?'🏠 Home':s==='tasks'?'✅ Tasks':s==='notes'?'📝 Notes':s==='flashcards'?'🃏 Cards':s==='pomodoro'?'🍅 Timer':s==='quizzes'?'📋 Quiz':s==='studyroom'?'🎮 Study':s==='wellness'?'💖 Wellness':'🏆 Awards'}</div>`).join('')}<div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>
                 <div class="main-container" style="max-width:1400px; margin:0 auto; padding:20px;">
-                    <div class="welcome-banner"><h1>👋 Hello, ${currentUser.name}!</h1><p>Your focused journey starts now. Let's achieve greatness together. 🚀</p>
-                    <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:18px;"><span style="background:rgba(255,255,255,0.2); padding:6px 14px; border-radius:40px;">🔥 ${currentUser.studyStreak} day streak</span><span>⭐ ${currentUser.points} points</span><span>🏆 Level ${currentUser.level}</span></div>
-                    <div class="progress-bar" style="margin-top:16px;"><div class="progress-fill" style="width: ${xpProgress}%"></div></div><p style="font-size:13px; margin-top:6px;">${currentUser.xp % 100}/100 XP to next level</p></div>
-                    <div class="grid-4"><div class="glass-card" style="padding:24px; text-align:center;"><div style="font-size:40px;">📖</div><h3>Focus Time</h3><p style="font-size:32px; font-weight:800;">${Math.floor(todayMins/60)}h ${todayMins%60}m</p><p>today</p></div>
-                    <div class="glass-card" style="padding:24px; text-align:center;"><div>✅</div><h3>Tasks</h3><p style="font-size:32px; font-weight:800;">${pendingTasks}</p><p>pending</p></div>
-                    <div class="glass-card" style="padding:24px; text-align:center;"><div>🃏</div><h3>Flashcards</h3><p style="font-size:32px;">${flashcards.length}</p><p>total</p></div>
-                    <div class="glass-card" style="padding:24px; text-align:center; background:white;"><div>${stress.emoji}</div><h3>Wellness</h3><p style="font-size:28px; font-weight:700; color:${stress.color};">${stress.score}%</p><p>${stress.level} stress</p></div></div>
-                    <div class="grid-3" style="margin-top:24px;"><div class="glass-card" style="padding:24px; cursor:pointer;" onclick="renderStudyTools()"><h3>✨ AI Study Guide</h3><p>Generate smart outlines for any topic</p><button class="btn-primary" style="margin-top:12px;">Generate →</button></div>
-                    <div class="glass-card" style="padding:24px; cursor:pointer;" onclick="startQuickQuiz()"><h3>📝 Quick Quiz</h3><p>5 questions to test your knowledge</p><button class="btn-primary">Start →</button></div>
-                    <div class="glass-card" style="padding:24px; background:linear-gradient(135deg,#4f46e5,#a855f7); color:white; cursor:pointer;" onclick="recordStudySession()"><h3>🎯 Log Session</h3><p>Track progress & earn XP</p><button class="btn-primary" style="background:white; color:#4f46e5;">Log Now</button></div></div>
+                    <div class="welcome-banner"><h1>👋 Hello, ${currentUser.name}!</h1><p>Your focused journey continues. Let's achieve greatness! 🚀</p>
+                    <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:18px;"><span>🔥 ${currentUser.studyStreak} day streak</span><span>⭐ ${currentUser.points} points</span><span>🏆 Level ${currentUser.level}</span></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${xpProgress}%"></div></div><p>${currentUser.xp % 100}/100 XP to next level</p></div>
+                    <div class="grid-4"><div class="glass-card" style="padding:24px; text-align:center;"><div style="font-size:48px;">📖</div><h3>Focus Time</h3><p style="font-size:36px; font-weight:800;">${Math.floor(todayMins/60)}h ${todayMins%60}m</p></div>
+                    <div class="glass-card" style="padding:24px; text-align:center;"><div style="font-size:48px;">✅</div><h3>Tasks</h3><p style="font-size:36px;">${pendingTasks}</p></div>
+                    <div class="glass-card" style="padding:24px; text-align:center;"><div style="font-size:48px;">🃏</div><h3>Flashcards</h3><p style="font-size:36px;">${Storage.getFlashcards().length}</p></div>
+                    <div class="glass-card" style="padding:24px; text-align:center; background:${stress.color}20;"><div style="font-size:48px;">${stress.emoji}</div><h3>Stress Level</h3><div class="stress-meter" style="margin-top:12px;"><div class="stress-fill" style="width: ${stress.score}%; background:${stress.color};"></div></div><p style="font-size:28px; font-weight:700; color:${stress.color};">${stress.score}%</p><p>${stress.level}</p></div></div>
+                    <div class="grid-3" style="margin-top:24px;"><div class="glass-card" style="padding:24px;" onclick="generateStudyNote()"><h3>✨ AI Study Note Generator</h3><p>Generate smart notes on any topic</p><button class="btn-primary">Generate →</button></div>
+                    <div class="glass-card" style="padding:24px;" onclick="startQuickQuiz()"><h3>📝 Quick Quiz</h3><p>Test knowledge with AI</p><button class="btn-primary">Start →</button></div>
+                    <div class="glass-card" style="padding:24px; background:linear-gradient(135deg,#4f46e5,#a855f7); color:white;" onclick="recordStudySession()"><h3>🎯 Log Session</h3><p>Track progress & earn XP</p><button class="btn-primary" style="background:white; color:#4f46e5;">Log Now</button></div></div>
+                    <div class="glass-card" style="padding:24px; margin-top:24px;"><h3>📋 Stress Management Tips</h3><div style="display:flex; gap:12px; flex-wrap:wrap;">${stress.suggestions.map(s=>`<span style="background:${stress.color}20; padding:8px 16px; border-radius:40px;">💡 ${s}</span>`).join('')}</div><button class="btn-secondary" onclick="speakText('Your stress level is ${stress.level}. ${stress.suggestions[0]}')">🔊 Read Aloud</button></div>
                 </div>
-                <div class="chatbot-container"><div class="chatbot-toggle" onclick="toggleChatbot()"><i class="fas fa-robot" style="font-size:30px; color:white;"></i></div><div class="chatbot-window" id="chatbotWindow"><div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark)); padding:16px; color:white; display:flex; justify-content:space-between;"><span>🤖 FocusWell AI Coach</span><i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatbot()"></i></div><div class="chat-messages" id="chatMessages" style="flex:1; overflow-y:auto; padding:16px;"><div class="message bot"><div class="message-bubble">Hi ${currentUser.name}! I'm your 24/7 study coach. Ask me anything 📚✨</div></div></div><div style="padding:12px; border-top:1px solid #eee; display:flex; gap:8px;"><input type="text" id="chatInput" placeholder="Ask for tips..." style="flex:1; padding:12px; border-radius:40px; border:1px solid #ddd;"><button onclick="sendChatMessage()" class="btn-primary" style="padding:8px 16px;">Send</button></div></div></div>
+                <div class="chatbot-container"><div class="chatbot-toggle" onclick="toggleChatbot()"><i class="fas fa-robot" style="font-size:32px;"></i></div><div class="chatbot-window" id="chatbotWindow"><div style="background:linear-gradient(135deg,var(--primary),var(--secondary)); padding:16px; color:white;"><span>🤖 FocusWell AI Coach</span><i class="fas fa-times" style="float:right; cursor:pointer;" onclick="toggleChatbot()"></i></div><div class="chat-messages" id="chatMessages" style="flex:1; overflow-y:auto; padding:16px;"><div class="message bot"><div class="message-bubble">Hi! Ask me anything about studying, stress, or motivation! ✨</div></div></div><div style="padding:12px; display:flex; gap:8px;"><input type="text" id="chatInput" placeholder="Type message..." style="flex:1; padding:12px; border-radius:40px;"><button onclick="sendChatMessage()" class="btn-primary">Send</button><button onclick="startSpeechToText((t)=>document.getElementById('chatInput').value=t)" style="background:#f1f5f9; border:none; border-radius:40px; padding:12px;"><i class="fas fa-microphone"></i></button></div></div></div>
             `;
         }
-        function renderTasks(){ currentScreen='tasks'; const tasks=Storage.getTasks(); document.getElementById('app').innerHTML = getNavHTML('tasks')+`<div class="main-container"><div class="glass-card" style="padding:28px; margin-bottom:24px;"><h3>➕ New Task</h3><form id="taskForm"><input type="text" id="taskTitle" placeholder="e.g., Review chapter 4" required style="width:100%; padding:12px; margin-bottom:12px; border-radius:40px;"><input type="date" id="taskDeadline" required style="width:100%; padding:12px; margin-bottom:12px; border-radius:40px;"><select id="taskPriority"><option value="low">🟢 Low</option><option value="medium" selected>🟡 Medium</option><option value="high">🔴 High</option></select><button type="submit" class="btn-primary" style="margin-top:12px;">Add Task</button></form></div><div class="glass-card" style="padding:28px;"><h3>📋 My Tasks</h3><div id="tasksList">${tasks.length===0?'<p>No tasks. Create one to boost productivity!</p>':tasks.map(task=>`<div class="task-item"><div style="display:flex; gap:12px; align-items:center;"><input type="checkbox" ${task.completed?'checked':''} onchange="toggleTask('${task.id}')"><div><strong style="${task.completed?'text-decoration:line-through; opacity:0.6':''}">${task.title}</strong><div style="font-size:12px;">📅 ${task.deadline} • ${task.priority}</div></div></div><button class="btn-secondary" style="padding:6px 12px;" onclick="deleteTask('${task.id}')">Delete</button></div>`).join('')}</div></div></div>`; document.getElementById('taskForm')?.addEventListener('submit',(e)=>{ e.preventDefault(); const title=document.getElementById('taskTitle').value, deadline=document.getElementById('taskDeadline').value, priority=document.getElementById('taskPriority').value; Storage.saveTask({ id:Date.now().toString(), title, deadline, priority, completed:false, createdAt:new Date().toISOString() }); renderTasks(); }); }
-        function toggleTask(id){ const tasks=Storage.getTasks(); const task=tasks.find(t=>t.id===id); if(task){ task.completed=!task.completed; localStorage.setItem('focuswell_tasks_v2',JSON.stringify(tasks)); if(task.completed){ addPointsAndXP(10,10); } renderTasks(); } }
+        
+        async function generateStudyNote() {
+            const topic = prompt("Enter topic for AI notes:", "Machine Learning Basics");
+            if(topic) {
+                const loading = alert("Generating smart notes... (AI demo)");
+                const fakeNote = `📘 ${topic.toUpperCase()} STUDY NOTES\n\n1. Introduction: ${topic} is a fascinating field.\n2. Key Concepts: Core principles include active learning and practice.\n3. Summary: Consistent revision yields mastery.\n✨ Pro tip: Create flashcards from these notes!`;
+                Storage.saveNote({ id: Date.now(), title: `${topic} Notes`, content: fakeNote, createdAt: new Date().toISOString() });
+                alert(`Notes for "${topic}" saved! Check Notes section.`);
+                renderNotes();
+            }
+        }
+        
+        function renderNotes() {
+            currentScreen='notes';
+            const notes = Storage.getNotes();
+            document.getElementById('app').innerHTML = getNavHTML('notes')+`<div class="main-container"><div class="glass-card" style="padding:28px;"><h3>📝 Smart Notes & Highlighter</h3><div style="display:flex; gap:12px; margin-bottom:20px;"><button class="btn-primary" onclick="createNewNote()">+ New Note</button><button class="btn-secondary" onclick="speakText(document.getElementById('noteContent')?.innerText || 'No note selected')">🔊 Read Selected</button></div><div id="notesList" style="max-height:300px; overflow-y:auto;">${notes.map(n=>`<div class="note-card" onclick="viewNote('${n.id}')"><strong>${n.title}</strong><p style="font-size:12px;">${new Date(n.createdAt).toLocaleString()}</p><button onclick="event.stopPropagation(); Storage.deleteNote('${n.id}'); renderNotes();">🗑️</button></div>`).join('')}</div><div id="noteViewer" style="margin-top:20px; padding:20px; background:var(--light); border-radius:20px;"><p>Select a note to view or edit</p></div></div></div>`;
+        }
+        function createNewNote(){ const title=prompt("Note title"); if(title){ const content=prompt("Note content"); if(content) Storage.saveNote({ id:Date.now(), title, content, createdAt:new Date().toISOString() }); renderNotes(); } }
+        function viewNote(id){ const note=Storage.getNotes().find(n=>n.id==id); if(note){ document.getElementById('noteViewer').innerHTML=`<h4>${note.title}</h4><div id="noteContent" style="white-space:pre-wrap;">${note.content}</div><div><button class="btn-secondary" onclick="speakText('${note.content}')">🔊 Read</button><button class="btn-secondary" onclick="highlightText()">🟡 Highlight</button></div>`; } }
+        function highlightText(){ const selection = window.getSelection(); if(selection.rangeCount){ const range = selection.getRangeAt(0); const span = document.createElement('span'); span.style.backgroundColor = currentHighlightColor; span.style.padding = '2px'; range.surroundContents(span); } }
+        
+        function renderTasks(){ currentScreen='tasks'; const tasks=Storage.getTasks(); document.getElementById('app').innerHTML = getNavHTML('tasks')+`<div class="main-container"><div class="glass-card" style="padding:28px;"><h3>➕ New Task</h3><form id="taskForm"><input type="text" id="taskTitle" placeholder="Task" required><input type="date" id="taskDeadline"><select id="taskPriority"><option>Low</option><option selected>Medium</option><option>High</option></select><button type="submit" class="btn-primary">Add</button></form><div id="tasksList">${tasks.map(t=>`<div class="task-item"><input type="checkbox" ${t.completed?'checked':''} onchange="toggleTask('${t.id}')"><span>${t.title}</span><button onclick="deleteTask('${t.id}')">🗑️</button></div>`).join('')}</div></div></div>`; document.getElementById('taskForm')?.addEventListener('submit',(e)=>{ e.preventDefault(); Storage.saveTask({ id:Date.now().toString(), title:document.getElementById('taskTitle').value, deadline:document.getElementById('taskDeadline').value, priority:document.getElementById('taskPriority').value, completed:false }); renderTasks(); }); }
+        function toggleTask(id){ const tasks=Storage.getTasks(); const task=tasks.find(t=>t.id===id); if(task){ task.completed=!task.completed; localStorage.setItem('focuswell_tasks_v3',JSON.stringify(tasks)); if(task.completed) addPointsAndXP(10,10); renderTasks(); } }
         function deleteTask(id){ Storage.deleteTask(id); renderTasks(); }
-        function renderFlashcards(){ currentScreen='flashcards'; let cards=Storage.getFlashcards(); document.getElementById('app').innerHTML = getNavHTML('flashcards')+`<div class="main-container"><div class="grid-2"><div class="glass-card" style="padding:28px;"><h3>✨ Create Flashcard</h3><form id="flashcardForm"><input type="text" id="cardTopic" placeholder="Topic" required><input type="text" id="cardQuestion" placeholder="Question" required><input type="text" id="cardAnswer" placeholder="Answer" required><button type="submit" class="btn-primary">Save Card</button></form><div style="margin-top:20px;"><h4>Your Cards</h4>${cards.map(c=>`<div style="background:#f1f5f9; margin:8px 0; padding:8px 12px; border-radius:20px; display:flex; justify-content:space-between;"><span><strong>${c.topic}</strong>: ${c.question}</span><button onclick="deleteFlashcardById('${c.id}')" style="background:none; border:none; color:red;">🗑️</button></div>`).join('')}</div></div><div class="glass-card" style="padding:28px; text-align:center;"><h3>🃏 Study Mode</h3>${cards.length>0?`<div class="flashcard" id="flashcardDisplay" onclick="flipCurrentCard()"><div id="flashcardContent"><p style="font-size:20px;">❓ ${cards[currentFlashcardIndex]?.question}</p><p style="font-size:13px;">Click to flip</p></div></div><div style="display:flex; gap:12px; justify-content:center; margin-top:20px;"><button class="btn-secondary" onclick="previousFlashcard()">◀ Prev</button><button class="btn-secondary" onclick="nextFlashcard()">Next ▶</button></div><p>${currentFlashcardIndex+1}/${cards.length}</p>`:'<p>Create your first flashcard above ☝️</p>'}</div></div></div>`; document.getElementById('flashcardForm')?.addEventListener('submit',(e)=>{ e.preventDefault(); Storage.saveFlashcard({ id:Date.now(), topic:document.getElementById('cardTopic').value, question:document.getElementById('cardQuestion').value, answer:document.getElementById('cardAnswer').value }); renderFlashcards(); }); }
-        function deleteFlashcardById(id){ let cards=Storage.getFlashcards(); cards=cards.filter(c=>c.id!=id); localStorage.setItem('focuswell_flashcards_v2',JSON.stringify(cards)); if(currentFlashcardIndex>=cards.length-1 && cards.length>0) currentFlashcardIndex=cards.length-1; else if(cards.length===0) currentFlashcardIndex=0; renderFlashcards(); }
-        function flipCurrentCard(){ const cards=Storage.getFlashcards(); if(!cards[currentFlashcardIndex]) return; const div=document.getElementById('flashcardContent'); const showingQuestion=div.innerHTML.includes(cards[currentFlashcardIndex].question); if(showingQuestion) div.innerHTML=`<p style="font-size:20px;">💡 ${cards[currentFlashcardIndex].answer}</p><p style="font-size:13px;">Click for question</p>`; else div.innerHTML=`<p style="font-size:20px;">❓ ${cards[currentFlashcardIndex].question}</p><p style="font-size:13px;">Click for answer</p>`; }
-        function previousFlashcard(){ const cards=Storage.getFlashcards(); if(cards.length){ currentFlashcardIndex=(currentFlashcardIndex-1+cards.length)%cards.length; renderFlashcards(); } }
+        
+        function renderFlashcards(){ currentScreen='flashcards'; let cards=Storage.getFlashcards(); document.getElementById('app').innerHTML = getNavHTML('flashcards')+`<div class="main-container"><div class="grid-2"><div class="glass-card" style="padding:28px;"><h3>Create Card</h3><form id="flashcardForm"><input placeholder="Topic"><input placeholder="Question"><input placeholder="Answer"><button type="submit">Save</button></form><div>${cards.map(c=>`<div>${c.question} <button onclick="deleteFlashcardById('${c.id}')">❌</button></div>`).join('')}</div></div><div class="glass-card" style="padding:28px;"><h3>Study Mode</h3>${cards.length?`<div class="flashcard-3d" id="flashcard3d" onclick="flipCard3d()"><div style="backface-visibility:hidden;"><p>${cards[currentFlashcardIndex]?.question}</p></div><div style="backface-visibility:hidden; transform:rotateY(180deg);"><p>${cards[currentFlashcardIndex]?.answer}</p></div></div><button onclick="nextFlashcard()">Next</button>`:'No cards'}</div></div></div>`; document.getElementById('flashcardForm')?.addEventListener('submit',(e)=>{ e.preventDefault(); const inputs=e.target.querySelectorAll('input'); Storage.saveFlashcard({ id:Date.now(), topic:inputs[0].value, question:inputs[1].value, answer:inputs[2].value }); renderFlashcards(); }); }
         function nextFlashcard(){ const cards=Storage.getFlashcards(); if(cards.length){ currentFlashcardIndex=(currentFlashcardIndex+1)%cards.length; renderFlashcards(); } }
-        function renderPomodoro(){ currentScreen='pomodoro'; document.getElementById('app').innerHTML = getNavHTML('pomodoro')+`<div class="main-container"><div class="glass-card" style="padding:48px; text-align:center;"><h2>🍅 Focus Timer</h2><div class="pomodoro-timer" id="pomodoroDisplay">25:00</div><div style="display:flex; gap:12px; justify-content:center;"><button class="btn-primary" onclick="startPomodoro()">▶ Start</button><button class="btn-secondary" onclick="pausePomodoro()">⏸ Pause</button><button class="btn-secondary" onclick="resetPomodoro()">🔄 Reset</button></div><p style="margin-top:24px;">🎯 25 min work → 5 min break → repeat</p></div></div>`; resetPomodoro(); }
-        function startPomodoro(){ if(!isPomodoroRunning){ isPomodoroRunning=true; pomodoroInterval=setInterval(()=>{ if(pomodoroSeconds>0){ pomodoroSeconds--; updatePomodoroDisplay(); } else { pausePomodoro(); alert("🎉 Session complete! Great focus! +15 XP"); recordStudySession(25); resetPomodoro(); } },1000); } }
+        function flipCard3d(){ document.getElementById('flashcard3d')?.classList.toggle('flipped'); }
+        function deleteFlashcardById(id){ Storage.deleteFlashcard(id); renderFlashcards(); }
+        
+        function renderPomodoro(){ currentScreen='pomodoro'; document.getElementById('app').innerHTML = getNavHTML('pomodoro')+`<div class="main-container"><div class="glass-card" style="padding:48px; text-align:center;"><h2>🍅 Focus Timer</h2><div class="pomodoro-timer" style="font-size:72px;" id="pomodoroDisplay">25:00</div><button class="btn-primary" onclick="startPomodoro()">Start</button><button class="btn-secondary" onclick="pausePomodoro()">Pause</button><button class="btn-secondary" onclick="resetPomodoro()">Reset</button><button class="btn-secondary" onclick="speakText('Focus session started')">🔊</button></div></div>`; resetPomodoro(); }
+        function startPomodoro(){ if(!isPomodoroRunning){ isPomodoroRunning=true; pomodoroInterval=setInterval(()=>{ if(pomodoroSeconds>0){ pomodoroSeconds--; updatePomodoroDisplay(); } else { pausePomodoro(); alert("Session complete!"); recordStudySession(25); resetPomodoro(); } },1000); } }
         function pausePomodoro(){ if(pomodoroInterval){ clearInterval(pomodoroInterval); pomodoroInterval=null; isPomodoroRunning=false; } }
         function resetPomodoro(){ pausePomodoro(); pomodoroSeconds=25*60; updatePomodoroDisplay(); }
-        function updatePomodoroDisplay(){ const el=document.getElementById('pomodoroDisplay'); if(el){ const m=Math.floor(pomodoroSeconds/60), s=pomodoroSeconds%60; el.textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; } }
-        function renderQuizzes(){ currentScreen='quizzes'; const results=Storage.getQuizzes(); document.getElementById('app').innerHTML = getNavHTML('quizzes')+`<div class="main-container"><div class="glass-card" style="padding:32px; text-align:center;"><h3>📝 Study Habits Mastery</h3><p>5 essential questions about learning science</p><button class="btn-primary" onclick="startQuiz()">Start Quiz →</button></div>${results.length?`<div class="glass-card" style="margin-top:20px; padding:24px;"><h3>📊 Past Results</h3>${results.slice(-5).map(r=>`<p>${new Date(r.date).toLocaleDateString()}: ${r.score}/${r.total} (${Math.round(r.score/r.total*100)}%) +${r.points}pts</p>`).join('')}</div>`:''}</div>`; }
-        function startQuiz(){ currentQuiz={ questions:[{text:"Best study technique for long-term memory?",options:["Highlighting","Passive reading","Active recall","Re-writing notes"],correct:2},{text:"Ideal Pomodoro length?",options:["15min","25min","45min","60min"],correct:1},{text:"Which reduces exam anxiety most?",options:["Cramming","Deep breathing","More caffeine","Skipping sleep"],correct:1},{text:"How often to review flashcards?",options:["Once a month","Spaced repetition","Only before exam","Never"],correct:1},{text:"Optimal sleep for students?",options:["4-5h","6-7h","7-9h","10+h"],correct:2}] }; quizAnswers=[]; quizIndex=0; renderQuizQuestion(); }
-        function renderQuizQuestion(){ if(quizIndex>=currentQuiz.questions.length){ const score=quizAnswers.filter((a,i)=>a===currentQuiz.questions[i].correct).length; const points=score*25; addPointsAndXP(points, points); Storage.saveQuizResult({ date:new Date().toISOString(), score, total:currentQuiz.questions.length, points }); alert(`🎉 Quiz complete! Score: ${score}/${currentQuiz.questions.length} → +${points} points!`); renderQuizzes(); return; } const q=currentQuiz.questions[quizIndex]; document.getElementById('app').innerHTML = `<div class="nav-bar"><div class="logo">🧠✨ FocusWell</div></div><div class="main-container"><div class="glass-card" style="padding:36px;"><h3>📝 Question ${quizIndex+1}/${currentQuiz.questions.length}</h3><h4 style="margin:24px 0;">${q.text}</h4>${q.options.map((opt,i)=>`<div class="quiz-option" onclick="answerQuiz(${i})">${opt}</div>`).join('')}</div></div>`; }
+        function updatePomodoroDisplay(){ const el=document.getElementById('pomodoroDisplay'); if(el){ const m=Math.floor(pomodoroSeconds/60), s=pomodoroSeconds%60; el.textContent=`${m}:${s.toString().padStart(2,'0')}`; } }
+        
+        function renderQuizzes(){ currentScreen='quizzes'; document.getElementById('app').innerHTML = getNavHTML('quizzes')+`<div class="main-container"><div class="glass-card" style="padding:32px;"><h3>📝 Study Quiz</h3><button class="btn-primary" onclick="startQuiz()">Start Quiz →</button></div></div>`; }
+        function startQuiz(){ currentQuiz={ questions:[{text:"Best study technique?",options:["Highlighting","Active Recall","Re-reading"],correct:1},{text:"Pomodoro length?",options:["25min","45min"],correct:0},{text:"Stress reducer?",options:["Breathing","Caffeine"],correct:0}] }; quizAnswers=[]; quizIndex=0; renderQuizQuestion(); }
+        function renderQuizQuestion(){ if(quizIndex>=currentQuiz.questions.length){ const score=quizAnswers.filter((a,i)=>a===currentQuiz.questions[i].correct).length; addPointsAndXP(score*20,score*15); alert(`Score: ${score}/${currentQuiz.questions.length}`); renderQuizzes(); return; } const q=currentQuiz.questions[quizIndex]; document.getElementById('app').innerHTML = `<div class="main-container"><div class="glass-card"><h3>Question ${quizIndex+1}</h3><p>${q.text}</p>${q.options.map((opt,i)=>`<div class="quiz-option" onclick="answerQuiz(${i})">${opt}</div>`).join('')}</div></div>`; }
         function answerQuiz(idx){ quizAnswers[quizIndex]=idx; quizIndex++; renderQuizQuestion(); }
-        function renderStudyRoom(){ currentScreen='studyroom'; const plantStage=Storage.getPlantStage(); const plantEmojis=['🌱','🌿','🌳','🌸','🍎']; document.getElementById('app').innerHTML = getNavHTML('studyroom')+`<div class="main-container"><div class="grid-3"><div class="study-room-card" onclick="playStudyMusic()"><i class="fas fa-headphones" style="font-size:48px;"></i><h3>Lo-Fi Focus</h3><p>Deep work ambiance</p><button class="btn-primary">Play 🎧</button></div><div class="study-room-card" onclick="growVirtualPlant()"><i class="fas fa-seedling" style="font-size:48px;"></i><h3>Virtual Garden</h3><p id="plantMsg">${plantEmojis[plantStage-1]} Stage ${plantStage}/5</p><button class="btn-primary">Study & Grow</button></div><div class="study-room-card" onclick="joinStudyGroup()"><i class="fas fa-user-friends" style="font-size:48px;"></i><h3>Study Together</h3><p>Global accountability</p><button class="btn-primary">Join Room</button></div></div></div>`; }
-        function growVirtualPlant(){ let stage=Storage.getPlantStage(); if(stage<5){ stage++; Storage.setPlantStage(stage); alert(`🌿 Your plant grew! Stage ${stage}/5 — Keep studying!`); renderStudyRoom(); } else alert("🌳 Your tree is fully grown! Amazing consistency!"); recordStudySession(15); }
-        function playStudyMusic(){ alert("🎵 Playing lo-fi beats · focus mode activated"); }
-        function joinStudyGroup(){ alert("👥 You joined 'Focus Room Alpha' — stay accountable!"); }
-        function renderWellness(){ currentScreen='wellness'; const stress=stressAnalyzer.calculateStressLevel(currentUser); document.getElementById('app').innerHTML = getNavHTML('wellness')+`<div class="main-container"><div class="grid-2"><div class="glass-card" style="padding:28px;"><h3>💖 Wellness Check-in</h3><form id="wellnessForm"><label>Sleep Quality (0-10)</label><input type="range" id="sleep" min="0" max="10" value="${currentUser.sleepQuality||7}" step="1"><span id="sleepVal">${currentUser.sleepQuality||7}/10</span><label>Anxiety / Stress (0-10)</label><input type="range" id="anxiety" min="0" max="10" value="${currentUser.anxietyLevel||3}" step="1"><span id="anxietyVal">${currentUser.anxietyLevel||3}/10</span><button type="submit" class="btn-primary" style="margin-top:20px;">Update & Save</button></form></div><div class="glass-card" style="padding:28px;"><h3>🧘 Mind Reset</h3><button class="btn-primary" onclick="startBreathing()">🌬️ 4-7-8 Breathing</button><button class="btn-secondary" onclick="showAffirmation()">✨ Daily Affirmation</button><div style="margin-top:24px; background:#f1f5f9; border-radius:24px; padding:20px;"><p><strong>Current Stress:</strong> ${stress.level}</p><p>${stress.advice}</p></div></div></div></div>`; document.getElementById('sleep')?.addEventListener('input',(e)=>document.getElementById('sleepVal').innerText=e.target.value+'/10'); document.getElementById('anxiety')?.addEventListener('input',(e)=>document.getElementById('anxietyVal').innerText=e.target.value+'/10'); document.getElementById('wellnessForm')?.addEventListener('submit',(e)=>{ e.preventDefault(); currentUser.sleepQuality=parseInt(document.getElementById('sleep').value); currentUser.anxietyLevel=parseInt(document.getElementById('anxiety').value); Storage.updateUser(currentUser.email,{ sleepQuality:currentUser.sleepQuality, anxietyLevel:currentUser.anxietyLevel }); alert('Wellness updated! 💙'); renderDashboard(); }); }
-        function renderAchievements(){ currentScreen='achievements'; const tasks=Storage.getTasks(); const flashcards=Storage.getFlashcards(); const sessions=Storage.getStudySessions(); const achievements=[{name:"First Win",desc:"Complete 1 task",icon:"🎯",earned:tasks.some(t=>t.completed)},{name:"Card Creator",desc:"5 flashcards",icon:"🃏",earned:flashcards.length>=5},{name:"Focus Streak",desc:"3 study days",icon:"🔥",earned:(currentUser.studyStreak||0)>=3},{name:"Perfect Quiz",desc:"100% score",icon:"🏆",earned:Storage.getQuizzes().some(q=>q.score===q.total)},{name:"10 Sessions",desc:"10 study logs",icon:"⭐",earned:sessions.length>=10},{name:"Elite Level",desc:"Level 3+",icon:"📈",earned:(currentUser.level||1)>=3}]; document.getElementById('app').innerHTML = getNavHTML('achievements')+`<div class="main-container"><div class="grid-3">${achievements.map(a=>`<div class="achievement-card" style="opacity:${a.earned?1:0.5}"><div class="achievement-badge">${a.icon}</div><h4>${a.name}</h4><p>${a.desc}</p>${a.earned?'✅ Unlocked!':'🔒 Locked'}</div>`).join('')}</div></div>`; }
-        function getNavHTML(active){ return `<div class="nav-bar"><div class="logo"><span>🧠✨</span><span>FocusWell</span></div><div class="nav-links"><div class="nav-link ${active==='dashboard'?'active':''}" onclick="renderDashboard()">🏠 Home</div><div class="nav-link ${active==='tasks'?'active':''}" onclick="renderTasks()">✅ Tasks</div><div class="nav-link ${active==='flashcards'?'active':''}" onclick="renderFlashcards()">🃏 Cards</div><div class="nav-link ${active==='pomodoro'?'active':''}" onclick="renderPomodoro()">🍅 Timer</div><div class="nav-link ${active==='quizzes'?'active':''}" onclick="renderQuizzes()">📝 Quiz</div><div class="nav-link ${active==='studyroom'?'active':''}" onclick="renderStudyRoom()">🎮 Study</div><div class="nav-link ${active==='wellness'?'active':''}" onclick="renderWellness()">💖 Wellness</div><div class="nav-link ${active==='achievements'?'active':''}" onclick="renderAchievements()">🏆 Awards</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>`; }
-        function renderStudyTools(){ const topic=prompt("Enter topic for AI Study Guide:","Neuroscience Basics"); if(topic){ alert(`✨ Generating smart guide for ${topic}...`); const guideDiv=document.createElement('div'); guideDiv.className='glass-card'; guideDiv.style.padding='24px'; guideDiv.style.marginTop='20px'; guideDiv.innerHTML=`<h3>📖 AI Study Plan: ${topic}</h3><p>1️⃣ Core concepts & definitions<br>2️⃣ Key principles & applications<br>3️⃣ Practice problems & quizzes<br>4️⃣ Common misconceptions<br>💡 Pro tip: Use active recall every 48h.</p><button class="btn-primary" onclick="createFlashcardsFromGuide('${topic}')">Generate Flashcards</button>`; document.querySelector('.main-container')?.appendChild(guideDiv); } }
-        function createFlashcardsFromGuide(topic){ for(let i=1;i<=3;i++) Storage.saveFlashcard({ id:Date.now()+i, topic, question:`${topic} concept ${i}`, answer:`Master ${topic} by reviewing case ${i}` }); alert(`3 flashcards for ${topic} created!`); renderFlashcards(); }
+        function renderStudyRoom(){ currentScreen='studyroom'; document.getElementById('app').innerHTML = getNavHTML('studyroom')+`<div class="main-container"><div class="grid-3"><div class="study-room-card" style="background:linear-gradient(135deg,#1e293b,#0f172a); color:white; padding:32px; border-radius:32px;" onclick="window.open('https://www.youtube.com/watch?v=5qap5aO4i9A','_blank')"><i class="fas fa-music" style="font-size:48px;"></i><h3>Lo-Fi Radio</h3><button class="btn-primary">Play</button></div><div class="study-room-card" style="background:linear-gradient(135deg,#2d3a4e,#1a2538);" onclick="joinGlobalStudy()"><i class="fas fa-globe" style="font-size:48px;"></i><h3>Global Study Room</h3><p>Connect with students worldwide</p><button class="btn-primary">Join</button></div><div class="study-room-card" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);" onclick="speakText('You are in the focus zone')"><i class="fas fa-brain" style="font-size:48px;"></i><h3>Focus Music</h3><button class="btn-primary">Ambient</button></div></div></div>`; }
+        function joinGlobalStudy(){ alert("🌍 You've joined the Global Focus Room! 342 students online. Stay productive!"); }
+        function renderWellness(){ currentScreen='wellness'; const stress=analyzeStressDetailed(currentUser.sleepQuality||7, currentUser.anxietyLevel||3); document.getElementById('app').innerHTML = getNavHTML('wellness')+`<div class="main-container"><div class="grid-2"><div class="glass-card"><h3>💖 Wellness Check</h3><label>Sleep (0-10)</label><input type="range" id="sleep" min="0" max="10" value="${currentUser.sleepQuality||7}"><label>Anxiety (0-10)</label><input type="range" id="anxiety" min="0" max="10" value="${currentUser.anxietyLevel||3}"><button class="btn-primary" onclick="updateWellness()">Update</button></div><div class="glass-card"><h3>🧘 Stress Tools</h3><button class="btn-primary" onclick="startBreathing()">🌬️ Breathing Exercise</button><button class="btn-secondary" onclick="showAffirmation()">✨ Affirmation</button><div style="margin-top:20px;"><p>Stress Score: ${stress.score}%</p><p>${stress.suggestions[0]}</p></div></div></div></div>`; }
+        function updateWellness(){ currentUser.sleepQuality=parseInt(document.getElementById('sleep').value); currentUser.anxietyLevel=parseInt(document.getElementById('anxiety').value); Storage.updateUser(currentUser.email,{ sleepQuality:currentUser.sleepQuality, anxietyLevel:currentUser.anxietyLevel }); alert("Wellness updated!"); renderDashboard(); }
+        function renderAchievements(){ currentScreen='achievements'; const achievements=[{name:"Task Master",earned:Storage.getTasks().some(t=>t.completed)},{name:"Card Creator",earned:Storage.getFlashcards().length>=3},{name:"Focus Streak",earned:(currentUser.studyStreak||0)>=2}]; document.getElementById('app').innerHTML = getNavHTML('achievements')+`<div class="main-container"><div class="grid-3">${achievements.map(a=>`<div class="achievement-card"><div class="achievement-badge">🏆</div><h4>${a.name}</h4>${a.earned?'✅':'🔒'}</div>`).join('')}</div></div>`; }
+        function getNavHTML(active){ return `<div class="nav-bar"><div class="logo">🧠✨ FocusWell</div><div class="nav-links"><div class="nav-link ${active==='dashboard'?'active':''}" onclick="renderDashboard()">🏠 Home</div><div class="nav-link ${active==='tasks'?'active':''}" onclick="renderTasks()">✅ Tasks</div><div class="nav-link ${active==='notes'?'active':''}" onclick="renderNotes()">📝 Notes</div><div class="nav-link ${active==='flashcards'?'active':''}" onclick="renderFlashcards()">🃏 Cards</div><div class="nav-link ${active==='pomodoro'?'active':''}" onclick="renderPomodoro()">🍅 Timer</div><div class="nav-link ${active==='quizzes'?'active':''}" onclick="renderQuizzes()">📋 Quiz</div><div class="nav-link ${active==='studyroom'?'active':''}" onclick="renderStudyRoom()">🎮 Study</div><div class="nav-link ${active==='wellness'?'active':''}" onclick="renderWellness()">💖 Wellness</div><div class="nav-link ${active==='achievements'?'active':''}" onclick="renderAchievements()">🏆 Awards</div><div class="nav-link" onclick="logout()">🚪 Exit</div></div></div>`; }
+        function recordStudySession(mins=null){ let m=mins||prompt("Minutes studied?"); if(m){ Storage.saveStudySession({ date:new Date().toISOString(), minutes:parseInt(m), hours:parseInt(m)/60 }); addPointsAndXP(parseInt(m)*1.5, parseInt(m)); alert(`+${parseInt(m)*1.5} points!`); renderDashboard(); } }
         function startQuickQuiz(){ startQuiz(); }
-        function startBreathing(){ alert("🧘 4-7-8 breathing: Inhale 4s → Hold 7s → Exhale 8s. Repeat 4 cycles."); }
-        function showAffirmation(){ const affs=["I am focused and capable","Every study session makes me sharper","I deserve calmness and success"]; alert(`✨ ${affs[Math.floor(Math.random()*affs.length)]} ✨`); }
+        function startBreathing(){ alert("🧘 4-7-8 Breathing: Inhale 4s, Hold 7s, Exhale 8s"); speakText("Start breathing exercise"); }
+        function showAffirmation(){ const affs=["I am focused and capable","Every session builds my future"]; alert(`✨ ${affs[Math.floor(Math.random()*affs.length)]}`); }
+        async function sendChatMessage(){ const input=document.getElementById('chatInput'); const msg=input.value.trim(); if(!msg)return; const chatDiv=document.getElementById('chatMessages'); chatDiv.innerHTML+=`<div class="message user"><div class="message-bubble">${msg}</div></div>`; input.value=''; const loadingId=setTimeout(()=>{ chatDiv.innerHTML+=`<div class="message bot"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`; },200); const response=await getAIResponse(msg); clearTimeout(loadingId); chatDiv.innerHTML=chatDiv.innerHTML.replace(/<div class="message bot">.*?<\/div>$/,''); chatDiv.innerHTML+=`<div class="message bot"><div class="message-bubble">${response}</div></div>`; chatDiv.scrollTop=chatDiv.scrollHeight; }
         function toggleChatbot(){ document.getElementById('chatbotWindow')?.classList.toggle('open'); }
-        function sendChatMessage(){ const input=document.getElementById('chatInput'); const msg=input.value.trim(); if(!msg)return; const chatDiv=document.getElementById('chatMessages'); chatDiv.innerHTML+=`<div class="message user"><div class="message-bubble">${msg}</div></div>`; input.value=''; setTimeout(()=>{ const reply=chatbot.getResponse(msg); chatDiv.innerHTML+=`<div class="message bot"><div class="message-bubble">${reply}</div></div>`; chatDiv.scrollTop=chatDiv.scrollHeight; },200); }
-        function logout(){ Storage.clearCurrent(); currentUser=null; renderLogin(); }
-        window.renderDashboard=renderDashboard; window.renderTasks=renderTasks; window.renderFlashcards=renderFlashcards; window.renderPomodoro=renderPomodoro; window.renderQuizzes=renderQuizzes; window.renderStudyRoom=renderStudyRoom; window.renderWellness=renderWellness; window.renderAchievements=renderAchievements; window.renderStudyTools=renderStudyTools; window.startPomodoro=startPomodoro; window.pausePomodoro=pausePomodoro; window.resetPomodoro=resetPomodoro; window.startQuiz=startQuiz; window.answerQuiz=answerQuiz; window.recordStudySession=recordStudySession; window.toggleTask=toggleTask; window.deleteTask=deleteTask; window.flipCurrentCard=flipCurrentCard; window.previousFlashcard=previousFlashcard; window.nextFlashcard=nextFlashcard; window.deleteFlashcardById=deleteFlashcardById; window.growVirtualPlant=growVirtualPlant; window.playStudyMusic=playStudyMusic; window.joinStudyGroup=joinStudyGroup; window.startBreathing=startBreathing; window.showAffirmation=showAffirmation; window.toggleChatbot=toggleChatbot; window.sendChatMessage=sendChatMessage; window.logout=logout; window.createFlashcardsFromGuide=createFlashcardsFromGuide; window.startQuickQuiz=startQuickQuiz;
-        init();
-        function init(){ if(!Storage.getCurrent()) renderLogin(); else { currentUser=Storage.getCurrent(); renderDashboard(); } }
+        function setTheme(theme){ if(theme==='dark') document.body.classList.add('dark-mode'); else document.body.classList.remove('dark-mode'); if(theme==='pink') document.body.style.background='linear-gradient(145deg, #fdf2f8 0%, #fce7f3 100%)'; else if(theme!=='dark') document.body.style.background=''; Storage.setTheme(theme); }
+        function logout(){ Storage.clearCurrent(); renderLogin(); }
+        
+        window.renderDashboard=renderDashboard; window.renderTasks=renderTasks; window.renderNotes=renderNotes; window.renderFlashcards=renderFlashcards; window.renderPomodoro=renderPomodoro; window.renderQuizzes=renderQuizzes; window.renderStudyRoom=renderStudyRoom; window.renderWellness=renderWellness; window.renderAchievements=renderAchievements; window.toggleTask=toggleTask; window.deleteTask=deleteTask; window.nextFlashcard=nextFlashcard; window.deleteFlashcardById=deleteFlashcardById; window.flipCard3d=flipCard3d; window.startPomodoro=startPomodoro; window.pausePomodoro=pausePomodoro; window.resetPomodoro=resetPomodoro; window.startQuiz=startQuiz; window.answerQuiz=answerQuiz; window.recordStudySession=recordStudySession; window.startQuickQuiz=startQuickQuiz; window.sendChatMessage=sendChatMessage; window.toggleChatbot=toggleChatbot; window.logout=logout; window.updateWellness=updateWellness; window.startBreathing=startBreathing; window.showAffirmation=showAffirmation; window.generateStudyNote=generateStudyNote; window.startSpeechToText=startSpeechToText; window.speakText=speakText; window.createNewNote=createNewNote; window.viewNote=viewNote; window.highlightText=highlightText; window.setTheme=setTheme; window.joinGlobalStudy=joinGlobalStudy;
+        
+        const savedTheme=Storage.getTheme(); if(savedTheme==='dark') document.body.classList.add('dark-mode');
+        if(Storage.getCurrent()){ currentUser=Storage.getCurrent(); renderDashboard(); } else renderLogin();
     </script>
 </body>
 </html>
