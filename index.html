@@ -7,53 +7,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #2b7a4b;
-            --primary-dark: #1e5a3a;
-            --primary-light: #e8f3ed;
-            --secondary: #FFB74D;
-            --accent: #7C4DFF;
-            --bg-main: #f9fbfd;
-            --bg-card: #ffffff;
-            --text-dark: #1a2c3e;
-            --text-muted: #5f7c6b;
-            --shadow: 0 8px 30px rgba(0,0,0,0.05);
-            --shadow-hover: 0 20px 35px -12px rgba(0,0,0,0.12);
+            --primary: #2b7a4b; --primary-dark: #1e5a3a; --primary-light: #e8f3ed;
+            --secondary: #FFB74D; --accent: #7C4DFF; --bg-main: #f9fbfd;
+            --bg-card: #ffffff; --text-dark: #1a2c3e; --text-muted: #5f7c6b;
+            --shadow: 0 8px 30px rgba(0,0,0,0.05); --shadow-hover: 0 20px 35px -12px rgba(0,0,0,0.12);
             --border-light: #e2e8f0;
         }
         body.night-theme {
-            --primary: #6abf8a;
-            --primary-dark: #4e9a6e;
-            --primary-light: #2a3a32;
-            --bg-main: #1a1f2e;
-            --bg-card: #252b3d;
-            --text-dark: #eef2ff;
-            --text-muted: #a0a8c0;
-            --border-light: #3a4055;
+            --primary: #6abf8a; --primary-dark: #4e9a6e; --primary-light: #2a3a32;
+            --bg-main: #1a1f2e; --bg-card: #252b3d; --text-dark: #eef2ff;
+            --text-muted: #a0a8c0; --border-light: #3a4055;
         }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-main);
-            color: var(--text-dark);
-            transition: all 0.3s ease;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            background: var(--bg-card);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            flex-wrap: wrap;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-dark); transition: all 0.3s ease; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: var(--bg-card); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
         .logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .theme-btn { width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer; margin: 0 4px; }
         .theme-day { background: #FFE0B5; }
@@ -61,28 +29,26 @@
         .hero { padding: 3rem 5%; background: linear-gradient(135deg, var(--primary-light), var(--bg-main)); display: flex; flex-wrap: wrap; gap: 2rem; }
         .hero-text { flex: 1; }
         .hero-text h2 { font-size: 2.5rem; font-weight: 800; }
-        .btn-primary { background: var(--primary); color: white; padding: 0.8rem 1.8rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--primary); color: white; padding: 0.8rem 1.8rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; margin-top: 5px; }
         .btn-primary:hover { transform: translateY(-2px); background: var(--primary-dark); }
-        .section-title { font-size: 1.8rem; text-align: center; margin: 2rem 0 1rem; }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 0 5%; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 2rem 5%; }
         .tool-card { background: var(--bg-card); border-radius: 28px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); border: 1px solid var(--border-light); }
         .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
         .tool-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: var(--bg-card); border-radius: 32px; padding: 2rem; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
+        .modal-content { background: var(--bg-card); border-radius: 32px; padding: 2rem; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; position: relative;}
         .quiz-option { display: block; margin: 10px 0; padding: 12px; background: var(--primary-light); border-radius: 20px; cursor: pointer; }
-        .quiz-option:hover { background: var(--primary); color: white; }
         .animal-companion { position: fixed; bottom: 100px; right: 20px; z-index: 999; cursor: pointer; }
         .animal-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 40px; animation: bounce 2s infinite; }
         @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .animal-speech { position: absolute; bottom: 80px; right: 10px; background: var(--bg-card); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap; box-shadow: var(--shadow); }
-        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 1.5rem; cursor: pointer; color: white; }
-        .chat-message { padding: 10px; margin: 8px 0; border-radius: 20px; max-width: 85%; }
-        .user-msg { background: var(--primary); color: white; margin-left: auto; text-align: right; }
-        .bot-msg { background: var(--primary-light); color: var(--text-dark); }
-        .notes-list { max-height: 300px; overflow-y: auto; }
+        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer; color: white; margin-left: 10px; }
+        .chat-message { padding: 12px 16px; margin: 8px 0; border-radius: 20px; max-width: 85%; line-height: 1.4; }
+        .user-msg { background: var(--primary); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
+        .bot-msg { background: var(--primary-light); color: var(--text-dark); border-bottom-left-radius: 4px; }
+        .notes-list { max-height: 300px; overflow-y: auto; margin-top: 10px;}
         .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
-        @media (max-width: 768px) { .hero h2 { font-size: 1.8rem; } }
+        textarea, input[type="text"], select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); margin: 8px 0; font-family: inherit; }
     </style>
 </head>
 <body>
@@ -101,36 +67,33 @@
         <p>Quiz generator • Topic explainer • Voice notes • Smart chatbot • Save notes</p>
         <button class="btn-primary" id="stressBtn"><i class="fas fa-brain"></i> Check Stress Level</button>
     </div>
-    <div><i class="fas fa-robot" style="font-size: 6rem; color: var(--primary);"></i></div>
+    <div style="display: flex; align-items: center;"><i class="fas fa-robot" style="font-size: 6rem; color: var(--primary);"></i></div>
 </section>
 
-<!-- Stress Detection Card -->
 <div id="stressModal" class="modal" style="display: none;">
     <div class="modal-content">
         <h3>🧠 AI Stress Detection</h3>
-        <label>Stress level (1-10):</label>
-        <input type="range" id="stressSlider" min="1" max="10" value="5" style="width:100%"><span id="sliderVal">5</span>
-        <label>How are you feeling?</label>
-        <textarea id="stressText" rows="2" placeholder="e.g., exams, anxiety..."></textarea>
-        <label>Workload:</label>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">How's your mental load today?</p>
+        <label>Stress level (1-10): <span id="sliderVal">5</span></label>
+        <input type="range" id="stressSlider" min="1" max="10" value="5" style="width:100%">
+        <textarea id="stressText" rows="2" placeholder="Tell me what's on your mind (exams, sleep, etc.)"></textarea>
+        <label>Current Workload:</label>
         <select id="workload"><option>Light</option><option selected>Moderate</option><option>Heavy</option><option>Extreme</option></select>
-        <button class="btn-primary" id="analyzeStressBtn" style="margin-top:1rem">Analyze</button>
-        <div id="stressResult" style="margin-top:1rem"></div>
-        <button class="btn-primary" onclick="closeModal('stressModal')">Close</button>
+        <button class="btn-primary" id="analyzeStressBtn">Analyze & Help Me</button>
+        <div id="stressResult" style="margin-top:1rem; padding: 10px; border-left: 4px solid var(--primary);"></div>
+        <button class="btn-primary" onclick="closeModal('stressModal')" style="background: #666;">Close</button>
     </div>
 </div>
 
-<!-- Tools Grid -->
 <div class="tools-grid">
     <div class="tool-card" onclick="openQuizGenerator()"><i class="fas fa-question-circle"></i><h3>📝 AI Quiz Generator</h3><p>Generate quiz on any topic</p></div>
     <div class="tool-card" onclick="openTopicExplainer()"><i class="fas fa-chalkboard-teacher"></i><h3>📖 Topic Explainer</h3><p>Get AI explanations</p></div>
     <div class="tool-card" onclick="openChatbot()"><i class="fas fa-comment-dots"></i><h3>🤖 AI Study Chatbot</h3><p>Ask anything + voice</p></div>
-    <div class="tool-card" onclick="openNotes()"><i class="fas fa-save"></i><h3>📓 Save Notes</h3><p>Store & retrieve notes</p></div>
+    <div class="tool-card" onclick="openNotes()"><i class="fas fa-save"></i><h3>📓 My Study Notes</h3><p>Store & retrieve notes</p></div>
     <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>🍅 Pomodoro Timer</h3><p>Focus session</p></div>
     <div class="tool-card" onclick="openFlashcards()"><i class="fas fa-layer-group"></i><h3>📇 Flashcards</h3><p>Self-test</p></div>
 </div>
 
-<!-- Animal Companion -->
 <div class="animal-companion" id="animalCompanion">
     <div class="animal-avatar" id="animalAvatar">🐼</div>
     <div class="animal-speech" id="animalSpeech">I'm your AI buddy!</div>
@@ -138,209 +101,204 @@
 
 <script>
     // ========== CONFIG ==========
-    const OPENAI_API_KEY = "sk-uvwx5678uvwx5678uvwx5678uvwx5678uvwx5678";
-    let currentTheme = 'day';
+    const OPENAI_API_KEY = "sk-1234ijklmnop5678ijklmnop1234ijklmnop5678"; 
+    
     function setTheme(theme) {
-        currentTheme = theme;
         if(theme === 'night') document.body.classList.add('night-theme');
         else document.body.classList.remove('night-theme');
         localStorage.setItem('focuswell_theme', theme);
     }
-    function loadTheme() { const t = localStorage.getItem('focuswell_theme'); if(t) setTheme(t); }
     
     // Helper: AI API call
-    async function callAI(prompt, system = "You are a helpful study assistant for students.") {
+    async function callAI(prompt, system = "You are a helpful study assistant.") {
         try {
             const response = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${OPENAI_API_KEY}` },
-                body: JSON.stringify({ model: "gpt-3.5-turbo", messages: [{ role: "system", content: system }, { role: "user", content: prompt }], temperature: 0.7 })
+                body: JSON.stringify({ 
+                    model: "gpt-3.5-turbo", 
+                    messages: [{ role: "system", content: system }, { role: "user", content: prompt }], 
+                    temperature: 0.7 
+                })
             });
             const data = await response.json();
             if(data.choices && data.choices[0]) return data.choices[0].message.content;
-            return "API Error. Please check your key or try again.";
+            return "API Error: " + (data.error ? data.error.message : "Unknown error");
         } catch(e) { return "Network error: " + e.message; }
     }
-    
+
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     function showModal(id) { document.getElementById(id).style.display = 'flex'; }
-    
-    // Stress Detection
+
+    // Stress Detection Logic
     document.getElementById('stressBtn').onclick = () => showModal('stressModal');
     document.getElementById('stressSlider').oninput = (e) => document.getElementById('sliderVal').innerText = e.target.value;
     document.getElementById('analyzeStressBtn').onclick = async () => {
-        const slider = parseInt(document.getElementById('stressSlider').value);
+        const slider = document.getElementById('stressSlider').value;
         const text = document.getElementById('stressText').value;
         const workload = document.getElementById('workload').value;
-        const prompt = `Student stress level: ${slider}/10, workload: ${workload}, description: "${text}". Give personalized stress management advice (2-3 sentences).`;
-        const advice = await callAI(prompt, "You are a caring mental health assistant for students.");
-        document.getElementById('stressResult').innerHTML = `<strong>🧘 Advice:</strong><br>${advice}`;
+        const resultDiv = document.getElementById('stressResult');
+        resultDiv.innerHTML = "<em>Analyzing your stress levels...</em>";
+        
+        const advice = await callAI(`Student stress: ${slider}/10, workload: ${workload}, thoughts: "${text}". Give 2 actionable, comforting tips.`, "You are a empathetic wellness coach.");
+        resultDiv.innerHTML = `<strong>🧘 Advice:</strong><br>${advice}`;
     };
-    
-    // ========== 1. AI QUIZ GENERATOR ==========
+
+    // Quiz Generator Logic
     async function openQuizGenerator() {
-        const topic = prompt("Enter topic for quiz (e.g., Photosynthesis, Calculus, World War II):");
+        const topic = prompt("Enter topic for quiz (e.g., Photosynthesis, Python Basics):");
         if(!topic) return;
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal'; modalDiv.id = 'quizModal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>📝 AI Quiz: ${topic}</h3><div id="quizContent">Generating quiz questions... ⏳</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        
+        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
+        modalDiv.innerHTML = `<div class="modal-content"><h3>📝 AI Quiz: ${topic}</h3><div id="quizContent">Generating your personalized quiz... ⏳</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
         document.body.appendChild(modalDiv);
-        const prompt = `Generate 3 multiple choice questions about "${topic}" for students. Format as JSON: [{"question":"Q1","options":["A","B","C","D"],"correct":0}] (correct is index 0-3). Only valid JSON.`;
-        const response = await callAI(prompt, "You are a quiz generator. Output only valid JSON array.");
+
+        const promptText = `Generate 3 multiple choice questions about "${topic}". Return ONLY a raw JSON array: [{"question":"...","options":["A","B","C","D"],"correct":0}]`;
+        const response = await callAI(promptText, "You are a quiz bot. Output only valid JSON.");
+        
         try {
-            let quiz = JSON.parse(response);
-            if(!Array.isArray(quiz)) throw new Error();
-            let html = `<div id="quizQuestions"></div><button class="btn-primary" id="submitQuiz">Submit Answers</button><div id="quizResult"></div>`;
+            // Clean response in case AI adds markdown code blocks
+            const cleanJson = response.replace(/```json|```/g, "").trim();
+            const quiz = JSON.parse(cleanJson);
+            let html = `<div id="quizQuestions"></div><button class="btn-primary" id="submitQuiz">Check Results</button><div id="quizResult" style="margin-top:15px"></div>`;
             document.getElementById('quizContent').innerHTML = html;
+            
             let userAnswers = new Array(quiz.length).fill(-1);
-            const qDiv = document.getElementById('quizQuestions');
             quiz.forEach((q, idx) => {
-                qDiv.innerHTML += `<div style="margin:20px 0"><strong>${idx+1}. ${q.question}</strong><br>`;
+                const qBlock = document.createElement('div');
+                qBlock.style.margin = "20px 0";
+                qBlock.innerHTML = `<strong>${idx+1}. ${q.question}</strong>`;
                 q.options.forEach((opt, optIdx) => {
-                    qDiv.innerHTML += `<label style="display:block"><input type="radio" name="q${idx}" value="${optIdx}"> ${opt}</label>`;
+                    const label = document.createElement('label');
+                    label.style.display = "block"; label.style.padding = "5px 0";
+                    label.innerHTML = `<input type="radio" name="q${idx}" value="${optIdx}"> ${opt}`;
+                    label.onchange = () => userAnswers[idx] = optIdx;
+                    qBlock.appendChild(label);
                 });
-                qDiv.innerHTML += `</div>`;
-                document.querySelectorAll(`input[name="q${idx}"]`).forEach(radio => {
-                    radio.addEventListener('change', (e) => userAnswers[idx] = parseInt(e.target.value));
-                });
+                document.getElementById('quizQuestions').appendChild(qBlock);
             });
+
             document.getElementById('submitQuiz').onclick = () => {
                 let score = 0;
-                quiz.forEach((q, idx) => { if(userAnswers[idx] === q.correct) score++; });
-                document.getElementById('quizResult').innerHTML = `<strong>Your score: ${score}/${quiz.length}</strong><br>${score === quiz.length ? "🎉 Perfect!" : "Keep learning!"}`;
+                quiz.forEach((q, idx) => { if(userAnswers[idx] == q.correct) score++; });
+                document.getElementById('quizResult').innerHTML = `<strong>Score: ${score}/${quiz.length}</strong> - ${score === quiz.length ? "Excellent!" : "Keep practicing!"}`;
             };
-        } catch(e) { document.getElementById('quizContent').innerHTML = `<p>Error generating quiz. ${response}</p>`; }
+        } catch(e) { document.getElementById('quizContent').innerHTML = "Could not parse quiz. Please try again."; }
     }
-    
-    // ========== 2. TOPIC EXPLAINER ==========
+
+    // Topic Explainer Logic
     async function openTopicExplainer() {
-        const topic = prompt("What topic would you like explained? (e.g., Quantum Physics, HTML basics)");
+        const topic = prompt("What should I explain?");
         if(!topic) return;
         const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>📖 Explaining: ${topic}</h3><div id="explainContent">Generating explanation... ⏳</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        modalDiv.innerHTML = `<div class="modal-content"><h3>📖 Topic: ${topic}</h3><div id="explainContent">Generating...</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
         document.body.appendChild(modalDiv);
-        const explanation = await callAI(`Explain "${topic}" in simple terms for a student. Include key points and examples.`, "You are a friendly tutor.");
-        document.getElementById('explainContent').innerHTML = `<p>${explanation.replace(/\n/g, '<br>')}</p><button class="btn-primary" onclick="speakText('${explanation.replace(/'/g, "\\'")}')">🔊 Listen</button>`;
+        
+        const explanation = await callAI(`Explain "${topic}" like I'm 15. Use bullet points for key facts.`);
+        document.getElementById('explainContent').innerHTML = `<p>${explanation.replace(/\n/g, '<br>')}</p><button class="btn-primary" onclick="speakText(\`${explanation.replace(/`/g, "'")}\`)">🔊 Listen</button>`;
     }
-    
-    // ========== 3. AI CHATBOT + Voice + Speech-to-Text ==========
-    let chatHistory = [];
+
+    // Chatbot Logic
     async function openChatbot() {
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal'; modalDiv.id = 'chatbotModal';
-        modalDiv.innerHTML = `<div class="modal-content" style="max-width:500px"><h3>🤖 AI Study Chatbot <button class="voice-btn" onclick="startVoiceInput()"><i class="fas fa-microphone"></i></button></h3><div id="chatMessages" style="height:300px; overflow-y:auto; margin-bottom:1rem;"></div><div style="display:flex; gap:8px;"><input type="text" id="chatInput" placeholder="Ask me anything..." style="flex:1; padding:12px; border-radius:40px; border:1px solid var(--border-light);"><button class="btn-primary" onclick="sendChatMessage()">Send</button><button class="voice-btn" onclick="speakLastResponse()"><i class="fas fa-volume-up"></i></button></div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
+        modalDiv.innerHTML = `<div class="modal-content" style="max-width:500px">
+            <h3>🤖 Study Chatbot</h3>
+            <div id="chatMessages" style="height:300px; overflow-y:auto; border:1px solid var(--border-light); padding:10px; border-radius:15px; margin-bottom:10px;"></div>
+            <div style="display:flex;">
+                <input type="text" id="chatInput" placeholder="Ask a question...">
+                <button class="voice-btn" onclick="startVoiceInput()"><i class="fas fa-microphone"></i></button>
+                <button class="btn-primary" onclick="sendChatMessage()" style="margin-left:5px">Send</button>
+            </div>
+            <button class="btn-primary" onclick="this.closest('.modal').remove()" style="background:#666">Exit</button>
+        </div>`;
         document.body.appendChild(modalDiv);
+
         window.sendChatMessage = async () => {
             const input = document.getElementById('chatInput');
-            const msg = input.value.trim();
-            if(!msg) return;
+            const text = input.value.trim();
+            if(!text) return;
             const chatDiv = document.getElementById('chatMessages');
-            chatDiv.innerHTML += `<div class="chat-message user-msg" style="margin-left:auto;">🧑‍🎓 ${msg}</div>`;
-            input.value = '';
+            chatDiv.innerHTML += `<div class="chat-message user-msg">${text}</div>`;
+            input.value = "";
             chatDiv.scrollTop = chatDiv.scrollHeight;
-            const aiReply = await callAI(msg, "You are a helpful study assistant. Answer concisely and supportively.");
-            chatDiv.innerHTML += `<div class="chat-message bot-msg">🤖 ${aiReply}</div>`;
+
+            const reply = await callAI(text);
+            chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`;
             chatDiv.scrollTop = chatDiv.scrollHeight;
-            window.lastBotReply = aiReply;
         };
+        
         window.startVoiceInput = () => {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!SpeechRecognition) { alert("Speech recognition not supported"); return; }
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.onresult = (event) => {
-                const text = event.results[0][0].transcript;
-                document.getElementById('chatInput').value = text;
-                sendChatMessage();
-            };
-            recognition.start();
+            if(!SpeechRecognition) return alert("Browser not supported");
+            const rec = new SpeechRecognition();
+            rec.onresult = (e) => { document.getElementById('chatInput').value = e.results[0][0].transcript; sendChatMessage(); };
+            rec.start();
         };
-        window.speakLastResponse = () => { if(window.lastBotReply) speakText(window.lastBotReply); else alert("No response yet"); };
     }
-    
-    // ========== 4. SAVE NOTES FEATURE ==========
+
+    // Notes, Timer, Flashcards (Local Logic)
     let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
     function openNotes() {
         const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>📓 My Study Notes</h3><textarea id="noteTitle" placeholder="Title" style="width:100%; margin:8px 0; padding:10px;"></textarea><textarea id="noteContent" rows="4" placeholder="Write your note here..." style="width:100%; padding:10px;"></textarea><button class="btn-primary" onclick="saveNewNote()">Save Note</button><div id="notesList" class="notes-list" style="margin-top:1rem;"></div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        modalDiv.innerHTML = `<div class="modal-content"><h3>📓 My Notes</h3>
+            <input type="text" id="noteTitle" placeholder="Title">
+            <textarea id="noteContent" rows="3" placeholder="Content..."></textarea>
+            <button class="btn-primary" onclick="saveNote()">Save</button>
+            <div id="notesList" class="notes-list"></div>
+            <button class="btn-primary" onclick="this.closest('.modal').remove()" style="background:#666">Close</button>
+        </div>`;
         document.body.appendChild(modalDiv);
-        window.saveNewNote = () => {
-            const title = document.getElementById('noteTitle').value.trim() || "Untitled";
-            const content = document.getElementById('noteContent').value;
-            if(content) { savedNotes.push({ id: Date.now(), title, content, date: new Date().toLocaleString() }); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotesList(); document.getElementById('noteContent').value = ''; document.getElementById('noteTitle').value = ''; }
+        renderNotes();
+        
+        window.saveNote = () => {
+            const t = document.getElementById('noteTitle').value;
+            const c = document.getElementById('noteContent').value;
+            if(c) { savedNotes.push({t, c, id: Date.now()}); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); }
         };
-        function renderNotesList() {
-            const container = document.getElementById('notesList');
-            if(!container) return;
-            container.innerHTML = savedNotes.map(note => `<div class="note-item"><div><strong>${note.title}</strong><br><small>${note.date}</small><p>${note.content.substring(0,80)}...</p></div><div><button class="btn-primary" style="padding:4px 12px; margin-right:4px;" onclick="viewNote(${note.id})">View</button><button class="btn-primary" style="background:red;" onclick="deleteNote(${note.id})">Delete</button></div></div>`).join('');
-        }
-        window.viewNote = (id) => { const note = savedNotes.find(n => n.id === id); if(note) alert(`${note.title}\n\n${note.content}`); };
-        window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotesList(); };
-        renderNotesList();
     }
-    
-    // ========== TEXT TO SPEECH ==========
-    function speakText(text) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.9;
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
+    function renderNotes() {
+        const list = document.getElementById('notesList');
+        if(list) list.innerHTML = savedNotes.map(n => `<div class="note-item"><span><strong>${n.t || 'Note'}</strong></span> <button onclick="deleteNote(${n.id})" style="border:none; background:none; color:red; cursor:pointer;">&times;</button></div>`).join('');
     }
-    
-    // ========== POMODORO TIMER ==========
+    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
+
     function openPomodoro() {
-        const mins = prompt("Study minutes:", "25");
-        let seconds = (parseInt(mins) || 25) * 60;
+        let sec = 1500;
         const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content" style="text-align:center"><h3>🍅 Pomodoro</h3><div id="timerDisplay" style="font-size:3rem; font-weight:bold;">${Math.floor(seconds/60)}:${(seconds%60).toString().padStart(2,'0')}</div><div><button id="startTimer" class="btn-primary">Start</button> <button id="pauseTimer" class="btn-primary">Pause</button> <button id="resetTimer" class="btn-primary">Reset</button></div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        modalDiv.innerHTML = `<div class="modal-content" style="text-align:center"><h3>🍅 Focus Timer</h3><h1 id="pTime">25:00</h1><button class="btn-primary" id="pStart">Start</button> <button class="btn-primary" onclick="this.closest('.modal').remove()">Quit</button></div>`;
         document.body.appendChild(modalDiv);
-        let interval = null, running = false;
-        const updateDisplay = () => { const d = document.getElementById('timerDisplay'); if(d) d.innerText = `${Math.floor(seconds/60)}:${(seconds%60).toString().padStart(2,'0')}`; if(seconds===0 && running) { clearInterval(interval); alert("Session complete! Great focus!"); } };
-        document.getElementById('startTimer').onclick = () => { if(!running) { running=true; interval = setInterval(() => { if(seconds>0 && running) { seconds--; updateDisplay(); } else if(seconds===0) { clearInterval(interval); alert("Done!"); } },1000); } };
-        document.getElementById('pauseTimer').onclick = () => { running=false; clearInterval(interval); };
-        document.getElementById('resetTimer').onclick = () => { running=false; clearInterval(interval); seconds = (parseInt(mins) || 25)*60; updateDisplay(); };
-        updateDisplay();
+        document.getElementById('pStart').onclick = function() {
+            this.disabled = true;
+            setInterval(() => { if(sec > 0) { sec--; document.getElementById('pTime').innerText = `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`; } }, 1000);
+        };
     }
-    
-    // ========== FLASHCARDS ==========
+
     function openFlashcards() {
-        let cards = JSON.parse(localStorage.getItem('focuswell_flashcards') || '[{"question":"What is AI?","answer":"Artificial Intelligence"}]');
-        let idx=0, showAnswer=false;
+        let cards = JSON.parse(localStorage.getItem('fw_cards') || '[{"q":"What is AI?","a":"Artificial Intelligence"}]');
+        let idx = 0;
         const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>📇 Flashcards</h3><div id="flashBox" style="background:var(--primary); color:white; padding:2rem; border-radius:28px; text-align:center; cursor:pointer; min-height:150px;">${cards[0].question}</div><div style="display:flex; gap:12px; margin-top:1rem;"><button class="btn-primary" id="prevFlash">◀ Prev</button><button class="btn-primary" id="nextFlash">Next ▶</button></div><button id="addFlashBtn" class="btn-primary">+ Add Card</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
+        modalDiv.innerHTML = `<div class="modal-content" style="text-align:center"><h3>📇 Flashcards</h3><div id="fCard" style="background:var(--primary); color:white; padding:40px; border-radius:20px; cursor:pointer; margin-bottom:10px;">${cards[idx].q}</div><button class="btn-primary" id="fNext">Next</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
         document.body.appendChild(modalDiv);
-        const flashBox = document.getElementById('flashBox');
-        function updateFlash() { flashBox.innerText = showAnswer ? cards[idx].answer : cards[idx].question; }
-        flashBox.onclick = () => { showAnswer = !showAnswer; updateFlash(); };
-        document.getElementById('prevFlash').onclick = () => { idx = (idx-1+cards.length)%cards.length; showAnswer=false; updateFlash(); };
-        document.getElementById('nextFlash').onclick = () => { idx = (idx+1)%cards.length; showAnswer=false; updateFlash(); };
-        document.getElementById('addFlashBtn').onclick = () => { const q = prompt("Question:"); if(q) { const a = prompt("Answer:"); if(a) { cards.push({question:q, answer:a}); localStorage.setItem('focuswell_flashcards', JSON.stringify(cards)); idx=cards.length-1; showAnswer=false; updateFlash(); } } };
-        updateFlash();
+        const card = document.getElementById('fCard');
+        card.onclick = () => card.innerText = (card.innerText === cards[idx].q) ? cards[idx].a : cards[idx].q;
+        document.getElementById('fNext').onclick = () => { idx = (idx+1)%cards.length; card.innerText = cards[idx].q; };
     }
-    
-    // Animal companion with random tips & speech
-    const animals = ['🐼', '🐨', '🦊', '🐰', '🐱'];
-    let animalIdx = 0;
+
+    function speakText(text) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.rate = 0.95;
+        window.speechSynthesis.speak(msg);
+    }
+
+    // Animal Interaction
     document.getElementById('animalCompanion').onclick = () => {
-        animalIdx = (animalIdx+1)%animals.length;
-        document.getElementById('animalAvatar').innerText = animals[animalIdx];
-        const tips = ["Try the AI Quiz! 📝", "Ask chatbot anything 🤖", "Save your notes 📓", "Explain a topic with AI 📖", "Use voice to study 🎤"];
-        document.getElementById('animalSpeech').innerText = tips[Math.floor(Math.random()*tips.length)];
-        setTimeout(() => document.getElementById('animalSpeech').innerText = "Tap me again!", 2000);
+        const lines = ["Take a deep breath!", "Hydrate while you study!", "Try a 5-minute quiz!", "You're doing great!"];
+        document.getElementById('animalSpeech').innerText = lines[Math.floor(Math.random()*lines.length)];
     };
-    setInterval(() => {
-        const speechDiv = document.getElementById('animalSpeech');
-        if(speechDiv && !document.querySelector('.modal')) speechDiv.innerText = "Need help? Tap me 🐣";
-    }, 15000);
-    
-    loadTheme();
-    window.speakText = speakText;
-    window.openQuizGenerator = openQuizGenerator;
-    window.openTopicExplainer = openTopicExplainer;
-    window.openChatbot = openChatbot;
-    window.openNotes = openNotes;
-    window.openPomodoro = openPomodoro;
-    window.openFlashcards = openFlashcards;
-    window.closeModal = closeModal;
-    window.speakText = speakText;
+
+    // Load theme
+    if(localStorage.getItem('focuswell_theme') === 'night') setTheme('night');
 </script>
 </body>
 </html>
