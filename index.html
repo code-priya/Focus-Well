@@ -47,7 +47,9 @@
         .user-msg { background: var(--primary); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
         .bot-msg { background: var(--primary-light); color: var(--text-dark); border-bottom-left-radius: 4px; }
         .notes-list { max-height: 300px; overflow-y: auto; margin-top: 10px;}
-        .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .note-actions { display: flex; gap: 8px; }
+        .note-actions button { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
         textarea, input[type="text"], select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); margin: 8px 0; font-family: inherit; background: var(--bg-card); color: var(--text-dark); }
         
         /* Login overlay */
@@ -62,6 +64,7 @@
         .music-control { position: fixed; bottom: 20px; left: 20px; background: var(--bg-card); border-radius: 60px; padding: 10px 18px; display: flex; gap: 12px; box-shadow: var(--shadow); z-index: 1000; align-items: center; border: 1px solid var(--border-light); }
         .music-control button { background: var(--primary); border: none; border-radius: 40px; color: white; padding: 8px 14px; cursor: pointer; font-size: 1rem; }
         .main-app { display: none; }
+        .read-note-btn { background: var(--primary); color: white; border: none; border-radius: 20px; padding: 6px 12px; font-size: 0.75rem; cursor: pointer; margin-left: 8px; }
     </style>
 </head>
 <body>
@@ -119,7 +122,6 @@
         <div class="tool-card" onclick="openNotes()"><i class="fas fa-save"></i><h3>📓 My Study Notes</h3><p>Store & retrieve notes</p></div>
         <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>🍅 Pomodoro Timer</h3><p>Focus session</p></div>
         <div class="tool-card" onclick="openFlashcards()"><i class="fas fa-layer-group"></i><h3>📇 Flashcards</h3><p>Self-test</p></div>
-        <!-- NEW: Feed card to show motivational pictures and emojis -->
         <div class="tool-card" onclick="openFeedModal()"><i class="fas fa-images"></i><h3>🐾 Cozy Feed</h3><p>Motivation + cute pics</p></div>
     </div>
 
@@ -138,8 +140,8 @@
 </div>
 
 <script>
-    // ========== CONFIG ==========
-    const OPENAI_API_KEY = "sk-1234ijklmnop5678ijklmnop1234ijklmnop5678"; 
+    // ========== CONFIG - YOUR API KEY INTEGRATED ==========
+    const OPENAI_API_KEY = "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";
     
     // ---------------------- LOGIC FOR LOGIN ----------------------
     const loginOverlay = document.getElementById('loginOverlay');
@@ -153,10 +155,10 @@
         localStorage.setItem('focuswell_user', username);
         loginOverlay.style.display = 'none';
         mainApp.style.display = 'block';
-        // welcome message with voice
         setTimeout(() => {
             speakText(`Welcome ${username}! Let's study with focus and joy.`);
-            showFloatingEmoji('🎉');
+            // burst of emojis on login
+            for(let i=0;i<8;i++) setTimeout(() => showFloatingEmoji(), i*80);
         }, 200);
     });
     
@@ -166,7 +168,7 @@
         localStorage.setItem('focuswell_theme', theme);
     }
     
-    // Helper: AI API call (mock fallback if key invalid but keeps existing)
+    // Enhanced AI API call with real key
     async function callAI(prompt, system = "You are a helpful study assistant.") {
         try {
             const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -180,8 +182,12 @@
             });
             const data = await response.json();
             if(data.choices && data.choices[0]) return data.choices[0].message.content;
-            return "AI is resting right now. But here's a tip: break tasks into small steps!";
-        } catch(e) { return "Network hiccup. Stay calm, hydrate! 🌱"; }
+            console.error("API Error:", data);
+            return "✨ AI is taking a quick breather. Here's a tip: Stay consistent, you're doing amazing! ✨";
+        } catch(e) { 
+            console.error(e);
+            return "🐣 Network glitch! But remember: small steps lead to big results. Keep going! 🌟"; 
+        }
     }
 
     function closeModal(id) { 
@@ -200,10 +206,10 @@
             const text = document.getElementById('stressText').value;
             const workload = document.getElementById('workload').value;
             const resultDiv = document.getElementById('stressResult');
-            resultDiv.innerHTML = "<em>Analyzing your stress levels...</em>";
-            const advice = await callAI(`Student stress: ${slider}/10, workload: ${workload}, thoughts: "${text}". Give 2 actionable, comforting tips.`, "You are a empathetic wellness coach.");
-            resultDiv.innerHTML = `<strong>🧘 Advice:</strong><br>${advice}`;
-            speakText(advice.substring(0, 180));
+            resultDiv.innerHTML = "<em>🧠 Analyzing your stress levels...</em>";
+            const advice = await callAI(`Student stress: ${slider}/10, workload: ${workload}, thoughts: "${text}". Give 2 actionable, comforting tips with emojis.`, "You are a empathetic wellness coach.");
+            resultDiv.innerHTML = `<strong>🧘 Wellness Advice:</strong><br>${advice.replace(/\n/g, '<br>')}`;
+            speakText(advice.substring(0, 200));
         };
     }
 
@@ -239,24 +245,25 @@
             document.getElementById('submitQuiz').onclick = () => {
                 let score = 0;
                 quiz.forEach((q, idx) => { if(userAnswers[idx] == q.correct) score++; });
-                document.getElementById('quizResult').innerHTML = `<strong>Score: ${score}/${quiz.length}</strong> - ${score === quiz.length ? "Excellent!" : "Keep practicing!"}`;
-                speakText(`You scored ${score} out of ${quiz.length}`);
+                const resultMsg = `You scored ${score} out of ${quiz.length}. ${score === quiz.length ? "Perfect! 🎉" : "Keep practicing! 💪"}`;
+                document.getElementById('quizResult').innerHTML = `<strong>${resultMsg}</strong>`;
+                speakText(resultMsg);
             };
-        } catch(e) { document.getElementById('quizContent').innerHTML = "Could not parse quiz. Try again or manual study. 🌟"; }
+        } catch(e) { document.getElementById('quizContent').innerHTML = "🌟 Couldn't parse quiz, but keep studying hard! Try again. 🌟"; }
     }
 
-    // Topic Explainer + Text-to-speech integrated
+    // Topic Explainer + Text-to-speech
     async function openTopicExplainer() {
         const topic = prompt("What should I explain?");
         if(!topic) return;
         const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
         modalDiv.innerHTML = `<div class="modal-content"><h3>📖 Topic: ${topic}</h3><div id="explainContent">Generating...</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
         document.body.appendChild(modalDiv);
-        const explanation = await callAI(`Explain "${topic}" like I'm 15. Use bullet points for key facts.`);
-        document.getElementById('explainContent').innerHTML = `<p>${explanation.replace(/\n/g, '<br>')}</p><button class="btn-primary" onclick="speakText(\`${explanation.replace(/`/g, "'").replace(/\n/g, ' ')}\`)">🔊 Listen to Explanation</button>`;
+        const explanation = await callAI(`Explain "${topic}" like I'm 15. Use bullet points for key facts. Add emojis.`);
+        document.getElementById('explainContent').innerHTML = `<p style="white-space: pre-wrap;">${explanation.replace(/\n/g, '<br>')}</p><button class="btn-primary" onclick="speakText(\`${explanation.replace(/`/g, "'").replace(/\n/g, ' ')}\`)">🔊 Listen to Explanation</button>`;
     }
 
-    // Chatbot + voice input (speech-to-text already present) & text-to-speech for replies
+    // Chatbot + voice input & TTS
     async function openChatbot() {
         const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
         modalDiv.innerHTML = `<div class="modal-content" style="max-width:500px">
@@ -281,11 +288,11 @@
             const reply = await callAI(text);
             chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`;
             chatDiv.scrollTop = chatDiv.scrollHeight;
-            speakText(reply.substring(0, 180));
+            speakText(reply.substring(0, 200));
         };
         window.startVoiceInputChat = () => {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!SpeechRecognition) return alert("Browser not supported");
+            if(!SpeechRecognition) return alert("Browser not supported for voice input");
             const rec = new SpeechRecognition();
             rec.onresult = (e) => { 
                 document.getElementById('chatInput').value = e.results[0][0].transcript; 
@@ -295,30 +302,53 @@
         };
     }
 
-    // Notes
+    // Notes with READ feature (text-to-speech for notes)
     let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
     function openNotes() {
         const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>📓 My Notes</h3>
-            <input type="text" id="noteTitle" placeholder="Title">
-            <textarea id="noteContent" rows="3" placeholder="Content..."></textarea>
-            <button class="btn-primary" onclick="saveNote()">Save</button>
+        modalDiv.innerHTML = `<div class="modal-content"><h3>📓 My Study Notes <i class="fas fa-head-side-vr"></i></h3>
+            <input type="text" id="noteTitle" placeholder="Title (optional)">
+            <textarea id="noteContent" rows="3" placeholder="Write your note here..."></textarea>
+            <button class="btn-primary" onclick="saveNote()"><i class="fas fa-save"></i> Save Note</button>
             <div id="notesList" class="notes-list"></div>
             <button class="btn-primary" onclick="this.closest('.modal').remove()" style="background:#666">Close</button>
         </div>`;
         document.body.appendChild(modalDiv);
-        renderNotes();
+        renderNotesWithRead();
         window.saveNote = () => {
             const t = document.getElementById('noteTitle').value;
             const c = document.getElementById('noteContent').value;
-            if(c) { savedNotes.push({t, c, id: Date.now()}); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); speakText("Note saved"); }
+            if(c) { savedNotes.push({t: t || "Untitled", c, id: Date.now()}); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotesWithRead(); document.getElementById('noteContent').value = ""; speakText("Note saved successfully"); showFloatingEmoji('📘'); }
         };
     }
-    function renderNotes() {
+    
+    function renderNotesWithRead() {
         const list = document.getElementById('notesList');
-        if(list) list.innerHTML = savedNotes.map(n => `<div class="note-item"><span><strong>${n.t || 'Note'}</strong></span> <button onclick="deleteNote(${n.id})" style="border:none; background:none; color:red; cursor:pointer;">&times;</button></div>`).join('');
+        if(!list) return;
+        if(savedNotes.length === 0) { list.innerHTML = "<p style='padding:12px;'>✨ No notes yet. Write your first study note! ✨</p>"; return; }
+        list.innerHTML = savedNotes.map(n => `
+            <div class="note-item">
+                <div><strong>${escapeHtml(n.t)}</strong><br><small style="opacity:0.7;">${n.c.substring(0, 60)}${n.c.length>60?'...':''}</small></div>
+                <div class="note-actions">
+                    <button onclick="readNoteById(${n.id})" title="Read note aloud" style="background:var(--primary); color:white; border-radius:20px; padding:6px 12px;"><i class="fas fa-volume-up"></i> Read</button>
+                    <button onclick="deleteNote(${n.id})" style="color:#ff6b6b; font-size:1.2rem;">&times;</button>
+                </div>
+            </div>
+        `).join('');
     }
-    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
+    
+    window.readNoteById = (id) => {
+        const note = savedNotes.find(n => n.id === id);
+        if(note) {
+            const fullText = `Title: ${note.t}. Content: ${note.c}`;
+            speakText(fullText);
+            showFloatingEmoji('🔊');
+        }
+    };
+    
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    
+    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotesWithRead(); speakText("Note deleted"); };
 
     function openPomodoro() {
         let sec = 1500;
@@ -327,7 +357,7 @@
         document.body.appendChild(modalDiv);
         document.getElementById('pStart').onclick = function() {
             this.disabled = true;
-            setInterval(() => { if(sec > 0) { sec--; document.getElementById('pTime').innerText = `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`; } }, 1000);
+            const interval = setInterval(() => { if(sec > 0) { sec--; document.getElementById('pTime').innerText = `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`; } else { clearInterval(interval); speakText("Time's up! Great focus session!"); } }, 1000);
         };
     }
 
@@ -338,11 +368,11 @@
         modalDiv.innerHTML = `<div class="modal-content" style="text-align:center"><h3>📇 Flashcards</h3><div id="fCard" style="background:var(--primary); color:white; padding:40px; border-radius:20px; cursor:pointer; margin-bottom:10px;">${cards[idx].q}</div><button class="btn-primary" id="fNext">Next</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
         document.body.appendChild(modalDiv);
         const card = document.getElementById('fCard');
-        card.onclick = () => card.innerText = (card.innerText === cards[idx].q) ? cards[idx].a : cards[idx].q;
+        card.onclick = () => { const newText = (card.innerText === cards[idx].q) ? cards[idx].a : cards[idx].q; card.innerText = newText; if(newText === cards[idx].a) speakText(cards[idx].a); };
         document.getElementById('fNext').onclick = () => { idx = (idx+1)%cards.length; card.innerText = cards[idx].q; };
     }
 
-    // Enhanced TTS (text to speech) function
+    // Enhanced TTS 
     function speakText(text) {
         if(!text) return;
         window.speechSynthesis.cancel();
@@ -352,26 +382,31 @@
         window.speechSynthesis.speak(msg);
     }
 
-    // Floating cute emojis every 4 seconds
+    // FLOATING EMOJIS: 4 emojis every second (increased frequency)
     function showFloatingEmoji(emoji = null) {
-        const emojis = ['🐣', '🐥', '🦊', '🐱', '🐶', '🐼', '🐸', '🐌', '🦋', '🐝', '🐰', '🦄', '🐙', '🐳'];
+        const emojis = ['🐣', '🐥', '🦊', '🐱', '🐶', '🐼', '🐸', '🐌', '🦋', '🐝', '🐰', '🦄', '🐙', '🐳', '🐨', '🦁', '🐧', '🐦', '⭐', '🌸', '🍎', '📚', '🧠', '✨'];
         const chosen = emoji || emojis[Math.floor(Math.random() * emojis.length)];
         const div = document.createElement('div');
         div.className = 'floating-emoji';
         div.innerText = chosen;
-        div.style.left = Math.random() * 90 + '%';
+        div.style.left = Math.random() * 95 + '%';
         div.style.bottom = '0px';
-        div.style.fontSize = (Math.random() * 1.5 + 1.5) + 'rem';
+        div.style.fontSize = (Math.random() * 1.8 + 1.2) + 'rem';
+        div.style.opacity = Math.random() * 0.8 + 0.4;
         document.body.appendChild(div);
-        setTimeout(() => div.remove(), 3000);
+        setTimeout(() => div.remove(), 2800);
     }
     
-    // start periodic emoji rain (every 4 seconds)
+    // Increased frequency: 4 emojis every second (using setInterval)
     let emojiInterval = setInterval(() => {
-        if(mainApp.style.display === 'block') showFloatingEmoji();
-    }, 4000);
+        if(mainApp.style.display === 'block') {
+            for(let i = 0; i < 4; i++) {
+                setTimeout(() => showFloatingEmoji(), i * 60);
+            }
+        }
+    }, 1000);
     
-    // FEED MODAL with pictures & motivational quotes + animal emojis
+    // FEED MODAL with pictures & motivational quotes
     const feedData = [
         { emoji: "📚", text: "Every small step counts! You got this!" },
         { emoji: "🐼", text: "Study panda says: rest your eyes every 25 mins." },
@@ -393,28 +428,28 @@
             feedEl.innerHTML = `<div class="feed-emoji">${item.emoji}</div><div><strong>✨ Affirmation</strong><br>${item.text}</div>`;
             container.appendChild(feedEl);
         });
-        // add random extra cute pic style
         const extra = document.createElement('div');
         extra.className = 'feed-item';
         extra.innerHTML = `<div class="feed-emoji">🎧</div><div><strong>Study vibe</strong><br>Stay focused, you are amazing 🌈</div>`;
         container.appendChild(extra);
-        showFloatingEmoji('❤️');
+        for(let i=0;i<6;i++) setTimeout(() => showFloatingEmoji('💖'), i*100);
     }
 
-    // Music Player (study lofi using Web Audio oscillator simulation or we embed ambient? Simpler: use an Audio context with loop? For better UX: use a hidden audio element with online stream? I'll generate a gentle loop via Audio element with CC0 lofi sample? But safe: create an oscillator? Better to use an actual audio? Provide simple white noise? Actually easier: use Audio from sample? Instead we use a web audio API - play a sine chord? Simpler: create an Audio element with royalty free lofi stream? Not safe for offline. I'll implement a silent "music" mock but provide a real audio context: using oscillator to play a calm drone. But might be annoying. I'll implement a simple Audio element with a generated tone? Better: Provide a media player using a public lofi stream? That may break. I'll implement a simple 'click' simulation? Actually I'll provide a simple metronome? No. I'll implement a toggle for study ambience: a hidden audio from a public domain wave? More robust: Use a simple BGM using a Web Audio API gentle pad. For demonstration, create a simple background sine wave loop? Might be complex. Use a silent track? I'll instead provide an option to play a peaceful audio from a free source (chillhop). Not reliable. Use a simple oscillator with gain node that plays a calming chord? Okay I'll implement a synthesizer chord loop but may be CPU heavy? Simpler: Use the built-in 'Audio' object with a base64 silent? I'll provide a playlist simulation with a lofi vibe from sample? I decide to embed a youtube? Not allowed. I'll just make music button show "ambient mode" using a simple oscillator with lowpass filter. For demonstration, it's fine.
+    // Music Player (gentle oscillator)
     let musicCtx = null;
     let musicSource = null;
     let isPlaying = false;
+    let musicGain = null;
     function initMusic() {
         if(musicCtx) return;
         musicCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const gain = musicCtx.createGain();
-        gain.gain.value = 0.25;
-        gain.connect(musicCtx.destination);
+        musicGain = musicCtx.createGain();
+        musicGain.gain.value = 0.2;
+        musicGain.connect(musicCtx.destination);
         const oscillator = musicCtx.createOscillator();
         oscillator.type = 'sine';
-        oscillator.frequency.value = 261.63; // C4
-        oscillator.connect(gain);
+        oscillator.frequency.value = 261.63;
+        oscillator.connect(musicGain);
         musicSource = oscillator;
     }
     function playStudyMusic() {
@@ -426,9 +461,8 @@
                 isPlaying = true;
                 speakText("Lofi beats activated. Keep flowing.");
             } catch(e) { 
-                // restart if needed
                 initMusic();
-                musicSource.start();
+                if(musicSource) musicSource.start();
                 isPlaying = true;
             }
         }
@@ -449,18 +483,20 @@
     });
     
     // Animal Companion interaction + speech
-    document.getElementById('animalCompanion').onclick = () => {
-        const lines = ["Take a deep breath!", "Hydrate while you study!", "Try a 5-minute quiz!", "You're doing great!", "🐣 Stay pawsitive!"];
-        const msg = lines[Math.floor(Math.random()*lines.length)];
-        document.getElementById('animalSpeech').innerText = msg;
-        speakText(msg);
-        showFloatingEmoji('🐣');
-    };
+    const animalDiv = document.getElementById('animalCompanion');
+    if(animalDiv) {
+        animalDiv.onclick = () => {
+            const lines = ["Take a deep breath!", "Hydrate while you study!", "Try a 5-minute quiz!", "You're doing great!", "🐣 Stay pawsitive!", "One step at a time 🌱"];
+            const msg = lines[Math.floor(Math.random()*lines.length)];
+            document.getElementById('animalSpeech').innerText = msg;
+            speakText(msg);
+            for(let i=0;i<3;i++) setTimeout(() => showFloatingEmoji('🐣'), i*150);
+        };
+    }
     
-    // Load theme from localStorage
+    // Load theme
     if(localStorage.getItem('focuswell_theme') === 'night') setTheme('night');
     
-    // prevent double intervals, cleanup after login not needed. 
     window.addEventListener('beforeunload', () => { if(musicCtx) musicCtx.close(); });
 </script>
 </body>
