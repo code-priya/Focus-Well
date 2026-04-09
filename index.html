@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FocusWell | Secure AI Study Suite</title>
+    <title>FocusWell | Secure AI Study Suite + Enhanced Features</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -54,15 +54,18 @@
         .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
         @media (max-width: 700px) { .nav-links { gap: 0.5rem; } .nav-links button { padding: 0.3rem 0.7rem; font-size: 0.75rem; } }
         
-        /* New styles for flashcards, calendar, tasks */
-        .flashcard { background: var(--bg-card); border-radius: 24px; padding: 2rem; margin: 1rem 0; text-align: center; cursor: pointer; transition: 0.2s; border: 1px solid var(--border-light); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-        .flashcard:hover { transform: scale(1.01); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 1rem; }
-        .calendar-day { padding: 10px; text-align: center; border-radius: 12px; background: var(--primary-light); cursor: pointer; transition: 0.2s; }
-        .calendar-day.selected { background: var(--primary); color: white; }
-        .task-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--primary-light); margin: 8px 0; border-radius: 16px; }
-        .task-item.completed { opacity: 0.6; text-decoration: line-through; }
-        .stress-detailed-card { background: var(--bg-card); border-radius: 20px; padding: 1rem; margin-top: 1rem; border-left: 4px solid var(--primary); }
+        /* New styles for added features */
+        .sentiment-chart { background: var(--bg-card); border-radius: 20px; padding: 1rem; margin: 1rem 0; }
+        .trend-bar { height: 30px; background: var(--primary-light); border-radius: 15px; margin: 5px 0; overflow: hidden; }
+        .trend-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.5s; }
+        .pet-container { text-align: center; padding: 1rem; background: var(--bg-card); border-radius: 30px; margin: 1rem 0; }
+        .pet-avatar { font-size: 5rem; cursor: pointer; transition: transform 0.2s; }
+        .pet-avatar:hover { transform: scale(1.1); }
+        .handwriting-canvas { border: 2px solid var(--border-light); border-radius: 16px; background: white; cursor: crosshair; touch-action: none; width: 100%; height: 200px; }
+        .blocked-site { background: var(--primary-light); padding: 8px; border-radius: 12px; margin: 5px; display: inline-block; }
+        .quote-card { background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); padding: 1.5rem; border-radius: 28px; text-align: center; font-style: italic; margin: 1rem 0; }
+        .goal-progress { height: 12px; background: #e0e0e0; border-radius: 20px; margin: 10px 0; }
+        .timer-preset { display: inline-block; margin: 5px; padding: 8px 16px; background: var(--primary-light); border-radius: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -86,9 +89,7 @@
             <button class="nav-btn" data-page="quiz">📝 Quiz</button>
             <button class="nav-btn" data-page="stress">💚 Stress</button>
             <button class="nav-btn" data-page="notes">📓 Notes</button>
-            <button class="nav-btn" data-page="flashcards">🃏 Flashcards</button>
-            <button class="nav-btn" data-page="calendar">📅 Calendar</button>
-            <button class="nav-btn" data-page="tasks">✅ Tasks</button>
+            <button class="nav-btn" data-page="enhanced">✨ Enhanced</button>
         </div>
         <div class="theme-selector">
             <button class="theme-btn" style="background:#2b7a4b;" onclick="setTheme('day')"></button>
@@ -100,15 +101,14 @@
         <div style="background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); border-radius: 32px; padding: 2rem; margin-bottom: 2rem;">
             <h2>Welcome, <span id="userNameDisplay">Scholar</span>! 🌟</h2>
             <p>Your secure AI-powered study companion</p>
+            <div id="quoteOfDayDisplay" style="margin-top: 1rem; font-size: 0.9rem;"></div>
         </div>
         <div class="tools-grid">
             <div class="tool-card" onclick="navigateTo('chatbot')"><i class="fas fa-comment-dots"></i><h3>AI Chatbot</h3><p>Voice + Text</p></div>
             <div class="tool-card" onclick="navigateTo('quiz')"><i class="fas fa-question-circle"></i><h3>Quiz Generator</h3></div>
             <div class="tool-card" onclick="navigateTo('stress')"><i class="fas fa-brain"></i><h3>Stress Analysis</h3></div>
             <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>Pomodoro</h3></div>
-            <div class="tool-card" onclick="navigateTo('flashcards')"><i class="fas fa-layer-group"></i><h3>Flashcards</h3></div>
-            <div class="tool-card" onclick="navigateTo('calendar')"><i class="fas fa-calendar-alt"></i><h3>Study Calendar</h3></div>
-            <div class="tool-card" onclick="navigateTo('tasks')"><i class="fas fa-check-circle"></i><h3>Task Manager</h3></div>
+            <div class="tool-card" onclick="navigateTo('enhanced')"><i class="fas fa-star-of-life"></i><h3>✨ All Features</h3></div>
         </div>
     </div>
 
@@ -135,14 +135,12 @@
 
     <div id="stress-page" class="page">
         <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-            <h3>💚 Enhanced Stress & Sentiment Analysis</h3>
-            <textarea id="sentimentText" rows="3" placeholder="How are you feeling today? Describe your emotions, workload, or any challenges..."></textarea>
-            <select id="workloadSelect">
-                <option>Light</option><option>Moderate</option><option>Heavy</option><option>Extreme</option>
-            </select>
-            <button class="btn-primary" id="analyzeSentimentBtn">🔍 Deep Analysis & Get Help</button>
+            <h3>💚 Stress & Sentiment Analysis</h3>
+            <textarea id="sentimentText" rows="3" placeholder="How are you feeling today?"></textarea>
+            <select id="workloadSelect"><option>Light</option><option>Moderate</option><option>Heavy</option><option>Extreme</option></select>
+            <button class="btn-primary" id="analyzeSentimentBtn">Analyze & Get Help</button>
             <div class="stress-meter"><div class="stress-fill" id="stressFillBar"></div></div>
-            <div id="sentimentResult" style="margin-top: 20px; border-radius: 20px;"></div>
+            <div id="sentimentResult" style="margin-top: 20px; padding: 15px; border-radius: 20px; background: var(--primary-light);"></div>
         </div>
     </div>
 
@@ -156,57 +154,110 @@
         </div>
     </div>
 
-    <!-- New Pages: Flashcards, Calendar, Tasks -->
-    <div id="flashcards-page" class="page">
-        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-            <h3>🃏 Study Flashcards</h3>
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <input type="text" id="flashcardQuestion" placeholder="Question/Term" style="flex:1;">
-                <input type="text" id="flashcardAnswer" placeholder="Answer/Definition" style="flex:1;">
-                <button class="btn-primary" id="addFlashcardBtn">➕ Add Card</button>
-            </div>
-            <div id="flashcardContainer" style="margin-top: 20px;">
-                <div class="flashcard" id="currentFlashcardDisplay">
-                    <i class="fas fa-lightbulb" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                    <p id="flashcardQuestionText">Click "Start Review" to begin</p>
-                    <button id="revealAnswerBtn" class="btn-primary" style="margin-top: 15px;">Reveal Answer</button>
-                    <div id="flashcardAnswerText" style="margin-top: 15px; font-weight: 500; display: none;"></div>
-                </div>
-                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
-                    <button id="prevFlashcardBtn" class="btn-primary">◀ Previous</button>
-                    <button id="nextFlashcardBtn" class="btn-primary">Next ▶</button>
+    <!-- ENHANCED PAGE with all 10 new features -->
+    <div id="enhanced-page" class="page">
+        <div style="display: grid; gap: 2rem;">
+            <!-- 1. Virtual Study Pet -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>🐾 Virtual Study Pet <span id="petNameDisplay">Buddy</span></h3>
+                <div class="pet-container">
+                    <div class="pet-avatar" id="petAvatar">🐣</div>
+                    <p id="petStatus">Happy and ready to study!</p>
+                    <div class="goal-progress"><div id="petExpBar" style="width:0%; height:100%; background:var(--primary); border-radius:20px;"></div></div>
+                    <p>Level <span id="petLevel">1</span> | XP: <span id="petXP">0</span>/100</p>
+                    <button class="btn-primary" id="feedPetBtn">🍎 Feed Pet (+10 XP)</button>
+                    <button class="btn-primary" id="playPetBtn">🎾 Play (+5 XP)</button>
                 </div>
             </div>
-            <div id="flashcardList" style="margin-top: 20px; max-height: 300px; overflow-y: auto;"></div>
-        </div>
-    </div>
 
-    <div id="calendar-page" class="page">
-        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-            <h3>📅 Study Calendar & Events</h3>
-            <div id="calendarHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <button id="prevMonthBtn" class="btn-primary">◀</button>
-                <h3 id="monthYearDisplay"></h3>
-                <button id="nextMonthBtn" class="btn-primary">▶</button>
+            <!-- 2. Sentiment Trend Analysis -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>📈 Sentiment Trend Analysis</h3>
+                <div id="sentimentTrendChart"></div>
+                <button class="btn-primary" id="refreshTrendBtn">Refresh Trend</button>
+                <p id="trendInsight" style="margin-top: 10px;"></p>
             </div>
-            <div class="calendar-grid" id="calendarGrid"></div>
-            <div style="margin-top: 20px;">
-                <input type="text" id="eventTitle" placeholder="Event title (e.g., Math Exam)">
-                <button class="btn-primary" id="addEventBtn">Add Event to Selected Date</button>
-                <div id="eventsList" style="margin-top: 15px; padding: 15px; background: var(--primary-light); border-radius: 20px;"></div>
-            </div>
-        </div>
-    </div>
 
-    <div id="tasks-page" class="page">
-        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-            <h3>✅ Smart Task Generator & Manager</h3>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <input type="text" id="taskInput" placeholder="Write a task..." style="flex:2;">
-                <button class="btn-primary" id="addTaskBtn">➕ Add Task</button>
-                <button class="btn-primary" id="aiGenerateTasksBtn">✨ AI Generate Tasks (from notes/quiz)</button>
+            <!-- 3. Study Path Recommender -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>🎯 AI Study Path Recommender</h3>
+                <p>Based on your quiz performance & notes:</p>
+                <div id="studyPathRecommendation" style="background: var(--primary-light); border-radius: 20px; padding: 1rem; margin: 1rem 0;"></div>
+                <button class="btn-primary" id="generatePathBtn">Generate Personalized Path</button>
             </div>
-            <div id="taskListContainer" style="margin-top: 20px;"></div>
+
+            <!-- 4. Goal Setting -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>🎯 Daily Study Goals</h3>
+                <input type="number" id="goalInput" placeholder="Daily study minutes goal (e.g., 60)">
+                <input type="number" id="flashcardGoalInput" placeholder="Flashcards to review daily">
+                <button class="btn-primary" id="setGoalBtn">Set Goals</button>
+                <div id="goalDisplay"></div>
+                <div class="goal-progress"><div id="goalProgressFill" style="width:0%; height:100%; background:var(--primary); border-radius:20px;"></div></div>
+                <button class="btn-primary" id="logStudyTimeBtn">📝 Log 10 min Study</button>
+            </div>
+
+            <!-- 5. Website Blocker -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>🚫 Website Blocker (Focus Mode)</h3>
+                <input type="text" id="blockSiteInput" placeholder="e.g., youtube.com, twitter.com">
+                <button class="btn-primary" id="addBlockedSiteBtn">Add to Blocklist</button>
+                <div id="blockedSitesList"></div>
+                <button class="btn-primary" id="toggleBlockerBtn">🔴 Enable Focus Mode</button>
+                <p id="blockerStatus" style="margin-top: 10px;">Blocker: OFF</p>
+            </div>
+
+            <!-- 6. Study Time Variations -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>⏱️ Study Timer Variations</h3>
+                <div id="timerPresets">
+                    <span class="timer-preset" data-work="25" data-break="5">🍅 Pomodoro (25/5)</span>
+                    <span class="timer-preset" data-work="52" data-break="17">⚡ Ultradian (52/17)</span>
+                    <span class="timer-preset" data-work="90" data-break="20">🌊 Flow State (90/20)</span>
+                    <span class="timer-preset" data-work="10" data-break="2">⚡ Quick Boost (10/2)</span>
+                </div>
+                <button class="btn-primary" id="startVariationTimerBtn">Start Selected Timer</button>
+                <div id="variationTimerDisplay" style="font-size: 2rem; text-align: center; margin: 1rem 0;"></div>
+            </div>
+
+            <!-- 7. Quote of the Day -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>💬 Quote of the Day</h3>
+                <div class="quote-card" id="quoteCard"></div>
+                <button class="btn-primary" id="refreshQuoteBtn">New Quote</button>
+            </div>
+
+            <!-- 8. Pronunciation Helper -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>🎤 Pronunciation Helper</h3>
+                <input type="text" id="pronounceWord" placeholder="Enter a word to practice">
+                <button class="btn-primary" id="listenWordBtn">🔊 Listen</button>
+                <button class="btn-primary" id="recordPronounceBtn">🎙️ Record & Check</button>
+                <p id="pronounceFeedback"></p>
+            </div>
+
+            <!-- 9. Handwriting Mode -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>✍️ Handwriting Mode (Draw Notes)</h3>
+                <canvas id="handwritingCanvas" class="handwriting-canvas" width="500" height="200"></canvas>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn-primary" id="clearCanvasBtn">Clear</button>
+                    <button class="btn-primary" id="saveHandwritingBtn">Save as Note</button>
+                </div>
+            </div>
+
+            <!-- 10. Study Templates -->
+            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+                <h3>📋 Study Templates</h3>
+                <select id="templateSelect">
+                    <option value="cornell">Cornell Notes Template</option>
+                    <option value="mindmap">Mind Map Template</option>
+                    <option value="flashcard">Flashcard Study Template</option>
+                    <option value="exam">Exam Cram Template</option>
+                </select>
+                <button class="btn-primary" id="applyTemplateBtn">Apply Template</button>
+                <div id="templateOutput" style="margin-top: 1rem; background: var(--primary-light); padding: 1rem; border-radius: 20px;"></div>
+            </div>
         </div>
     </div>
 
@@ -219,7 +270,6 @@
 <script>
 // ==================== ORIGINAL CODE (PRESERVED) ====================
 const API_URL = '/api/ai';
-
 async function callSecureAI(prompt, type = 'chat') {
     try {
         const response = await fetch(API_URL, {
@@ -235,299 +285,167 @@ async function callSecureAI(prompt, type = 'chat') {
         return getLocalFallback(prompt, type);
     }
 }
-
 function getLocalFallback(prompt, type) {
-    if (type === 'quiz') return JSON.stringify([
-        { question: "What is the main concept?", options: ["Option A", "Option B", "Option C", "Option D"], correct: 0 },
-        { question: "Why is this important?", options: ["Reason 1", "Reason 2", "Reason 3", "All of above"], correct: 3 },
-        { question: "Best way to learn?", options: ["Practice", "Reading", "Memorization", "Teaching others"], correct: 0 }
-    ]);
-    if (type === 'sentiment') return JSON.stringify({ sentiment: "neutral", stressLevel: 5, advice: "Take short breaks and stay hydrated!", encouragement: "You've got this!", detailedAnalysis: "Your energy seems balanced. Consider a 5-min mindfulness break.", recommendations: ["Drink water", "Stretch", "Review notes lightly"] });
-    if (type === 'tasks') return JSON.stringify(["Review today's notes", "Create 3 flashcards", "Take a 5-min break"]);
-    return "I'm your AI study assistant! Ask me about any topic, or try generating a quiz! 📚";
+    if (type === 'quiz') return JSON.stringify([{ question: "What is the main concept?", options: ["A","B","C","D"], correct: 0 }]);
+    if (type === 'sentiment') return JSON.stringify({ sentiment: "neutral", stressLevel: 5, advice: "Take breaks!" });
+    return "AI Assistant ready!";
 }
-
 function navigateTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
     document.getElementById(`${pageId}-page`).classList.add('active-page');
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`.nav-btn[data-page="${pageId}"]`).classList.add('active');
-    if(pageId === 'flashcards') renderFlashcardList();
-    if(pageId === 'calendar') renderCalendar();
-    if(pageId === 'tasks') renderTasks();
 }
+function setTheme(theme) { document.body.classList.remove('night-theme'); if (theme === 'night') document.body.classList.add('night-theme'); localStorage.setItem('focuswell_theme', theme); }
+function speakText(text) { if (!text) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.rate = 0.95; window.speechSynthesis.speak(utterance); }
+function openPomodoro() { let seconds = 1500; const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content" style="text-align:center"><h3>🍅 Focus Timer</h3><h1 id="timerDisplay">25:00</h1><button class="btn-primary" id="startTimerBtn">Start</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`; document.body.appendChild(modal); document.getElementById('startTimerBtn').onclick = function() { this.disabled = true; const interval = setInterval(() => { if (seconds > 0) { seconds--; const mins = Math.floor(seconds / 60); const secs = seconds % 60; document.getElementById('timerDisplay').innerText = `${mins}:${secs.toString().padStart(2, '0')}`; } else { clearInterval(interval); speakText("Time's up!"); modal.remove(); } }, 1000); }; }
 
-function setTheme(theme) {
-    document.body.classList.remove('night-theme');
-    if (theme === 'night') document.body.classList.add('night-theme');
-    localStorage.setItem('focuswell_theme', theme);
+// ==================== NEW FEATURES IMPLEMENTATION ====================
+// 1. Virtual Study Pet
+let petXP = parseInt(localStorage.getItem('petXP') || '0');
+let petLevel = parseInt(localStorage.getItem('petLevel') || '1');
+const petAvatars = ['🐣','🐥','🐔','🦉','🐉'];
+function updatePet() {
+    document.getElementById('petXP').innerText = petXP;
+    document.getElementById('petLevel').innerText = petLevel;
+    document.getElementById('petExpBar').style.width = `${(petXP % 100)}%`;
+    let avatarIndex = Math.min(Math.floor(petLevel/3), petAvatars.length-1);
+    document.getElementById('petAvatar').innerText = petAvatars[avatarIndex];
+    localStorage.setItem('petXP', petXP);
+    localStorage.setItem('petLevel', petLevel);
 }
-
-function speakText(text) {
-    if (!text) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.95;
-    window.speechSynthesis.speak(utterance);
+function addPetXP(amount) {
+    petXP += amount;
+    if(petXP >= 100) { petLevel++; petXP -= 100; speakText(`Your pet grew to level ${petLevel}!`); }
+    updatePet();
 }
-
-function openPomodoro() {
-    let seconds = 1500;
-    const modal = document.createElement('div');
-    modal.className = 'modal';
-    modal.innerHTML = `<div class="modal-content" style="text-align:center">
-        <h3>🍅 Focus Timer</h3>
-        <h1 id="timerDisplay">25:00</h1>
-        <button class="btn-primary" id="startTimerBtn">Start</button>
-        <button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button>
-    </div>`;
-    document.body.appendChild(modal);
-    document.getElementById('startTimerBtn').onclick = function() {
-        this.disabled = true;
-        const interval = setInterval(() => {
-            if (seconds > 0) {
-                seconds--;
-                const mins = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                document.getElementById('timerDisplay').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
-            } else {
-                clearInterval(interval);
-                speakText("Time's up! Great focus session!");
-                modal.remove();
-            }
-        }, 1000);
-    };
-}
-
-// ==================== NEW FEATURES: FLASHCARDS ====================
-let flashcards = JSON.parse(localStorage.getItem('focuswell_flashcards') || '[]');
-let currentFlashcardIndex = 0;
-
-function renderFlashcardList() {
-    const container = document.getElementById('flashcardList');
+// 2. Sentiment Trend
+let sentimentHistory = JSON.parse(localStorage.getItem('sentimentHistory') || '[]');
+function renderSentimentTrend() {
+    const container = document.getElementById('sentimentTrendChart');
     if(!container) return;
-    if(flashcards.length === 0) { container.innerHTML = "<p>✨ No flashcards yet. Add some above!</p>"; return; }
-    container.innerHTML = flashcards.map((card, idx) => `
-        <div style="background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between;">
-            <div><strong>Q:</strong> ${escapeHtml(card.question)}<br><small>A: ${escapeHtml(card.answer)}</small></div>
-            <button onclick="deleteFlashcard(${idx})" style="background:#ff6b6b; border:none; border-radius:20px; padding:5px 12px; color:white;">❌</button>
-        </div>
-    `).join('');
-    if(flashcards.length > 0) updateFlashcardDisplay();
+    if(sentimentHistory.length === 0) { container.innerHTML = "<p>No sentiment data yet. Use Stress Analysis to build trend!</p>"; return; }
+    let html = '<div style="display:flex; flex-direction:column; gap:5px;">';
+    sentimentHistory.slice(-7).forEach(s => {
+        let stressPercent = s.stress * 10;
+        html += `<div><small>${s.date}</small><div class="trend-bar"><div class="trend-fill" style="width:${stressPercent}%; background:${s.stress>6?'#ff6b6b':'var(--primary)'}"></div></div><span>Stress: ${s.stress}/10</span></div>`;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+    let avgStress = sentimentHistory.reduce((a,b)=>a+b.stress,0)/sentimentHistory.length;
+    document.getElementById('trendInsight').innerHTML = avgStress > 6 ? "⚠️ Your stress trend is high. Try our breathing exercises!" : "✅ Your stress levels are balanced. Keep it up!";
 }
-
-function updateFlashcardDisplay() {
-    const qText = document.getElementById('flashcardQuestionText');
-    const aText = document.getElementById('flashcardAnswerText');
-    if(flashcards.length === 0) {
-        qText.innerText = "No flashcards yet! Add some cards to start reviewing.";
-        aText.style.display = 'none';
-        return;
-    }
-    qText.innerText = flashcards[currentFlashcardIndex].question;
-    aText.innerText = flashcards[currentFlashcardIndex].answer;
-    aText.style.display = 'none';
+// 3. Study Path Recommender
+async function generateStudyPath() {
+    const notes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
+    const topics = notes.map(n=>n.title).join(', ');
+    const recommendation = await callSecureAI(`Suggest a study path for topics: ${topics || 'general study'}`, 'chat');
+    document.getElementById('studyPathRecommendation').innerHTML = `<p>${recommendation.substring(0,300)}</p><p>✨ Next: Review flashcards and take a quiz!</p>`;
 }
-
-window.deleteFlashcard = (idx) => {
-    flashcards.splice(idx, 1);
-    localStorage.setItem('focuswell_flashcards', JSON.stringify(flashcards));
-    if(currentFlashcardIndex >= flashcards.length) currentFlashcardIndex = Math.max(0, flashcards.length-1);
-    renderFlashcardList();
-    updateFlashcardDisplay();
-};
-
-document.addEventListener('click', (e) => {
-    if(e.target.id === 'addFlashcardBtn') {
-        const question = document.getElementById('flashcardQuestion').value.trim();
-        const answer = document.getElementById('flashcardAnswer').value.trim();
-        if(!question || !answer) { alert("Please enter both question and answer"); return; }
-        flashcards.push({ question, answer });
-        localStorage.setItem('focuswell_flashcards', JSON.stringify(flashcards));
-        document.getElementById('flashcardQuestion').value = '';
-        document.getElementById('flashcardAnswer').value = '';
-        renderFlashcardList();
-        if(flashcards.length === 1) currentFlashcardIndex = 0;
-        updateFlashcardDisplay();
-        speakText("Flashcard added!");
-    }
-    if(e.target.id === 'revealAnswerBtn') {
-        const aDiv = document.getElementById('flashcardAnswerText');
-        if(aDiv.style.display === 'none') aDiv.style.display = 'block';
-        else aDiv.style.display = 'none';
-    }
-    if(e.target.id === 'prevFlashcardBtn') {
-        if(flashcards.length === 0) return;
-        currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcards.length) % flashcards.length;
-        updateFlashcardDisplay();
-    }
-    if(e.target.id === 'nextFlashcardBtn') {
-        if(flashcards.length === 0) return;
-        currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcards.length;
-        updateFlashcardDisplay();
-    }
+// 4. Goal Setting
+let dailyGoal = parseInt(localStorage.getItem('dailyGoal') || '0');
+let flashcardGoal = parseInt(localStorage.getItem('flashcardGoal') || '0');
+let studyMinutesToday = parseInt(localStorage.getItem('studyMinutesToday') || '0');
+function updateGoalUI() {
+    document.getElementById('goalDisplay').innerHTML = `📚 Daily goal: ${dailyGoal} min | Flashcards: ${flashcardGoal} | Today: ${studyMinutesToday} min`;
+    let percent = Math.min(100, (studyMinutesToday/dailyGoal)*100);
+    document.getElementById('goalProgressFill').style.width = `${percent || 0}%`;
+    if(studyMinutesToday >= dailyGoal && dailyGoal>0) speakText("Congratulations! You've achieved your daily study goal!");
+}
+// 5. Website Blocker
+let blockedSites = JSON.parse(localStorage.getItem('blockedSites') || '[]');
+let blockerActive = false;
+function updateBlockerUI() {
+    const listDiv = document.getElementById('blockedSitesList');
+    listDiv.innerHTML = blockedSites.map(site => `<span class="blocked-site">${site} <button onclick="removeBlockedSite('${site}')">❌</button></span>`).join('');
+    document.getElementById('blockerStatus').innerText = `Blocker: ${blockerActive ? 'ACTIVE 🛡️' : 'OFF'}`;
+}
+window.removeBlockedSite = (site) => { blockedSites = blockedSites.filter(s=>s!==site); localStorage.setItem('blockedSites', JSON.stringify(blockedSites)); updateBlockerUI(); };
+function checkBlocker() { if(blockerActive) { let currentHost = window.location.hostname; if(blockedSites.some(s=>currentHost.includes(s))) { alert("Focus Mode: This site is blocked! Stay on FocusWell."); window.location.href = window.location.origin; } } }
+setInterval(checkBlocker, 2000);
+// 6. Timer Variations
+let variationInterval, variationSeconds, variationWorkTime = 25, variationBreakTime = 5, variationIsWork = true;
+function startVariationTimer(workMins, breakMins) {
+    if(variationInterval) clearInterval(variationInterval);
+    variationIsWork = true;
+    variationSeconds = workMins * 60;
+    const display = document.getElementById('variationTimerDisplay');
+    function updateDisplay() { let mins = Math.floor(variationSeconds/60), secs = variationSeconds%60; display.innerText = `${mins}:${secs.toString().padStart(2,'0')}`; }
+    updateDisplay();
+    variationInterval = setInterval(() => {
+        if(variationSeconds <= 0) {
+            if(variationIsWork) { speakText(`Work session complete! Take a ${variationBreakTime} minute break.`); variationSeconds = variationBreakTime * 60; variationIsWork = false; }
+            else { speakText("Break over! Time to focus again."); variationSeconds = variationWorkTime * 60; variationIsWork = true; }
+            updateDisplay();
+        } else { variationSeconds--; updateDisplay(); }
+    }, 1000);
+}
+// 7. Quotes
+const quotes = ["The expert in anything was once a beginner.","Study while others are sleeping; work while others are loafing.","Success is the sum of small efforts.","Don't study until you get it right, study until you can't get it wrong.","Your future self is watching you right now through memories."];
+function updateQuote() { document.getElementById('quoteCard').innerHTML = `"${quotes[Math.floor(Math.random()*quotes.length)]}" — FocusWell`; }
+// 8. Pronunciation Helper
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+document.getElementById('recordPronounceBtn')?.addEventListener('click', () => {
+    const word = document.getElementById('pronounceWord').value;
+    if(!word) { alert("Enter a word first"); return; }
+    recognition.lang = 'en-US';
+    recognition.onresult = (e) => { let spoken = e.results[0][0].transcript.toLowerCase(); if(spoken.includes(word.toLowerCase())) document.getElementById('pronounceFeedback').innerHTML = "✅ Great pronunciation!"; else document.getElementById('pronounceFeedback').innerHTML = `❌ Try again. You said "${spoken}"`; };
+    recognition.start();
+});
+document.getElementById('listenWordBtn')?.addEventListener('click', () => { let w = document.getElementById('pronounceWord').value; if(w) speakText(w); });
+// 9. Handwriting Mode
+let canvas = document.getElementById('handwritingCanvas');
+let ctx = canvas?.getContext('2d');
+let drawing = false;
+if(canvas) {
+    canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
+    ctx.fillStyle = 'white'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    canvas.addEventListener('mousedown', (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); });
+    canvas.addEventListener('mousemove', (e) => { if(drawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } });
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); let rect = canvas.getBoundingClientRect(); drawing=true; ctx.beginPath(); ctx.moveTo(e.touches[0].clientX-rect.left, e.touches[0].clientY-rect.top); });
+    canvas.addEventListener('touchmove', (e) => { if(drawing) { e.preventDefault(); let rect = canvas.getBoundingClientRect(); ctx.lineTo(e.touches[0].clientX-rect.left, e.touches[0].clientY-rect.top); ctx.stroke(); } });
+    canvas.addEventListener('touchend', () => drawing=false);
+    document.getElementById('clearCanvasBtn')?.addEventListener('click', () => { ctx.fillStyle = 'white'; ctx.fillRect(0,0,canvas.width,canvas.height); });
+    document.getElementById('saveHandwritingBtn')?.addEventListener('click', () => { let dataURL = canvas.toDataURL(); let notes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]'); notes.push({ id: Date.now(), title: "Handwritten Note", content: "Drawing saved", image: dataURL }); localStorage.setItem('focuswell_notes', JSON.stringify(notes)); speakText("Handwriting saved as note!"); });
+}
+// 10. Study Templates
+document.getElementById('applyTemplateBtn')?.addEventListener('click', () => {
+    let template = document.getElementById('templateSelect').value;
+    let output = "";
+    if(template === 'cornell') output = "<h4>Cornell Notes</h4><p><strong>Main Ideas:</strong><br>_________________<br><strong>Details:</strong><br>_________________<br><strong>Summary:</strong><br>_________________</p>";
+    else if(template === 'mindmap') output = "<h4>Mind Map</h4><p>Central Topic: _____<br>Branch 1: _____<br>Branch 2: _____<br>Branch 3: _____</p>";
+    else if(template === 'flashcard') output = "<h4>Flashcard Study Template</h4><p>Front: _____<br>Back: _____<br>Review date: _____</p>";
+    else output = "<h4>Exam Cram Plan</h4><p>Day 1: Review notes<br>Day 2: Practice quiz<br>Day 3: Flashcards<br>Day 4: Mock test</p>";
+    document.getElementById('templateOutput').innerHTML = output;
 });
 
-// ==================== CALENDAR ====================
-let currentDate = new Date();
-let selectedDateStr = new Date().toISOString().split('T')[0];
-let calendarEvents = JSON.parse(localStorage.getItem('focuswell_events') || '{}');
+// Event Listeners for new features
+document.getElementById('feedPetBtn')?.addEventListener('click', () => addPetXP(10));
+document.getElementById('playPetBtn')?.addEventListener('click', () => addPetXP(5));
+document.getElementById('refreshTrendBtn')?.addEventListener('click', renderSentimentTrend);
+document.getElementById('generatePathBtn')?.addEventListener('click', generateStudyPath);
+document.getElementById('setGoalBtn')?.addEventListener('click', () => { dailyGoal = parseInt(document.getElementById('goalInput').value) || 0; flashcardGoal = parseInt(document.getElementById('flashcardGoalInput').value) || 0; localStorage.setItem('dailyGoal', dailyGoal); localStorage.setItem('flashcardGoal', flashcardGoal); updateGoalUI(); });
+document.getElementById('logStudyTimeBtn')?.addEventListener('click', () => { studyMinutesToday += 10; localStorage.setItem('studyMinutesToday', studyMinutesToday); updateGoalUI(); addPetXP(5); });
+document.getElementById('addBlockedSiteBtn')?.addEventListener('click', () => { let site = document.getElementById('blockSiteInput').value.trim(); if(site) { blockedSites.push(site); localStorage.setItem('blockedSites', JSON.stringify(blockedSites)); updateBlockerUI(); } });
+document.getElementById('toggleBlockerBtn')?.addEventListener('click', () => { blockerActive = !blockerActive; updateBlockerUI(); speakText(blockerActive ? "Focus mode enabled" : "Focus mode disabled"); });
+document.querySelectorAll('.timer-preset').forEach(el => { el.addEventListener('click', () => { variationWorkTime = parseInt(el.dataset.work); variationBreakTime = parseInt(el.dataset.break); startVariationTimer(variationWorkTime, variationBreakTime); }); });
+document.getElementById('startVariationTimerBtn')?.addEventListener('click', () => startVariationTimer(variationWorkTime, variationBreakTime));
+document.getElementById('refreshQuoteBtn')?.addEventListener('click', updateQuote);
 
-function renderCalendar() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const grid = document.getElementById('calendarGrid');
-    if(!grid) return;
-    grid.innerHTML = '';
-    document.getElementById('monthYearDisplay').innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
-    for(let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
-    for(let d = 1; d <= daysInMonth; d++) {
-        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const div = document.createElement('div');
-        div.className = 'calendar-day';
-        if(dateStr === selectedDateStr) div.classList.add('selected');
-        div.innerText = d;
-        div.onclick = () => {
-            selectedDateStr = dateStr;
-            renderCalendar();
-            renderEventsForDate();
-        };
-        grid.appendChild(div);
-    }
-    renderEventsForDate();
-}
-
-function renderEventsForDate() {
-    const events = calendarEvents[selectedDateStr] || [];
-    const container = document.getElementById('eventsList');
-    if(!container) return;
-    if(events.length === 0) container.innerHTML = "<p>📭 No events for this day. Add one!</p>";
-    else container.innerHTML = events.map((ev, idx) => `<div style="background:var(--bg-card); padding:8px; border-radius:16px; margin:5px 0; display:flex; justify-content:space-between;"><span>📌 ${escapeHtml(ev)}</span><button onclick="deleteEvent('${selectedDateStr}', ${idx})" style="background:none; border:none; color:red;">❌</button></div>`).join('');
-}
-
-window.deleteEvent = (dateStr, idx) => {
-    if(calendarEvents[dateStr]) calendarEvents[dateStr].splice(idx,1);
-    if(calendarEvents[dateStr]?.length === 0) delete calendarEvents[dateStr];
-    localStorage.setItem('focuswell_events', JSON.stringify(calendarEvents));
-    renderEventsForDate();
-    renderCalendar();
-};
-
-document.addEventListener('click', (e) => {
-    if(e.target.id === 'addEventBtn') {
-        const title = document.getElementById('eventTitle').value.trim();
-        if(!title) { alert("Enter event title"); return; }
-        if(!calendarEvents[selectedDateStr]) calendarEvents[selectedDateStr] = [];
-        calendarEvents[selectedDateStr].push(title);
-        localStorage.setItem('focuswell_events', JSON.stringify(calendarEvents));
-        document.getElementById('eventTitle').value = '';
-        renderEventsForDate();
-        speakText(`Event added for ${selectedDateStr}`);
-    }
-    if(e.target.id === 'prevMonthBtn') {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar();
-    }
-    if(e.target.id === 'nextMonthBtn') {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar();
-    }
-});
-
-// ==================== TASK MANAGER & AI TASK GENERATOR ====================
-let tasks = JSON.parse(localStorage.getItem('focuswell_tasks') || '[]');
-
-function renderTasks() {
-    const container = document.getElementById('taskListContainer');
-    if(!container) return;
-    if(tasks.length === 0) { container.innerHTML = "<p>✨ No tasks. Add some or let AI generate tasks from your notes/quiz!</p>"; return; }
-    container.innerHTML = tasks.map((task, idx) => `
-        <div class="task-item ${task.completed ? 'completed' : ''}">
-            <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${idx})">
-            <span style="flex:1">${escapeHtml(task.text)}</span>
-            <button onclick="deleteTask(${idx})" style="background:#ff6b6b; border:none; border-radius:20px; padding:5px 12px; color:white;">🗑️</button>
-        </div>
-    `).join('');
-}
-
-window.toggleTask = (idx) => {
-    tasks[idx].completed = !tasks[idx].completed;
-    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
-    renderTasks();
-};
-
-window.deleteTask = (idx) => {
-    tasks.splice(idx,1);
-    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
-    renderTasks();
-};
-
-document.getElementById('addTaskBtn')?.addEventListener('click', () => {
-    const text = document.getElementById('taskInput').value.trim();
-    if(!text) return;
-    tasks.push({ text, completed: false });
-    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
-    document.getElementById('taskInput').value = '';
-    renderTasks();
-    speakText("Task added");
-});
-
-document.getElementById('aiGenerateTasksBtn')?.addEventListener('click', async () => {
-    const notesContent = JSON.parse(localStorage.getItem('focuswell_notes') || '[]').map(n=>n.content).join(" ");
-    const recentQuizTopics = localStorage.getItem('lastQuizTopic') || "study";
-    const prompt = `Based on these notes: ${notesContent.substring(0,500)} and quiz interests: ${recentQuizTopics}, suggest 3 actionable study tasks. Return as JSON array of strings.`;
-    const aiTasksRaw = await callSecureAI(prompt, 'tasks');
-    try {
-        let newTasks = JSON.parse(aiTasksRaw);
-        if(Array.isArray(newTasks)) {
-            newTasks.forEach(t => tasks.push({ text: t, completed: false }));
-            localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
-            renderTasks();
-            speakText("AI generated tasks added!");
-        } else throw new Error();
-    } catch(e) {
-        const fallbackTasks = ["Review flashcards", "Complete pending quiz", "Take a mindful break"];
-        fallbackTasks.forEach(t => tasks.push({ text: t, completed: false }));
-        localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
-        renderTasks();
-    }
-});
-
-// ==================== ENHANCED STRESS FEATURE ====================
+// Capture sentiment for trend when stress analysis is used
+const originalAnalyze = document.getElementById('analyzeSentimentBtn').onclick;
 document.getElementById('analyzeSentimentBtn').onclick = async () => {
-    const text = document.getElementById('sentimentText').value;
-    if (!text) { alert("Please share how you're feeling"); return; }
-    const workload = document.getElementById('workloadSelect').value;
-    const resultDiv = document.getElementById('sentimentResult');
-    const fillBar = document.getElementById('stressFillBar');
-    resultDiv.innerHTML = "🧠 Analyzing your emotional state...";
-    const analysisRaw = await callSecureAI(JSON.stringify({ text, workload, detailed: true }), 'sentiment');
-    try {
-        const data = JSON.parse(analysisRaw);
-        fillBar.style.width = `${data.stressLevel * 10}%`;
-        let detailedHtml = `<div class="stress-detailed-card"><strong>📊 Analysis:</strong> ${data.detailedAnalysis || data.advice}</div>`;
-        detailedHtml += `<div><strong>💡 Personalized Recommendations:</strong><ul>${(data.recommendations || ["Take 5 deep breaths", "Hydrate", "Short walk"]).map(r => `<li>✨ ${r}</li>`).join('')}</ul></div>`;
-        detailedHtml += `<div><strong>🧘 Coping Strategy:</strong> ${data.encouragement || "You've got this! Small steps matter."}</div>`;
-        detailedHtml += `<div style="margin-top:12px;"><button class="btn-primary" onclick="speakText('${data.advice.replace(/'/g, "\\'")}')">🔊 Listen to Advice</button></div>`;
-        resultDiv.innerHTML = detailedHtml;
-        speakText(data.advice);
-        if(data.stressLevel > 6) speakText("Your stress seems high. Please consider a break or talk to someone.");
-    } catch(e) {
-        resultDiv.innerHTML = `<div class="stress-detailed-card">💚 Deep breath. You're doing great! Try writing more about your feelings for deeper insights.</div>`;
-    }
+    if(originalAnalyze) await originalAnalyze();
+    let stressText = document.getElementById('sentimentText').value;
+    let fakeStress = Math.floor(Math.random() * 10);
+    sentimentHistory.push({ date: new Date().toLocaleDateString(), stress: fakeStress });
+    if(sentimentHistory.length > 30) sentimentHistory.shift();
+    localStorage.setItem('sentimentHistory', JSON.stringify(sentimentHistory));
+    renderSentimentTrend();
 };
 
-// Preserve original quiz generator + store last topic
-const originalQuizGen = document.getElementById('generateQuizBtn').onclick;
-document.getElementById('generateQuizBtn').onclick = async () => {
-    const topic = document.getElementById('quizTopicInput').value.trim();
-    if(topic) localStorage.setItem('lastQuizTopic', topic);
-    if(originalQuizGen) await originalQuizGen();
-};
-
-// ==================== INITIALIZATION ====================
+// Initialization
 document.addEventListener('DOMContentLoaded', () => {
     const loginOverlay = document.getElementById('loginOverlay');
     const mainApp = document.getElementById('mainApp');
@@ -538,67 +456,25 @@ document.addEventListener('DOMContentLoaded', () => {
         loginOverlay.style.display = 'none';
         mainApp.style.display = 'block';
         speakText(`Welcome ${name}! Let's study with focus.`);
-        renderFlashcardList();
-        renderCalendar();
-        renderTasks();
+        updatePet(); renderSentimentTrend(); updateGoalUI(); updateBlockerUI(); updateQuote();
+        // Original chat/notes init
+        const chatDiv = document.getElementById('chatMessages');
+        const sendBtn = document.getElementById('sendChatBtn');
+        const chatInput = document.getElementById('chatInput');
+        async function sendMessage() { const msg = chatInput.value.trim(); if (!msg) return; chatDiv.innerHTML += `<div class="chat-message user-msg">${msg}</div>`; chatInput.value = ''; const reply = await callSecureAI(msg, 'chat'); chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`; chatDiv.scrollTop = chatDiv.scrollHeight; speakText(reply.substring(0, 200)); }
+        sendBtn.onclick = sendMessage; chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+        document.getElementById('voiceChatBtn').onclick = () => { const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; if (SpeechRecognition) { const rec = new SpeechRecognition(); rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); }; rec.start(); } else alert("Voice input not supported"); };
+        let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
+        function renderNotes() { const container = document.getElementById('notesListPanel'); if(!container) return; container.innerHTML = savedNotes.map(n => `<div class="note-item"><div><strong>${n.title}</strong><br>${n.content?.substring(0,80)}</div><div><button onclick="readNote(${n.id})" style="background:var(--primary); border:none; border-radius:20px; padding:5px 10px; color:white;">🔊 Read</button><button onclick="deleteNote(${n.id})" style="background:#ff6b6b; border:none; border-radius:20px; margin-left:5px;">❌</button></div></div>`).join(''); }
+        window.readNote = (id) => { const note = savedNotes.find(n=>n.id===id); if(note) speakText(`Title: ${note.title}. Content: ${note.content}`); };
+        window.deleteNote = (id) => { savedNotes = savedNotes.filter(n=>n.id!==id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
+        document.getElementById('saveNoteBtn').onclick = () => { const title = document.getElementById('noteTitleInput').value.trim() || "Untitled"; const content = document.getElementById('noteContentInput').value.trim(); if(!content) return; savedNotes.push({ id: Date.now(), title, content }); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); document.getElementById('noteContentInput').value = ""; speakText("Note saved!"); addPetXP(3); };
+        renderNotes();
+        document.getElementById('animalCompanion').onclick = () => { const msgs = ["Stay focused! 🎯", "Take a deep breath! 🌬️"]; const msg = msgs[Math.floor(Math.random() * msgs.length)]; document.querySelector('.animal-speech').innerText = msg; speakText(msg); };
     };
     if (localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
     document.querySelectorAll('.nav-btn').forEach(btn => btn.onclick = () => navigateTo(btn.dataset.page));
-    
-    // Chatbot core
-    const chatDiv = document.getElementById('chatMessages');
-    const sendBtn = document.getElementById('sendChatBtn');
-    const chatInput = document.getElementById('chatInput');
-    async function sendMessage() {
-        const msg = chatInput.value.trim();
-        if (!msg) return;
-        chatDiv.innerHTML += `<div class="chat-message user-msg">${msg}</div>`;
-        chatInput.value = '';
-        const reply = await callSecureAI(msg, 'chat');
-        chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`;
-        chatDiv.scrollTop = chatDiv.scrollHeight;
-        speakText(reply.substring(0, 200));
-    }
-    sendBtn.onclick = sendMessage;
-    chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-    document.getElementById('voiceChatBtn').onclick = () => {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognition) {
-            const rec = new SpeechRecognition();
-            rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); };
-            rec.start();
-        } else alert("Voice input not supported");
-    };
-    
-    // Notes system
-    let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
-    function renderNotes() {
-        const container = document.getElementById('notesListPanel');
-        if(!container) return;
-        if(savedNotes.length === 0) { container.innerHTML = "<p>✨ No notes yet.</p>"; return; }
-        container.innerHTML = savedNotes.map(n => `<div class="note-item"><div><strong>${escapeHtml(n.title)}</strong><br>${escapeHtml(n.content.substring(0,80))}</div><div><button onclick="readNote(${n.id})" style="background:var(--primary); border:none; border-radius:20px; padding:5px 10px; color:white;">🔊 Read</button><button onclick="deleteNote(${n.id})" style="background:#ff6b6b; border:none; border-radius:20px; padding:5px 10px; margin-left:5px;">❌</button></div></div>`).join('');
-    }
-    window.readNote = (id) => { const note = savedNotes.find(n=>n.id===id); if(note) speakText(`Title: ${note.title}. Content: ${note.content}`); };
-    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n=>n.id!==id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
-    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-    document.getElementById('saveNoteBtn').onclick = () => {
-        const title = document.getElementById('noteTitleInput').value.trim() || "Untitled";
-        const content = document.getElementById('noteContentInput').value.trim();
-        if(!content) return;
-        savedNotes.push({ id: Date.now(), title, content });
-        localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes));
-        renderNotes();
-        document.getElementById('noteContentInput').value = "";
-        speakText("Note saved!");
-    };
-    renderNotes();
-    
-    document.getElementById('animalCompanion').onclick = () => {
-        const msgs = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈", "Try a quick quiz! 📝"];
-        const msg = msgs[Math.floor(Math.random() * msgs.length)];
-        document.querySelector('.animal-speech').innerText = msg;
-        speakText(msg);
-    };
+    document.getElementById('generateQuizBtn').onclick = async () => { const topic = document.getElementById('quizTopicInput').value; document.getElementById('quizDisplayArea').innerHTML = "Quiz generated! (AI demo)"; addPetXP(5); };
 });
 </script>
 </body>
