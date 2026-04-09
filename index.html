@@ -1,523 +1,416 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FocusWell | AI Study Suite with Voice & Quiz</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusWell | Secure AI Study Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --primary: #2b7a4b; --primary-dark: #1e5a3a; --primary-light: #e8f3ed;
-            --secondary: #FFB74D; --accent: #7C4DFF; --bg-main: #f9fbfd;
-            --bg-card: #ffffff; --text-dark: #1a2c3e; --text-muted: #5f7c6b;
-            --shadow: 0 8px 30px rgba(0,0,0,0.05); --shadow-hover: 0 20px 35px -12px rgba(0,0,0,0.12);
-            --border-light: #e2e8f0;
+            --secondary: #FFB74D; --bg-main: #f9fbfd; --bg-card: #ffffff;
+            --text-dark: #1a2c3e; --text-muted: #5f7c6b; --border-light: #e2e8f0;
         }
         body.night-theme {
-            --primary: #6abf8a; --primary-dark: #4e9a6e; --primary-light: #2a3a32;
-            --bg-main: #1a1f2e; --bg-card: #252b3d; --text-dark: #eef2ff;
-            --text-muted: #a0a8c0; --border-light: #3a4055;
+            --primary: #6abf8a; --bg-main: #1a1f2e; --bg-card: #252b3d;
+            --text-dark: #eef2ff; --border-light: #3a4055;
         }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-dark); transition: all 0.3s ease; overflow-x: hidden; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: var(--bg-card); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-dark); transition: all 0.3s ease; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: var(--bg-card); box-shadow: 0 8px 30px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
         .logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .theme-btn { width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer; margin: 0 4px; }
-        .theme-day { background: #FFE0B5; }
-        .theme-night { background: #2d2f4e; color: white; }
-        .hero { padding: 3rem 5%; background: linear-gradient(135deg, var(--primary-light), var(--bg-main)); display: flex; flex-wrap: wrap; gap: 2rem; }
-        .hero-text { flex: 1; }
-        .hero-text h2 { font-size: 2.5rem; font-weight: 800; }
-        .btn-primary { background: var(--primary); color: white; padding: 0.8rem 1.8rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; margin-top: 5px; }
-        .btn-primary:hover { transform: translateY(-2px); background: var(--primary-dark); }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 2rem 5%; }
-        .tool-card { background: var(--bg-card); border-radius: 28px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); border: 1px solid var(--border-light); }
-        .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-links button { background: none; border: none; font-weight: 600; cursor: pointer; padding: 0.5rem 1rem; border-radius: 30px; color: var(--text-dark); }
+        .nav-links button.active { background: var(--primary); color: white; }
+        .theme-selector { display: flex; gap: 6px; }
+        .theme-btn { width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer; }
+        .page { display: none; padding: 2rem 5%; animation: fadeIn 0.3s ease; }
+        .active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .tool-card { background: var(--bg-card); border-radius: 28px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 30px rgba(0,0,0,0.05); border: 1px solid var(--border-light); }
+        .tool-card:hover { transform: translateY(-5px); }
         .tool-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: var(--bg-card); border-radius: 32px; padding: 2rem; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; position: relative;}
-        .quiz-option { display: block; margin: 10px 0; padding: 12px; background: var(--primary-light); border-radius: 20px; cursor: pointer; }
-        .animal-companion { position: fixed; bottom: 100px; right: 20px; z-index: 999; cursor: pointer; }
-        .animal-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 40px; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .animal-speech { position: absolute; bottom: 80px; right: 10px; background: var(--bg-card); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap; box-shadow: var(--shadow); }
-        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer; color: white; margin-left: 10px; }
-        .chat-message { padding: 12px 16px; margin: 8px 0; border-radius: 20px; max-width: 85%; line-height: 1.4; }
+        .modal-content { background: var(--bg-card); border-radius: 32px; padding: 2rem; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
+        .chat-message { padding: 12px 16px; margin: 8px 0; border-radius: 20px; max-width: 85%; }
         .user-msg { background: var(--primary); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
         .bot-msg { background: var(--primary-light); color: var(--text-dark); border-bottom-left-radius: 4px; }
-        .notes-list { max-height: 300px; overflow-y: auto; margin-top: 10px;}
-        .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .note-actions { display: flex; gap: 8px; }
-        .note-actions button { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
-        textarea, input[type="text"], select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); margin: 8px 0; font-family: inherit; background: var(--bg-card); color: var(--text-dark); }
-        
-        /* Login overlay */
+        .btn-primary { background: var(--primary); color: white; padding: 0.8rem 1.8rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; color: white; }
+        .animal-companion { position: fixed; bottom: 100px; right: 20px; cursor: pointer; z-index: 999; }
+        .animal-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 40px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .animal-speech { position: absolute; bottom: 80px; right: 10px; background: var(--bg-card); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap; }
         .login-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .login-box { background: var(--bg-card); padding: 2.5rem; border-radius: 48px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 25px 40px rgba(0,0,0,0.3); }
-        .login-box input { width: 100%; margin: 12px 0; padding: 14px; border-radius: 32px; border: 1px solid var(--border-light); font-size: 1rem; }
-        .floating-emoji { position: fixed; pointer-events: none; z-index: 9999; font-size: 2rem; animation: floatUp 3s ease-out forwards; }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) rotate(0deg); } 100% { opacity: 0; transform: translateY(-120px) rotate(20deg); } }
-        .feed-grid { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding: 5px; }
-        .feed-item { background: var(--bg-card); border-radius: 24px; padding: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--border-light); }
-        .feed-emoji { font-size: 2.5rem; }
-        .music-control { position: fixed; bottom: 20px; left: 20px; background: var(--bg-card); border-radius: 60px; padding: 10px 18px; display: flex; gap: 12px; box-shadow: var(--shadow); z-index: 1000; align-items: center; border: 1px solid var(--border-light); }
-        .music-control button { background: var(--primary); border: none; border-radius: 40px; color: white; padding: 8px 14px; cursor: pointer; font-size: 1rem; }
+        .login-box { background: var(--bg-card); padding: 2.5rem; border-radius: 48px; width: 90%; max-width: 400px; text-align: center; }
         .main-app { display: none; }
-        .read-note-btn { background: var(--primary); color: white; border: none; border-radius: 20px; padding: 6px 12px; font-size: 0.75rem; cursor: pointer; margin-left: 8px; }
+        textarea, input[type="text"], select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); margin: 8px 0; font-family: inherit; background: var(--bg-card); color: var(--text-dark); }
+        .stress-meter { height: 8px; background: #e0e0e0; border-radius: 10px; margin: 10px 0; }
+        .stress-fill { width: 0%; height: 100%; border-radius: 10px; background: var(--primary); transition: width 0.3s; }
+        .notes-list { max-height: 300px; overflow-y: auto; margin-top: 10px; }
+        .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+        @media (max-width: 700px) { .nav-links { gap: 0.5rem; } .nav-links button { padding: 0.3rem 0.7rem; font-size: 0.75rem; } }
     </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE MODAL (first screen) -->
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
         <i class="fas fa-graduation-cap" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
-        <h2 style="margin-bottom: 1rem;">🌸 FocusWell</h2>
-        <p style="margin-bottom: 1rem;">Your AI Study Sanctuary</p>
-        <input type="text" id="loginUsername" placeholder="Enter your name" autocomplete="off">
-        <button class="btn-primary" id="loginBtn" style="width:100%; justify-content: center;">✨ Enter Study Zone ✨</button>
-        <p style="font-size: 0.75rem; margin-top: 1rem;">🐣 cute animal friends will cheer you on!</p>
+        <h2>🌸 FocusWell</h2>
+        <p>Secure AI Study Suite</p>
+        <input type="text" id="loginUsername" placeholder="Enter your name">
+        <button class="btn-primary" id="loginBtn" style="width:100%;">✨ Enter Study Zone ✨</button>
     </div>
 </div>
 
-<!-- MAIN APP WRAPPER (hidden until login) -->
 <div class="main-app" id="mainApp">
     <nav class="navbar">
         <div class="logo"><h1>FOCUSWELL 🧠</h1></div>
-        <div>
-            <button class="theme-btn theme-day" onclick="setTheme('day')">☀️</button>
-            <button class="theme-btn theme-night" onclick="setTheme('night')">🌙</button>
+        <div class="nav-links">
+            <button class="nav-btn active" data-page="dashboard">🏠 Dashboard</button>
+            <button class="nav-btn" data-page="chatbot">🤖 AI Chat</button>
+            <button class="nav-btn" data-page="quiz">📝 Quiz</button>
+            <button class="nav-btn" data-page="stress">💚 Stress</button>
+            <button class="nav-btn" data-page="notes">📓 Notes</button>
+        </div>
+        <div class="theme-selector">
+            <button class="theme-btn" style="background:#2b7a4b;" onclick="setTheme('day')"></button>
+            <button class="theme-btn" style="background:#2d2f4e;" onclick="setTheme('night')"></button>
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="hero-text">
-            <h2>AI Study Assistant <br>+ <span style="color:var(--primary);">Stress Care</span></h2>
-            <p>Quiz generator • Topic explainer • Smart chatbot • Voice notes • Save notes</p>
-            <button class="btn-primary" id="stressBtn"><i class="fas fa-brain"></i> Check Stress Level</button>
+    <div id="dashboard-page" class="page active-page">
+        <div style="background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); border-radius: 32px; padding: 2rem; margin-bottom: 2rem;">
+            <h2>Welcome, <span id="userNameDisplay">Scholar</span>! 🌟</h2>
+            <p>Your secure AI-powered study companion</p>
         </div>
-        <div style="display: flex; align-items: center;"><i class="fas fa-robot" style="font-size: 6rem; color: var(--primary);"></i></div>
-    </section>
-
-    <div id="stressModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h3>🧠 AI Stress Detection</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted);">How's your mental load today?</p>
-            <label>Stress level (1-10): <span id="sliderVal">5</span></label>
-            <input type="range" id="stressSlider" min="1" max="10" value="5" style="width:100%">
-            <textarea id="stressText" rows="2" placeholder="Tell me what's on your mind (exams, sleep, etc.)"></textarea>
-            <label>Current Workload:</label>
-            <select id="workload"><option>Light</option><option selected>Moderate</option><option>Heavy</option><option>Extreme</option></select>
-            <button class="btn-primary" id="analyzeStressBtn">Analyze & Help Me</button>
-            <div id="stressResult" style="margin-top:1rem; padding: 10px; border-left: 4px solid var(--primary);"></div>
-            <button class="btn-primary" onclick="closeModal('stressModal')" style="background: #666;">Close</button>
+        <div class="tools-grid">
+            <div class="tool-card" onclick="navigateTo('chatbot')"><i class="fas fa-comment-dots"></i><h3>AI Chatbot</h3><p>Voice + Text</p></div>
+            <div class="tool-card" onclick="navigateTo('quiz')"><i class="fas fa-question-circle"></i><h3>Quiz Generator</h3></div>
+            <div class="tool-card" onclick="navigateTo('stress')"><i class="fas fa-brain"></i><h3>Stress Analysis</h3></div>
+            <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>Pomodoro</h3></div>
         </div>
     </div>
 
-    <div class="tools-grid">
-        <div class="tool-card" onclick="openQuizGenerator()"><i class="fas fa-question-circle"></i><h3>📝 AI Quiz Generator</h3><p>Generate quiz on any topic</p></div>
-        <div class="tool-card" onclick="openTopicExplainer()"><i class="fas fa-chalkboard-teacher"></i><h3>📖 Topic Explainer</h3><p>Get AI explanations</p></div>
-        <div class="tool-card" onclick="openChatbot()"><i class="fas fa-comment-dots"></i><h3>🤖 AI Study Chatbot</h3><p>Ask anything + voice</p></div>
-        <div class="tool-card" onclick="openNotes()"><i class="fas fa-save"></i><h3>📓 My Study Notes</h3><p>Store & retrieve notes</p></div>
-        <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>🍅 Pomodoro Timer</h3><p>Focus session</p></div>
-        <div class="tool-card" onclick="openFlashcards()"><i class="fas fa-layer-group"></i><h3>📇 Flashcards</h3><p>Self-test</p></div>
-        <div class="tool-card" onclick="openFeedModal()"><i class="fas fa-images"></i><h3>🐾 Cozy Feed</h3><p>Motivation + cute pics</p></div>
+    <div id="chatbot-page" class="page">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>🤖 AI Study Chatbot</h3>
+            <div id="chatMessages" style="height: 400px; overflow-y: auto; border-radius: 20px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-light);"></div>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="chatInput" placeholder="Ask anything..." style="flex:1;">
+                <button class="voice-btn" id="voiceChatBtn"><i class="fas fa-microphone"></i></button>
+                <button class="btn-primary" id="sendChatBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz-page" class="page">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>📝 AI Quiz Generator</h3>
+            <input type="text" id="quizTopicInput" placeholder="Enter topic (e.g., Python, History, Science)">
+            <button class="btn-primary" id="generateQuizBtn">✨ Generate Quiz</button>
+            <div id="quizDisplayArea" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <div id="stress-page" class="page">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>💚 Stress & Sentiment Analysis</h3>
+            <textarea id="sentimentText" rows="3" placeholder="How are you feeling today?"></textarea>
+            <select id="workloadSelect">
+                <option>Light</option><option>Moderate</option><option>Heavy</option><option>Extreme</option>
+            </select>
+            <button class="btn-primary" id="analyzeSentimentBtn">Analyze & Get Help</button>
+            <div class="stress-meter"><div class="stress-fill" id="stressFillBar"></div></div>
+            <div id="sentimentResult" style="margin-top: 20px; padding: 15px; border-radius: 20px; background: var(--primary-light);"></div>
+        </div>
+    </div>
+
+    <div id="notes-page" class="page">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>📓 My Notes</h3>
+            <input type="text" id="noteTitleInput" placeholder="Title">
+            <textarea id="noteContentInput" rows="3" placeholder="Write your note..."></textarea>
+            <button class="btn-primary" id="saveNoteBtn">Save Note</button>
+            <div id="notesListPanel" class="notes-list"></div>
+        </div>
     </div>
 
     <div class="animal-companion" id="animalCompanion">
-        <div class="animal-avatar" id="animalAvatar">🐼</div>
-        <div class="animal-speech" id="animalSpeech">I'm your AI buddy!</div>
-    </div>
-
-    <!-- MUSIC PLAYER SECTION -->
-    <div class="music-control" id="musicControl">
-        <i class="fas fa-music" style="color: var(--primary);"></i>
-        <span style="font-weight: 500;">Lofi Beats</span>
-        <button id="playMusicBtn"><i class="fas fa-play"></i> Play</button>
-        <button id="pauseMusicBtn"><i class="fas fa-pause"></i> Pause</button>
+        <div class="animal-avatar">🐼</div>
+        <div class="animal-speech">Your AI buddy!</div>
     </div>
 </div>
 
 <script>
-    // ========== CONFIG - API KEY REMOVED, USING SMART LOCAL FALLBACK ==========
-    // All AI features now work with intelligent offline responses + local demo mode
-    // The app remains fully functional with simulated AI responses for demo/educational purposes
-    
-    async function callAI(prompt, system = "You are a helpful study assistant.") {
-        // DEMO MODE: Simulate AI responses without API key
-        // This keeps all features working beautifully
-        console.log("AI Prompt (demo mode):", prompt.substring(0, 100));
-        
-        // Intelligent response generation based on keywords
-        const lowerPrompt = prompt.toLowerCase();
-        
-        // Quiz generation
-        if (prompt.includes("Generate 3 multiple choice questions") || prompt.includes("quiz")) {
-            const topicMatch = prompt.match(/about "([^"]+)"/i) || prompt.match(/about (.+?)\./i);
-            const topic = topicMatch ? topicMatch[1] : "general knowledge";
-            return JSON.stringify([
-                { question: `What is the main concept of ${topic}?`, options: ["Basic principle", "Complex theory", "Historical fact", "Application method"], correct: 0 },
-                { question: `Why is ${topic} important to study?`, options: ["Improves thinking", "Boosts career", "Enhances creativity", "All of the above"], correct: 3 },
-                { question: `Which of these relates to ${topic}?`, options: ["Fundamental idea", "Advanced technique", "Practical use", "Theoretical background"], correct: 0 }
-            ]);
-        }
-        
-        // Topic explanation
-        if (prompt.includes("Explain") || system.includes("explain")) {
-            const topicMatch = prompt.match(/Explain "([^"]+)"/i) || prompt.match(/Explain (.+?) like/i);
-            const topic = topicMatch ? topicMatch[1] : "this topic";
-            return `📚 Here's a simple explanation of ${topic}:\n\n• ${topic} is an important concept that helps us understand the world better.\n• Think of it like building blocks - each part connects to create something amazing!\n• Practice and curiosity will help you master ${topic} over time.\n• Fun fact: Many experts started as beginners just like you! 🌟\n\nKeep learning and stay curious! 🧠`;
-        }
-        
-        // Stress/wellness responses
-        if (prompt.includes("stress") || prompt.includes("workload") || prompt.includes("mental")) {
-            return "💚 Take a deep breath! Here are 2 calming tips:\n\n1. Try the 5-4-3-2-1 technique: Name 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.\n2. Break your study into 25-minute focused sessions with 5-minute breaks. You've got this! 🌈\n\nRemember: Progress, not perfection! 🐣";
-        }
-        
-        // General study help
-        if (prompt.includes("study") || prompt.includes("learn") || prompt.includes("exam")) {
-            return "📖 Great question! Here's a study tip:\n\nActive recall is super effective! Try to explain concepts out loud without looking at your notes. Then check what you missed. It's like a workout for your brain! 💪\n\nWant more specific help? Just ask about any topic! ✨";
-        }
-        
-        // Default friendly response
-        return "🌟 Thanks for asking! I'm your AI study buddy. I can help you with:\n• Creating quizzes on any topic\n• Explaining difficult concepts\n• Study tips and motivation\n• Stress management techniques\n\nWhat would you like to explore today? 🐼";
-    }
+// SECURE: All API calls go through our backend endpoint (no API key exposed!)
+const API_URL = '/api/ai';
 
-    // ---------------------- LOGIC FOR LOGIN ----------------------
+// Helper function to call secure backend
+async function callSecureAI(prompt, type = 'chat') {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt, type })
+        });
+        
+        if (!response.ok) throw new Error('API request failed');
+        const data = await response.json();
+        return data.result;
+    } catch (error) {
+        console.error('API Error:', error);
+        return getLocalFallback(prompt, type);
+    }
+}
+
+// Local fallback (works offline too)
+function getLocalFallback(prompt, type) {
+    if (type === 'quiz') return JSON.stringify([
+        { question: "What is the main concept?", options: ["Option A", "Option B", "Option C", "Option D"], correct: 0 },
+        { question: "Why is this important?", options: ["Reason 1", "Reason 2", "Reason 3", "All of above"], correct: 3 },
+        { question: "Best way to learn?", options: ["Practice", "Reading", "Memorization", "Teaching others"], correct: 0 }
+    ]);
+    if (type === 'sentiment') return JSON.stringify({ sentiment: "neutral", stressLevel: 5, advice: "Take short breaks and stay hydrated!", encouragement: "You've got this!" });
+    return "I'm your AI study assistant! Ask me about any topic, or try generating a quiz! 📚";
+}
+
+// Navigation
+function navigateTo(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+    document.getElementById(`${pageId}-page`).classList.add('active-page');
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.nav-btn[data-page="${pageId}"]`).classList.add('active');
+}
+
+// Theme
+function setTheme(theme) {
+    document.body.classList.remove('night-theme');
+    if (theme === 'night') document.body.classList.add('night-theme');
+    localStorage.setItem('focuswell_theme', theme);
+}
+
+// Text to Speech
+function speakText(text) {
+    if (!text) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+}
+
+// Pomodoro Timer
+function openPomodoro() {
+    let seconds = 1500;
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `<div class="modal-content" style="text-align:center">
+        <h3>🍅 Focus Timer</h3>
+        <h1 id="timerDisplay">25:00</h1>
+        <button class="btn-primary" id="startTimerBtn">Start</button>
+        <button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button>
+    </div>`;
+    document.body.appendChild(modal);
+    
+    document.getElementById('startTimerBtn').onclick = function() {
+        this.disabled = true;
+        const interval = setInterval(() => {
+            if (seconds > 0) {
+                seconds--;
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                document.getElementById('timerDisplay').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+            } else {
+                clearInterval(interval);
+                speakText("Time's up! Great focus session!");
+                modal.remove();
+            }
+        }, 1000);
+    };
+}
+
+// Initialize app
+document.addEventListener('DOMContentLoaded', () => {
+    // Login
     const loginOverlay = document.getElementById('loginOverlay');
     const mainApp = document.getElementById('mainApp');
-    const loginBtn = document.getElementById('loginBtn');
-    const loginUsernameInput = document.getElementById('loginUsername');
     
-    loginBtn.addEventListener('click', () => {
-        let username = loginUsernameInput.value.trim();
-        if(username === "") username = "Scholar";
-        localStorage.setItem('focuswell_user', username);
+    document.getElementById('loginBtn').onclick = () => {
+        let name = document.getElementById('loginUsername').value.trim() || "Scholar";
+        localStorage.setItem('focuswell_user', name);
+        document.getElementById('userNameDisplay').innerText = name;
         loginOverlay.style.display = 'none';
         mainApp.style.display = 'block';
-        setTimeout(() => {
-            speakText(`Welcome ${username}! Let's study with focus and joy.`);
-            for(let i=0;i<8;i++) setTimeout(() => showFloatingEmoji(), i*80);
-        }, 200);
+        speakText(`Welcome ${name}! Let's study with focus.`);
+    };
+    
+    if (localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.onclick = () => navigateTo(btn.dataset.page);
     });
     
-    function setTheme(theme) {
-        if(theme === 'night') document.body.classList.add('night-theme');
-        else document.body.classList.remove('night-theme');
-        localStorage.setItem('focuswell_theme', theme);
-    }
-
-    function closeModal(id) { 
-        const el = document.getElementById(id);
-        if(el) el.style.display = 'none'; 
-        else document.querySelectorAll('.modal').forEach(m => m.remove());
-    }
-    function showModal(id) { document.getElementById(id).style.display = 'flex'; }
-
-    // Stress Detection Logic
-    if(document.getElementById('stressBtn')) {
-        document.getElementById('stressBtn').onclick = () => showModal('stressModal');
-        document.getElementById('stressSlider').oninput = (e) => document.getElementById('sliderVal').innerText = e.target.value;
-        document.getElementById('analyzeStressBtn').onclick = async () => {
-            const slider = document.getElementById('stressSlider').value;
-            const text = document.getElementById('stressText').value;
-            const workload = document.getElementById('workload').value;
-            const resultDiv = document.getElementById('stressResult');
-            resultDiv.innerHTML = "<em>🧠 Analyzing your stress levels...</em>";
-            const advice = await callAI(`Student stress: ${slider}/10, workload: ${workload}, thoughts: "${text}". Give 2 actionable, comforting tips.`, "You are a empathetic wellness coach.");
-            resultDiv.innerHTML = `<strong>🧘 Wellness Advice:</strong><br>${advice.replace(/\n/g, '<br>')}`;
-            speakText(advice.substring(0, 200));
-        };
-    }
-
-    // Quiz Generator Logic
-    async function openQuizGenerator() {
-        const topic = prompt("Enter topic for quiz (e.g., Photosynthesis, Python Basics, World History):");
-        if(!topic) return;
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>📝 AI Quiz: ${topic}</h3><div id="quizContent">Generating your personalized quiz... ⏳</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
-        document.body.appendChild(modalDiv);
-
-        const promptText = `Generate 3 multiple choice questions about "${topic}". Return ONLY a raw JSON array: [{"question":"...","options":["A","B","C","D"],"correct":0}]`;
-        const response = await callAI(promptText, "You are a quiz bot. Output only valid JSON.");
-        try {
-            const cleanJson = response.replace(/```json|```/g, "").trim();
-            const quiz = JSON.parse(cleanJson);
-            let html = `<div id="quizQuestions"></div><button class="btn-primary" id="submitQuiz">Check Results</button><div id="quizResult" style="margin-top:15px"></div>`;
-            document.getElementById('quizContent').innerHTML = html;
-            let userAnswers = new Array(quiz.length).fill(-1);
-            quiz.forEach((q, idx) => {
-                const qBlock = document.createElement('div');
-                qBlock.style.margin = "20px 0";
-                qBlock.innerHTML = `<strong>${idx+1}. ${q.question}</strong>`;
-                q.options.forEach((opt, optIdx) => {
-                    const label = document.createElement('label');
-                    label.style.display = "block"; label.style.padding = "5px 0";
-                    label.innerHTML = `<input type="radio" name="q${idx}" value="${optIdx}"> ${opt}`;
-                    label.onchange = () => userAnswers[idx] = optIdx;
-                    qBlock.appendChild(label);
-                });
-                document.getElementById('quizQuestions').appendChild(qBlock);
-            });
-            document.getElementById('submitQuiz').onclick = () => {
-                let score = 0;
-                quiz.forEach((q, idx) => { if(userAnswers[idx] == q.correct) score++; });
-                const resultMsg = `You scored ${score} out of ${quiz.length}. ${score === quiz.length ? "Perfect! 🎉" : "Keep practicing! 💪"}`;
-                document.getElementById('quizResult').innerHTML = `<strong>${resultMsg}</strong>`;
-                speakText(resultMsg);
-            };
-        } catch(e) { document.getElementById('quizContent').innerHTML = "🌟 Quiz ready! Here's a fun fact: Keep studying and you'll master " + topic + "! 🌟<br><br>Try asking for an explanation instead!"; }
-    }
-
-    // Topic Explainer + Text-to-speech
-    async function openTopicExplainer() {
-        const topic = prompt("What should I explain? (e.g., Quantum Physics, Shakespeare, Algebra)");
-        if(!topic) return;
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>📖 Topic: ${topic}</h3><div id="explainContent">Generating explanation...</div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
-        document.body.appendChild(modalDiv);
-        const explanation = await callAI(`Explain "${topic}" like I'm 15. Use bullet points for key facts. Add emojis.`);
-        document.getElementById('explainContent').innerHTML = `<p style="white-space: pre-wrap;">${explanation.replace(/\n/g, '<br>')}</p><button class="btn-primary" onclick="speakText(\`${explanation.replace(/`/g, "'").replace(/\n/g, ' ')}\`)">🔊 Listen to Explanation</button>`;
-    }
-
-    // Chatbot + voice input & TTS
-    async function openChatbot() {
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content" style="max-width:500px">
-            <h3>🤖 Study Chatbot <i class="fas fa-microphone-alt"></i></h3>
-            <div id="chatMessages" style="height:300px; overflow-y:auto; border:1px solid var(--border-light); padding:10px; border-radius:15px; margin-bottom:10px;"></div>
-            <div style="display:flex;">
-                <input type="text" id="chatInput" placeholder="Ask any study question...">
-                <button class="voice-btn" onclick="startVoiceInputChat()"><i class="fas fa-microphone"></i></button>
-                <button class="btn-primary" onclick="sendChatMessage()" style="margin-left:5px">Send</button>
-            </div>
-            <button class="btn-primary" onclick="this.closest('.modal').remove()" style="background:#666">Exit</button>
-        </div>`;
-        document.body.appendChild(modalDiv);
-        window.sendChatMessage = async () => {
-            const input = document.getElementById('chatInput');
-            const text = input.value.trim();
-            if(!text) return;
-            const chatDiv = document.getElementById('chatMessages');
-            chatDiv.innerHTML += `<div class="chat-message user-msg">${text}</div>`;
-            input.value = "";
-            chatDiv.scrollTop = chatDiv.scrollHeight;
-            const reply = await callAI(text);
-            chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`;
-            chatDiv.scrollTop = chatDiv.scrollHeight;
-            speakText(reply.substring(0, 200));
-        };
-        window.startVoiceInputChat = () => {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!SpeechRecognition) return alert("Browser not supported for voice input");
-            const rec = new SpeechRecognition();
-            rec.onresult = (e) => { 
-                document.getElementById('chatInput').value = e.results[0][0].transcript; 
-                sendChatMessage();
-            };
-            rec.start();
-        };
-    }
-
-    // Notes with READ feature (text-to-speech for notes)
-    let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
-    function openNotes() {
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>📓 My Study Notes <i class="fas fa-head-side-vr"></i></h3>
-            <input type="text" id="noteTitle" placeholder="Title (optional)">
-            <textarea id="noteContent" rows="3" placeholder="Write your note here..."></textarea>
-            <button class="btn-primary" onclick="saveNote()"><i class="fas fa-save"></i> Save Note</button>
-            <div id="notesList" class="notes-list"></div>
-            <button class="btn-primary" onclick="this.closest('.modal').remove()" style="background:#666">Close</button>
-        </div>`;
-        document.body.appendChild(modalDiv);
-        renderNotesWithRead();
-        window.saveNote = () => {
-            const t = document.getElementById('noteTitle').value;
-            const c = document.getElementById('noteContent').value;
-            if(c) { savedNotes.push({t: t || "Untitled", c, id: Date.now()}); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotesWithRead(); document.getElementById('noteContent').value = ""; speakText("Note saved successfully"); showFloatingEmoji('📘'); }
-        };
+    // Chatbot
+    const chatDiv = document.getElementById('chatMessages');
+    const sendBtn = document.getElementById('sendChatBtn');
+    const chatInput = document.getElementById('chatInput');
+    
+    async function sendMessage() {
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+        chatDiv.innerHTML += `<div class="chat-message user-msg">${msg}</div>`;
+        chatInput.value = '';
+        const reply = await callSecureAI(msg, 'chat');
+        chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`;
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+        speakText(reply.substring(0, 200));
     }
     
-    function renderNotesWithRead() {
-        const list = document.getElementById('notesList');
-        if(!list) return;
-        if(savedNotes.length === 0) { list.innerHTML = "<p style='padding:12px;'>✨ No notes yet. Write your first study note! ✨</p>"; return; }
-        list.innerHTML = savedNotes.map(n => `
+    sendBtn.onclick = sendMessage;
+    chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    
+    document.getElementById('voiceChatBtn').onclick = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const rec = new SpeechRecognition();
+            rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); };
+            rec.start();
+        } else alert("Voice input not supported");
+    };
+    
+    // Quiz Generator
+    document.getElementById('generateQuizBtn').onclick = async () => {
+        const topic = document.getElementById('quizTopicInput').value.trim();
+        if (!topic) { alert("Please enter a topic"); return; }
+        
+        const area = document.getElementById('quizDisplayArea');
+        area.innerHTML = "Generating quiz... 🤖";
+        
+        const quizData = await callSecureAI(topic, 'quiz');
+        try {
+            const quiz = JSON.parse(quizData);
+            let html = `<div id="quizQuestions"></div><button class="btn-primary" id="submitQuizAnswers">Submit</button><div id="quizScore"></div>`;
+            area.innerHTML = html;
+            
+            const answers = new Array(quiz.length).fill(-1);
+            quiz.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.style.margin = "15px 0";
+                qDiv.innerHTML = `<strong>${idx+1}. ${q.question}</strong>`;
+                q.options.forEach((opt, optIdx) => {
+                    const label = document.createElement('label');
+                    label.style.display = "block";
+                    label.innerHTML = `<input type="radio" name="q${idx}" value="${optIdx}"> ${opt}`;
+                    label.onclick = () => answers[idx] = optIdx;
+                    qDiv.appendChild(label);
+                });
+                document.getElementById('quizQuestions').appendChild(qDiv);
+            });
+            
+            document.getElementById('submitQuizAnswers').onclick = () => {
+                let score = answers.filter((a, i) => a === quiz[i].correct).length;
+                document.getElementById('quizScore').innerHTML = `<strong>Score: ${score}/${quiz.length} 🎯</strong>`;
+                speakText(`You scored ${score} out of ${quiz.length}`);
+            };
+        } catch(e) {
+            area.innerHTML = "✨ Quiz ready! Try a different topic or use the chatbot for explanations!";
+        }
+    };
+    
+    // Sentiment Analysis
+    document.getElementById('analyzeSentimentBtn').onclick = async () => {
+        const text = document.getElementById('sentimentText').value;
+        if (!text) { alert("Please share how you're feeling"); return; }
+        
+        const workload = document.getElementById('workloadSelect').value;
+        const resultDiv = document.getElementById('sentimentResult');
+        const fillBar = document.getElementById('stressFillBar');
+        
+        resultDiv.innerHTML = "Analyzing your sentiment... 🧠";
+        
+        const analysis = await callSecureAI(JSON.stringify({ text, workload }), 'sentiment');
+        try {
+            const data = JSON.parse(analysis);
+            fillBar.style.width = `${data.stressLevel * 10}%`;
+            resultDiv.innerHTML = `
+                <div style="padding: 10px;">
+                    <p><strong>😔 Sentiment:</strong> ${data.sentiment}</p>
+                    <p><strong>🧘 Advice:</strong> ${data.advice}</p>
+                    <p><strong>✨ Encouragement:</strong> ${data.encouragement}</p>
+                    <button class="btn-primary" onclick="speakText('${data.advice}')">🔊 Listen to Advice</button>
+                </div>
+            `;
+            speakText(data.advice);
+        } catch(e) {
+            resultDiv.innerHTML = "💚 Take a deep breath. You're doing great! Try again or use the chatbot for support.";
+        }
+    };
+    
+    // Notes
+    let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
+    
+    function renderNotes() {
+        const container = document.getElementById('notesListPanel');
+        if (!container) return;
+        if (savedNotes.length === 0) {
+            container.innerHTML = "<p>✨ No notes yet. Create your first study note!</p>";
+            return;
+        }
+        container.innerHTML = savedNotes.map(n => `
             <div class="note-item">
-                <div><strong>${escapeHtml(n.t)}</strong><br><small style="opacity:0.7;">${n.c.substring(0, 60)}${n.c.length>60?'...':''}</small></div>
-                <div class="note-actions">
-                    <button onclick="readNoteById(${n.id})" title="Read note aloud" style="background:var(--primary); color:white; border-radius:20px; padding:6px 12px;"><i class="fas fa-volume-up"></i> Read</button>
-                    <button onclick="deleteNote(${n.id})" style="color:#ff6b6b; font-size:1.2rem;">&times;</button>
+                <div><strong>${escapeHtml(n.title)}</strong><br>${escapeHtml(n.content.substring(0, 80))}</div>
+                <div>
+                    <button onclick="readNote(${n.id})" style="background: var(--primary); color: white; border: none; border-radius: 20px; padding: 5px 10px; margin-right: 5px;">🔊 Read</button>
+                    <button onclick="deleteNote(${n.id})" style="background: #ff6b6b; color: white; border: none; border-radius: 20px; padding: 5px 10px;">❌</button>
                 </div>
             </div>
         `).join('');
     }
     
-    window.readNoteById = (id) => {
+    window.readNote = (id) => {
         const note = savedNotes.find(n => n.id === id);
-        if(note) {
-            const fullText = `Title: ${note.t}. Content: ${note.c}`;
-            speakText(fullText);
-            showFloatingEmoji('🔊');
-        }
+        if (note) speakText(`Title: ${note.title}. Content: ${note.content}`);
     };
     
-    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    window.deleteNote = (id) => {
+        savedNotes = savedNotes.filter(n => n.id !== id);
+        localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes));
+        renderNotes();
+    };
     
-    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotesWithRead(); speakText("Note deleted"); };
-
-    function openPomodoro() {
-        let sec = 1500;
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content" style="text-align:center"><h3>🍅 Focus Timer</h3><h1 id="pTime">25:00</h1><button class="btn-primary" id="pStart">Start</button> <button class="btn-primary" onclick="this.closest('.modal').remove()">Quit</button></div>`;
-        document.body.appendChild(modalDiv);
-        document.getElementById('pStart').onclick = function() {
-            this.disabled = true;
-            const interval = setInterval(() => { if(sec > 0) { sec--; document.getElementById('pTime').innerText = `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`; } else { clearInterval(interval); speakText("Time's up! Great focus session!"); } }, 1000);
-        };
-    }
-
-    function openFlashcards() {
-        let cards = JSON.parse(localStorage.getItem('fw_cards') || '[{"q":"What is AI?","a":"Artificial Intelligence"}]');
-        let idx = 0;
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content" style="text-align:center"><h3>📇 Flashcards</h3><div id="fCard" style="background:var(--primary); color:white; padding:40px; border-radius:20px; cursor:pointer; margin-bottom:10px;">${cards[idx].q}</div><button class="btn-primary" id="fNext">Next</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
-        document.body.appendChild(modalDiv);
-        const card = document.getElementById('fCard');
-        card.onclick = () => { const newText = (card.innerText === cards[idx].q) ? cards[idx].a : cards[idx].q; card.innerText = newText; if(newText === cards[idx].a) speakText(cards[idx].a); };
-        document.getElementById('fNext').onclick = () => { idx = (idx+1)%cards.length; card.innerText = cards[idx].q; };
-    }
-
-    // Enhanced TTS 
-    function speakText(text) {
-        if(!text) return;
-        window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.rate = 0.95;
-        msg.lang = 'en-US';
-        window.speechSynthesis.speak(msg);
-    }
-
-    // FLOATING EMOJIS: 4 emojis every second (increased frequency)
-    function showFloatingEmoji(emoji = null) {
-        const emojis = ['🐣', '🐥', '🦊', '🐱', '🐶', '🐼', '🐸', '🐌', '🦋', '🐝', '🐰', '🦄', '🐙', '🐳', '🐨', '🦁', '🐧', '🐦', '⭐', '🌸', '🍎', '📚', '🧠', '✨'];
-        const chosen = emoji || emojis[Math.floor(Math.random() * emojis.length)];
-        const div = document.createElement('div');
-        div.className = 'floating-emoji';
-        div.innerText = chosen;
-        div.style.left = Math.random() * 95 + '%';
-        div.style.bottom = '0px';
-        div.style.fontSize = (Math.random() * 1.8 + 1.2) + 'rem';
-        div.style.opacity = Math.random() * 0.8 + 0.4;
-        document.body.appendChild(div);
-        setTimeout(() => div.remove(), 2800);
-    }
-    
-    // Increased frequency: 4 emojis every second
-    let emojiInterval = setInterval(() => {
-        if(mainApp.style.display === 'block') {
-            for(let i = 0; i < 4; i++) {
-                setTimeout(() => showFloatingEmoji(), i * 60);
-            }
-        }
-    }, 1000);
-    
-    // FEED MODAL with pictures & motivational quotes
-    const feedData = [
-        { emoji: "📚", text: "Every small step counts! You got this!" },
-        { emoji: "🐼", text: "Study panda says: rest your eyes every 25 mins." },
-        { emoji: "🌿", text: "Nature reminds: progress, not perfection." },
-        { emoji: "🧸", text: "You're braver than you believe, smarter than you think." },
-        { emoji: "🐢", text: "Slow and steady wins the exam!" },
-        { emoji: "🦉", text: "Wise owl tip: Active recall works wonders." },
-        { emoji: "🐱", text: "Stay curious like a kitten!" },
-        { emoji: "🌟", text: "Believe in yourself! One concept at a time." }
-    ];
-    function openFeedModal() {
-        const modalDiv = document.createElement('div'); modalDiv.className = 'modal';
-        modalDiv.innerHTML = `<div class="modal-content"><h3>🐣 Motivation Feed <i class="fas fa-heart" style="color: #ff8c8c;"></i></h3><div id="feedContainer" class="feed-grid"></div><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`;
-        document.body.appendChild(modalDiv);
-        const container = document.getElementById('feedContainer');
-        feedData.forEach(item => {
-            const feedEl = document.createElement('div');
-            feedEl.className = 'feed-item';
-            feedEl.innerHTML = `<div class="feed-emoji">${item.emoji}</div><div><strong>✨ Affirmation</strong><br>${item.text}</div>`;
-            container.appendChild(feedEl);
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
         });
-        const extra = document.createElement('div');
-        extra.className = 'feed-item';
-        extra.innerHTML = `<div class="feed-emoji">🎧</div><div><strong>Study vibe</strong><br>Stay focused, you are amazing 🌈</div>`;
-        container.appendChild(extra);
-        for(let i=0;i<6;i++) setTimeout(() => showFloatingEmoji('💖'), i*100);
-    }
-
-    // Music Player (gentle oscillator for study ambiance)
-    let musicCtx = null;
-    let musicSource = null;
-    let isPlaying = false;
-    let musicGain = null;
-    function initMusic() {
-        if(musicCtx) return;
-        musicCtx = new (window.AudioContext || window.webkitAudioContext)();
-        musicGain = musicCtx.createGain();
-        musicGain.gain.value = 0.15;
-        musicGain.connect(musicCtx.destination);
-        const oscillator = musicCtx.createOscillator();
-        oscillator.type = 'sine';
-        oscillator.frequency.value = 261.63;
-        oscillator.connect(musicGain);
-        musicSource = oscillator;
-    }
-    function playStudyMusic() {
-        if(!musicCtx) initMusic();
-        if(musicCtx.state === 'suspended') musicCtx.resume();
-        if(musicSource && !isPlaying) {
-            try {
-                musicSource.start();
-                isPlaying = true;
-                speakText("Lofi beats activated. Keep flowing.");
-            } catch(e) { 
-                initMusic();
-                if(musicSource) musicSource.start();
-                isPlaying = true;
-            }
-        }
-    }
-    function pauseStudyMusic() {
-        if(musicSource && isPlaying) {
-            musicSource.stop();
-            isPlaying = false;
-            musicSource = null;
-            initMusic();
-        }
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-        const playBtn = document.getElementById('playMusicBtn');
-        const pauseBtn = document.getElementById('pauseMusicBtn');
-        if(playBtn) playBtn.onclick = () => { playStudyMusic(); };
-        if(pauseBtn) pauseBtn.onclick = () => { pauseStudyMusic(); };
-    });
-    
-    // Animal Companion interaction + speech
-    const animalDiv = document.getElementById('animalCompanion');
-    if(animalDiv) {
-        animalDiv.onclick = () => {
-            const lines = ["Take a deep breath!", "Hydrate while you study!", "Try a 5-minute quiz!", "You're doing great!", "🐣 Stay pawsitive!", "One step at a time 🌱"];
-            const msg = lines[Math.floor(Math.random()*lines.length)];
-            document.getElementById('animalSpeech').innerText = msg;
-            speakText(msg);
-            for(let i=0;i<3;i++) setTimeout(() => showFloatingEmoji('🐣'), i*150);
-        };
     }
     
-    // Load theme
-    if(localStorage.getItem('focuswell_theme') === 'night') setTheme('night');
+    document.getElementById('saveNoteBtn').onclick = () => {
+        const title = document.getElementById('noteTitleInput').value.trim() || "Untitled";
+        const content = document.getElementById('noteContentInput').value.trim();
+        if (!content) return;
+        
+        savedNotes.push({ id: Date.now(), title, content });
+        localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes));
+        renderNotes();
+        document.getElementById('noteContentInput').value = "";
+        speakText("Note saved successfully!");
+    };
     
-    window.addEventListener('beforeunload', () => { if(musicCtx) musicCtx.close(); });
+    renderNotes();
+    
+    // Animal companion
+    document.getElementById('animalCompanion').onclick = () => {
+        const messages = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈", "Try a quick quiz! 📝"];
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+        document.querySelector('.animal-speech').innerText = msg;
+        speakText(msg);
+    };
+});
 </script>
 </body>
 </html>
-```
