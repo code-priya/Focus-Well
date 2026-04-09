@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FocusWell | Secure AI Study Suite + Enhanced Features</title>
+    <title>FocusWell | Complete AI Study Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -21,119 +21,74 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-dark); transition: all 0.3s ease; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: var(--bg-card); box-shadow: 0 8px 30px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
         .logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .nav-links button { background: none; border: none; font-weight: 600; cursor: pointer; padding: 0.5rem 1rem; border-radius: 30px; color: var(--text-dark); }
+        .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .nav-links button { background: none; border: none; font-weight: 600; cursor: pointer; padding: 0.5rem 0.8rem; border-radius: 30px; color: var(--text-dark); font-size: 0.85rem; }
         .nav-links button.active { background: var(--primary); color: white; }
         .theme-selector { display: flex; gap: 6px; }
         .theme-btn { width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer; }
-        .page { display: none; padding: 2rem 5%; animation: fadeIn 0.3s ease; }
+        .page { display: none; padding: 1.5rem 5%; animation: fadeIn 0.3s ease; }
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
-        .tool-card { background: var(--bg-card); border-radius: 28px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 30px rgba(0,0,0,0.05); border: 1px solid var(--border-light); }
-        .tool-card:hover { transform: translateY(-5px); }
-        .tool-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .tool-card { background: var(--bg-card); border-radius: 24px; padding: 1.2rem; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-light); }
+        .tool-card:hover { transform: translateY(-3px); }
+        .tool-card i { font-size: 2rem; color: var(--primary); margin-bottom: 0.8rem; }
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: var(--bg-card); border-radius: 32px; padding: 2rem; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
-        .chat-message { padding: 12px 16px; margin: 8px 0; border-radius: 20px; max-width: 85%; }
+        .modal-content { background: var(--bg-card); border-radius: 28px; padding: 1.5rem; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; }
+        .chat-message { padding: 10px 14px; margin: 6px 0; border-radius: 18px; max-width: 85%; }
         .user-msg { background: var(--primary); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
         .bot-msg { background: var(--primary-light); color: var(--text-dark); border-bottom-left-radius: 4px; }
-        .btn-primary { background: var(--primary); color: white; padding: 0.8rem 1.8rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; color: white; }
-        .animal-companion { position: fixed; bottom: 100px; right: 20px; cursor: pointer; z-index: 999; }
-        .animal-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 40px; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .animal-speech { position: absolute; bottom: 80px; right: 10px; background: var(--bg-card); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap; }
+        .btn-primary { background: var(--primary); color: white; padding: 0.6rem 1.2rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 38px; height: 38px; cursor: pointer; color: white; }
+        .animal-companion { position: fixed; bottom: 100px; right: 15px; cursor: pointer; z-index: 999; }
+        .animal-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 32px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .animal-speech { position: absolute; bottom: 70px; right: 5px; background: var(--bg-card); padding: 5px 10px; border-radius: 16px; font-size: 0.7rem; white-space: nowrap; }
         .login-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .login-box { background: var(--bg-card); padding: 2.5rem; border-radius: 48px; width: 90%; max-width: 400px; text-align: center; }
+        .login-box { background: var(--bg-card); padding: 2rem; border-radius: 40px; width: 90%; max-width: 350px; text-align: center; }
         .main-app { display: none; }
-        textarea, input[type="text"], select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); margin: 8px 0; font-family: inherit; background: var(--bg-card); color: var(--text-dark); }
+        textarea, input[type="text"], select { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--border-light); margin: 6px 0; font-family: inherit; background: var(--bg-card); color: var(--text-dark); }
         .stress-meter { height: 8px; background: #e0e0e0; border-radius: 10px; margin: 10px 0; }
         .stress-fill { width: 0%; height: 100%; border-radius: 10px; background: var(--primary); transition: width 0.3s; }
-        .notes-list { max-height: 300px; overflow-y: auto; margin-top: 10px; }
-        .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
-        @media (max-width: 700px) { .nav-links { gap: 0.5rem; } .nav-links button { padding: 0.3rem 0.7rem; font-size: 0.75rem; } }
+        .notes-list { max-height: 250px; overflow-y: auto; margin-top: 10px; }
+        .note-item { background: var(--primary-light); margin: 6px 0; padding: 10px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
         
-        /* New styles for added features */
-        .sentiment-chart { background: var(--bg-card); border-radius: 20px; padding: 1rem; margin: 1rem 0; }
-        .trend-bar { height: 30px; background: var(--primary-light); border-radius: 15px; margin: 5px 0; overflow: hidden; }
+        /* Feature Styles */
+        .pet-container { text-align: center; padding: 1rem; background: var(--bg-card); border-radius: 24px; margin: 1rem 0; }
+        .pet-avatar { font-size: 4rem; cursor: pointer; transition: transform 0.2s; }
+        .pet-avatar:hover { transform: scale(1.05); }
+        .trend-bar { height: 25px; background: var(--primary-light); border-radius: 12px; margin: 5px 0; overflow: hidden; }
         .trend-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.5s; }
-        .pet-container { text-align: center; padding: 1rem; background: var(--bg-card); border-radius: 30px; margin: 1rem 0; }
-        .pet-avatar { font-size: 5rem; cursor: pointer; transition: transform 0.2s; }
-        .pet-avatar:hover { transform: scale(1.1); }
-        .handwriting-canvas { border: 2px solid var(--border-light); border-radius: 16px; background: white; cursor: crosshair; touch-action: none; width: 100%; height: 200px; }
-        .blocked-site { background: var(--primary-light); padding: 8px; border-radius: 12px; margin: 5px; display: inline-block; }
-        .quote-card { background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); padding: 1.5rem; border-radius: 28px; text-align: center; font-style: italic; margin: 1rem 0; }
-        .goal-progress { height: 12px; background: #e0e0e0; border-radius: 20px; margin: 10px 0; }
-        .timer-preset { display: inline-block; margin: 5px; padding: 8px 16px; background: var(--primary-light); border-radius: 30px; cursor: pointer; }
-        
-        /* Music Player Styles */
-        .music-player-bar {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border-radius: 60px;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            border: 1px solid var(--border-light);
-            z-index: 1000;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
-        }
-        .music-player-bar i {
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--primary);
-            transition: 0.2s;
-        }
-        .music-player-bar i:hover { transform: scale(1.1); }
-        .music-title { font-weight: 500; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .volume-slider { width: 70px; cursor: pointer; }
-        .genre-select { background: var(--primary-light); border: none; border-radius: 20px; padding: 5px 10px; font-size: 0.75rem; cursor: pointer; }
-        
-        /* Cute Animal Popup */
-        .animal-popup {
-            position: fixed;
-            bottom: 180px;
-            right: 20px;
-            background: var(--bg-card);
-            border-radius: 28px;
-            padding: 12px 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
-            z-index: 1001;
-            animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-            border-left: 6px solid var(--primary);
-            backdrop-filter: blur(8px);
-            max-width: 280px;
-            cursor: pointer;
-        }
-        .animal-popup-avatar { font-size: 2.5rem; }
-        .animal-popup-text { font-size: 0.85rem; font-weight: 500; }
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(60px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .fade-out-popup { animation: fadeOut 0.5s forwards; }
+        .handwriting-canvas { border: 2px solid var(--border-light); border-radius: 16px; background: white; cursor: crosshair; width: 100%; height: 180px; touch-action: none; }
+        .blocked-site { background: var(--primary-light); padding: 5px 10px; border-radius: 20px; margin: 4px; display: inline-block; font-size: 0.8rem; }
+        .quote-card { background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); padding: 1rem; border-radius: 24px; text-align: center; font-style: italic; margin: 1rem 0; }
+        .goal-progress { height: 10px; background: #e0e0e0; border-radius: 10px; margin: 8px 0; }
+        .timer-preset { display: inline-block; margin: 4px; padding: 6px 12px; background: var(--primary-light); border-radius: 25px; cursor: pointer; font-size: 0.75rem; }
+        .music-player-bar { position: fixed; bottom: 15px; left: 15px; background: var(--bg-card); backdrop-filter: blur(10px); border-radius: 40px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid var(--border-light); z-index: 1000; flex-wrap: wrap; font-size: 0.8rem; }
+        .music-player-bar i { font-size: 1rem; cursor: pointer; color: var(--primary); }
+        .music-title { max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .volume-slider { width: 60px; }
+        .genre-select { background: var(--primary-light); border: none; border-radius: 20px; padding: 4px 8px; font-size: 0.7rem; }
+        .animal-popup { position: fixed; bottom: 170px; right: 15px; background: var(--bg-card); border-radius: 20px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 1001; animation: slideInRight 0.3s ease; border-left: 4px solid var(--primary); max-width: 250px; cursor: pointer; }
+        .animal-popup-avatar { font-size: 2rem; }
+        .animal-popup-text { font-size: 0.8rem; font-weight: 500; }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        .fade-out-popup { animation: fadeOut 0.4s forwards; }
         @keyframes fadeOut { to { opacity: 0; transform: translateX(30px); visibility: hidden; } }
+        .section-card { background: var(--bg-card); border-radius: 24px; padding: 1.2rem; margin-bottom: 1.5rem; border: 1px solid var(--border-light); }
+        .section-title { font-size: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+        @media (max-width: 700px) { .nav-links button { padding: 0.3rem 0.5rem; font-size: 0.7rem; } .page { padding: 1rem; } }
     </style>
 </head>
 <body>
 
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
-        <i class="fas fa-graduation-cap" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+        <i class="fas fa-graduation-cap" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.8rem;"></i>
         <h2>🌸 FocusWell</h2>
-        <p>Secure AI Study Suite</p>
+        <p>Complete AI Study Suite</p>
         <input type="text" id="loginUsername" placeholder="Enter your name">
-        <button class="btn-primary" id="loginBtn" style="width:100%;">✨ Enter Study Zone ✨</button>
+        <button class="btn-primary" id="loginBtn" style="width:100%;">✨ Start Studying ✨</button>
     </div>
 </div>
 
@@ -141,12 +96,12 @@
     <nav class="navbar">
         <div class="logo"><h1>FOCUSWELL 🧠</h1></div>
         <div class="nav-links">
-            <button class="nav-btn active" data-page="dashboard">🏠 Dashboard</button>
-            <button class="nav-btn" data-page="chatbot">🤖 AI Chat</button>
+            <button class="nav-btn active" data-page="dashboard">🏠 Home</button>
+            <button class="nav-btn" data-page="chatbot">💬 AI Chat</button>
             <button class="nav-btn" data-page="quiz">📝 Quiz</button>
             <button class="nav-btn" data-page="stress">💚 Stress</button>
             <button class="nav-btn" data-page="notes">📓 Notes</button>
-            <button class="nav-btn" data-page="enhanced">✨ Enhanced</button>
+            <button class="nav-btn" data-page="enhanced">✨ Studio</button>
         </div>
         <div class="theme-selector">
             <button class="theme-btn" style="background:#2b7a4b;" onclick="setTheme('day')"></button>
@@ -154,26 +109,28 @@
         </div>
     </nav>
 
+    <!-- Dashboard -->
     <div id="dashboard-page" class="page active-page">
-        <div style="background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); border-radius: 32px; padding: 2rem; margin-bottom: 2rem;">
+        <div style="background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); border-radius: 28px; padding: 1.5rem; margin-bottom: 1.5rem;">
             <h2>Welcome, <span id="userNameDisplay">Scholar</span>! 🌟</h2>
-            <p>Your secure AI-powered study companion</p>
-            <div id="quoteOfDayDisplay" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+            <p>Your complete AI-powered study companion</p>
+            <div id="quoteOfDayDisplay" style="margin-top: 0.8rem; font-size: 0.85rem;"></div>
         </div>
         <div class="tools-grid">
-            <div class="tool-card" onclick="navigateTo('chatbot')"><i class="fas fa-comment-dots"></i><h3>AI Chatbot</h3><p>Voice + Text</p></div>
-            <div class="tool-card" onclick="navigateTo('quiz')"><i class="fas fa-question-circle"></i><h3>Quiz Generator</h3></div>
-            <div class="tool-card" onclick="navigateTo('stress')"><i class="fas fa-brain"></i><h3>Stress Analysis</h3></div>
+            <div class="tool-card" onclick="navigateTo('chatbot')"><i class="fas fa-comment-dots"></i><h3>AI Chatbot</h3></div>
+            <div class="tool-card" onclick="navigateTo('quiz')"><i class="fas fa-question-circle"></i><h3>Quiz Gen</h3></div>
+            <div class="tool-card" onclick="navigateTo('stress')"><i class="fas fa-brain"></i><h3>Stress Care</h3></div>
             <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>Pomodoro</h3></div>
-            <div class="tool-card" onclick="navigateTo('enhanced')"><i class="fas fa-star-of-life"></i><h3>✨ All Features</h3></div>
+            <div class="tool-card" onclick="navigateTo('enhanced')"><i class="fas fa-star-of-life"></i><h3>All Tools</h3></div>
         </div>
     </div>
 
+    <!-- Chatbot -->
     <div id="chatbot-page" class="page">
-        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-            <h3>🤖 AI Study Chatbot</h3>
-            <div id="chatMessages" style="height: 400px; overflow-y: auto; border-radius: 20px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-light);"></div>
-            <div style="display: flex; gap: 10px;">
+        <div class="section-card">
+            <h3>🤖 AI Study Assistant</h3>
+            <div id="chatMessages" style="height: 350px; overflow-y: auto; border-radius: 20px; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border-light);"></div>
+            <div style="display: flex; gap: 8px;">
                 <input type="text" id="chatInput" placeholder="Ask anything..." style="flex:1;">
                 <button class="voice-btn" id="voiceChatBtn"><i class="fas fa-microphone"></i></button>
                 <button class="btn-primary" id="sendChatBtn">Send</button>
@@ -181,29 +138,34 @@
         </div>
     </div>
 
+    <!-- Quiz -->
     <div id="quiz-page" class="page">
-        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+        <div class="section-card">
             <h3>📝 AI Quiz Generator</h3>
-            <input type="text" id="quizTopicInput" placeholder="Enter topic (e.g., Python, History, Science)">
-            <button class="btn-primary" id="generateQuizBtn">✨ Generate Quiz</button>
-            <div id="quizDisplayArea" style="margin-top: 20px;"></div>
+            <input type="text" id="quizTopicInput" placeholder="Enter topic (Python, History, Science...)">
+            <button class="btn-primary" id="generateQuizBtn">✨ Generate Smart Quiz</button>
+            <div id="quizDisplayArea" style="margin-top: 15px;"></div>
         </div>
     </div>
 
+    <!-- Stress Analysis (FULLY FUNCTIONAL) -->
     <div id="stress-page" class="page">
-        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-            <h3>💚 Stress & Sentiment Analysis</h3>
-            <textarea id="sentimentText" rows="3" placeholder="How are you feeling today?"></textarea>
-            <select id="workloadSelect"><option>Light</option><option>Moderate</option><option>Heavy</option><option>Extreme</option></select>
-            <button class="btn-primary" id="analyzeSentimentBtn">Analyze & Get Help</button>
+        <div class="section-card">
+            <h3>💚 Advanced Stress & Sentiment Analysis</h3>
+            <textarea id="sentimentText" rows="3" placeholder="How are you feeling today? Describe your emotions, workload, or any challenges..."></textarea>
+            <select id="workloadSelect">
+                <option>Light</option><option>Moderate</option><option>Heavy</option><option>Extreme</option>
+            </select>
+            <button class="btn-primary" id="analyzeSentimentBtn">🔍 Deep Analysis & Get Help</button>
             <div class="stress-meter"><div class="stress-fill" id="stressFillBar"></div></div>
-            <div id="sentimentResult" style="margin-top: 20px; padding: 15px; border-radius: 20px; background: var(--primary-light);"></div>
+            <div id="sentimentResult" style="margin-top: 15px;"></div>
         </div>
     </div>
 
+    <!-- Notes -->
     <div id="notes-page" class="page">
-        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-            <h3>📓 My Notes</h3>
+        <div class="section-card">
+            <h3>📓 My Study Notes</h3>
             <input type="text" id="noteTitleInput" placeholder="Title">
             <textarea id="noteContentInput" rows="3" placeholder="Write your note..."></textarea>
             <button class="btn-primary" id="saveNoteBtn">Save Note</button>
@@ -211,159 +173,165 @@
         </div>
     </div>
 
-    <!-- ENHANCED PAGE with all 10 new features -->
+    <!-- Enhanced Page - All Features -->
     <div id="enhanced-page" class="page">
-        <div style="display: grid; gap: 2rem;">
-            <!-- 1. Virtual Study Pet -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>🐾 Virtual Study Pet <span id="petNameDisplay">Buddy</span></h3>
-                <div class="pet-container">
-                    <div class="pet-avatar" id="petAvatar">🐣</div>
-                    <p id="petStatus">Happy and ready to study!</p>
-                    <div class="goal-progress"><div id="petExpBar" style="width:0%; height:100%; background:var(--primary); border-radius:20px;"></div></div>
-                    <p>Level <span id="petLevel">1</span> | XP: <span id="petXP">0</span>/100</p>
-                    <button class="btn-primary" id="feedPetBtn">🍎 Feed Pet (+10 XP)</button>
-                    <button class="btn-primary" id="playPetBtn">🎾 Play (+5 XP)</button>
-                </div>
+        <!-- Virtual Pet -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-paw"></i> Virtual Study Pet</div>
+            <div class="pet-container">
+                <div class="pet-avatar" id="petAvatar">🐣</div>
+                <p id="petStatus">Happy studier!</p>
+                <div class="goal-progress"><div id="petExpBar" style="width:0%; height:100%; background:var(--primary); border-radius:10px;"></div></div>
+                <p>Level <span id="petLevel">1</span> | XP: <span id="petXP">0</span>/100</p>
+                <button class="btn-primary" id="feedPetBtn">🍎 Feed (+10 XP)</button>
+                <button class="btn-primary" id="playPetBtn">🎾 Play (+5 XP)</button>
             </div>
+        </div>
 
-            <!-- 2. Sentiment Trend Analysis -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>📈 Sentiment Trend Analysis</h3>
-                <div id="sentimentTrendChart"></div>
-                <button class="btn-primary" id="refreshTrendBtn">Refresh Trend</button>
-                <p id="trendInsight" style="margin-top: 10px;"></p>
-            </div>
+        <!-- Sentiment Trend -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-chart-line"></i> Sentiment Trend</div>
+            <div id="sentimentTrendChart"></div>
+            <button class="btn-primary" id="refreshTrendBtn">Refresh</button>
+            <p id="trendInsight" style="margin-top: 8px; font-size:0.85rem;"></p>
+        </div>
 
-            <!-- 3. Study Path Recommender -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>🎯 AI Study Path Recommender</h3>
-                <p>Based on your quiz performance & notes:</p>
-                <div id="studyPathRecommendation" style="background: var(--primary-light); border-radius: 20px; padding: 1rem; margin: 1rem 0;"></div>
-                <button class="btn-primary" id="generatePathBtn">Generate Personalized Path</button>
-            </div>
+        <!-- Study Path -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-map"></i> AI Study Path</div>
+            <div id="studyPathRecommendation" style="background: var(--primary-light); border-radius: 16px; padding: 0.8rem; margin: 0.5rem 0;"></div>
+            <button class="btn-primary" id="generatePathBtn">Generate Path</button>
+        </div>
 
-            <!-- 4. Goal Setting -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>🎯 Daily Study Goals</h3>
-                <input type="number" id="goalInput" placeholder="Daily study minutes goal (e.g., 60)">
-                <input type="number" id="flashcardGoalInput" placeholder="Flashcards to review daily">
-                <button class="btn-primary" id="setGoalBtn">Set Goals</button>
-                <div id="goalDisplay"></div>
-                <div class="goal-progress"><div id="goalProgressFill" style="width:0%; height:100%; background:var(--primary); border-radius:20px;"></div></div>
-                <button class="btn-primary" id="logStudyTimeBtn">📝 Log 10 min Study</button>
-            </div>
+        <!-- Goals -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-bullseye"></i> Daily Goals</div>
+            <input type="number" id="goalInput" placeholder="Daily minutes goal">
+            <input type="number" id="flashcardGoalInput" placeholder="Flashcards goal">
+            <button class="btn-primary" id="setGoalBtn">Set Goals</button>
+            <div id="goalDisplay" style="margin:8px 0; font-size:0.85rem;"></div>
+            <div class="goal-progress"><div id="goalProgressFill" style="width:0%; height:100%; background:var(--primary); border-radius:10px;"></div></div>
+            <button class="btn-primary" id="logStudyTimeBtn">📝 Log 10 min Study</button>
+        </div>
 
-            <!-- 5. Website Blocker -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>🚫 Website Blocker (Focus Mode)</h3>
-                <input type="text" id="blockSiteInput" placeholder="e.g., youtube.com, twitter.com">
-                <button class="btn-primary" id="addBlockedSiteBtn">Add to Blocklist</button>
-                <div id="blockedSitesList"></div>
-                <button class="btn-primary" id="toggleBlockerBtn">🔴 Enable Focus Mode</button>
-                <p id="blockerStatus" style="margin-top: 10px;">Blocker: OFF</p>
-            </div>
+        <!-- Website Blocker -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-shield-alt"></i> Focus Blocker</div>
+            <input type="text" id="blockSiteInput" placeholder="e.g., youtube.com">
+            <button class="btn-primary" id="addBlockedSiteBtn">Add Site</button>
+            <div id="blockedSitesList"></div>
+            <button class="btn-primary" id="toggleBlockerBtn">🔴 Enable Focus Mode</button>
+            <p id="blockerStatus" style="margin-top:6px; font-size:0.75rem;">Blocker: OFF</p>
+        </div>
 
-            <!-- 6. Study Time Variations -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>⏱️ Study Timer Variations</h3>
-                <div id="timerPresets">
-                    <span class="timer-preset" data-work="25" data-break="5">🍅 Pomodoro (25/5)</span>
-                    <span class="timer-preset" data-work="52" data-break="17">⚡ Ultradian (52/17)</span>
-                    <span class="timer-preset" data-work="90" data-break="20">🌊 Flow State (90/20)</span>
-                    <span class="timer-preset" data-work="10" data-break="2">⚡ Quick Boost (10/2)</span>
-                </div>
-                <button class="btn-primary" id="startVariationTimerBtn">Start Selected Timer</button>
-                <div id="variationTimerDisplay" style="font-size: 2rem; text-align: center; margin: 1rem 0;"></div>
+        <!-- Timer Variations -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-hourglass-half"></i> Study Timers</div>
+            <div id="timerPresets">
+                <span class="timer-preset" data-work="25" data-break="5">🍅 25/5</span>
+                <span class="timer-preset" data-work="52" data-break="17">⚡ 52/17</span>
+                <span class="timer-preset" data-work="90" data-break="20">🌊 90/20</span>
+                <span class="timer-preset" data-work="10" data-break="2">⚡ 10/2</span>
             </div>
+            <button class="btn-primary" id="startVariationTimerBtn">Start Timer</button>
+            <div id="variationTimerDisplay" style="font-size: 1.8rem; text-align: center; margin: 0.8rem 0;"></div>
+        </div>
 
-            <!-- 7. Quote of the Day -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>💬 Quote of the Day</h3>
-                <div class="quote-card" id="quoteCard"></div>
-                <button class="btn-primary" id="refreshQuoteBtn">New Quote</button>
-            </div>
+        <!-- Quote -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-quote-left"></i> Inspiration</div>
+            <div class="quote-card" id="quoteCard"></div>
+            <button class="btn-primary" id="refreshQuoteBtn">New Quote</button>
+        </div>
 
-            <!-- 8. Pronunciation Helper -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>🎤 Pronunciation Helper</h3>
-                <input type="text" id="pronounceWord" placeholder="Enter a word to practice">
-                <button class="btn-primary" id="listenWordBtn">🔊 Listen</button>
-                <button class="btn-primary" id="recordPronounceBtn">🎙️ Record & Check</button>
-                <p id="pronounceFeedback"></p>
-            </div>
+        <!-- Pronunciation -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-microphone-alt"></i> Pronunciation Coach</div>
+            <input type="text" id="pronounceWord" placeholder="Enter a word">
+            <button class="btn-primary" id="listenWordBtn">🔊 Listen</button>
+            <button class="btn-primary" id="recordPronounceBtn">🎙️ Record & Check</button>
+            <p id="pronounceFeedback" style="font-size:0.85rem; margin-top:6px;"></p>
+        </div>
 
-            <!-- 9. Handwriting Mode -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>✍️ Handwriting Mode (Draw Notes)</h3>
-                <canvas id="handwritingCanvas" class="handwriting-canvas" width="500" height="200"></canvas>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button class="btn-primary" id="clearCanvasBtn">Clear</button>
-                    <button class="btn-primary" id="saveHandwritingBtn">Save as Note</button>
-                </div>
+        <!-- Handwriting -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-pencil-alt"></i> Handwriting Notes</div>
+            <canvas id="handwritingCanvas" class="handwriting-canvas" width="500" height="180"></canvas>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <button class="btn-primary" id="clearCanvasBtn">Clear</button>
+                <button class="btn-primary" id="saveHandwritingBtn">Save to Notes</button>
             </div>
+        </div>
 
-            <!-- 10. Study Templates -->
-            <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
-                <h3>📋 Study Templates</h3>
-                <select id="templateSelect">
-                    <option value="cornell">Cornell Notes Template</option>
-                    <option value="mindmap">Mind Map Template</option>
-                    <option value="flashcard">Flashcard Study Template</option>
-                    <option value="exam">Exam Cram Template</option>
-                </select>
-                <button class="btn-primary" id="applyTemplateBtn">Apply Template</button>
-                <div id="templateOutput" style="margin-top: 1rem; background: var(--primary-light); padding: 1rem; border-radius: 20px;"></div>
-            </div>
+        <!-- Templates -->
+        <div class="section-card">
+            <div class="section-title"><i class="fas fa-copy"></i> Study Templates</div>
+            <select id="templateSelect">
+                <option value="cornell">Cornell Notes</option>
+                <option value="mindmap">Mind Map</option>
+                <option value="flashcard">Flashcard Template</option>
+                <option value="exam">Exam Cram</option>
+            </select>
+            <button class="btn-primary" id="applyTemplateBtn">Apply</button>
+            <div id="templateOutput" style="margin-top: 10px; background: var(--primary-light); padding: 0.8rem; border-radius: 16px; font-size:0.85rem;"></div>
         </div>
     </div>
 
     <div class="animal-companion" id="animalCompanion">
         <div class="animal-avatar">🐼</div>
-        <div class="animal-speech">Your AI buddy!</div>
+        <div class="animal-speech">Study buddy!</div>
     </div>
     
-    <!-- NEW: Music Player -->
     <div class="music-player-bar" id="musicPlayerBar">
         <i class="fas fa-music" id="musicIconBtn"></i>
         <i class="fas fa-play-circle" id="playPauseMusicBtn"></i>
-        <span class="music-title" id="musicTrackTitle">Lofi Study</span>
+        <span class="music-title" id="musicTrackTitle">Lofi</span>
         <select id="musicGenreSelect" class="genre-select">
-            <option value="lofi">🎧 Lofi Hip Hop</option>
-            <option value="classical">🎹 Classical Piano</option>
-            <option value="nature">🌧️ Nature Rain</option>
-            <option value="jazz">🎷 Jazz Café</option>
-            <option value="ambient">✨ Ambient Space</option>
+            <option value="lofi">🎧 Lofi</option><option value="classical">🎹 Classical</option>
+            <option value="nature">🌧️ Nature</option><option value="jazz">🎷 Jazz</option>
         </select>
         <i class="fas fa-step-backward" id="prevTrackBtn"></i>
         <i class="fas fa-step-forward" id="nextTrackBtn"></i>
-        <input type="range" min="0" max="1" step="0.01" value="0.3" class="volume-slider" id="musicVolumeSlider">
+        <input type="range" min="0" max="1" step="0.01" value="0.25" class="volume-slider" id="musicVolumeSlider">
         <i class="fas fa-volume-up"></i>
     </div>
 </div>
 
 <script>
-// ==================== ORIGINAL CODE (PRESERVED) ====================
+// ========== CORE FUNCTIONS ==========
 const API_URL = '/api/ai';
 async function callSecureAI(prompt, type = 'chat') {
     try {
         const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt, type })
         });
-        if (!response.ok) throw new Error('API request failed');
+        if (!response.ok) throw new Error();
         const data = await response.json();
         return data.result;
     } catch (error) {
-        console.error('API Error:', error);
         return getLocalFallback(prompt, type);
     }
 }
 function getLocalFallback(prompt, type) {
-    if (type === 'quiz') return JSON.stringify([{ question: "What is the main concept?", options: ["A","B","C","D"], correct: 0 }]);
-    if (type === 'sentiment') return JSON.stringify({ sentiment: "neutral", stressLevel: 5, advice: "Take breaks!" });
-    return "AI Assistant ready!";
+    if (type === 'quiz') return JSON.stringify([{ question: "What is the main concept?", options: ["Option A", "Option B", "Option C", "Option D"], correct: 0 }]);
+    if (type === 'sentiment') {
+        const lowerPrompt = prompt.toLowerCase();
+        let stress = 5;
+        if (lowerPrompt.includes('stressed') || lowerPrompt.includes('anxious')) stress = 8;
+        else if (lowerPrompt.includes('tired')) stress = 6;
+        else if (lowerPrompt.includes('happy') || lowerPrompt.includes('great')) stress = 3;
+        return JSON.stringify({ 
+            sentiment: stress > 6 ? "Stressed" : (stress < 4 ? "Relaxed" : "Neutral"), 
+            stressLevel: stress, 
+            advice: stress > 6 ? "Take a 5-minute break and breathe deeply. You've got this!" : (stress < 4 ? "Great energy! Keep up the momentum!" : "You're doing well. Stay hydrated and take short breaks."),
+            encouragement: "Every small step counts toward your goals!",
+            detailedAnalysis: `Based on your input, your stress level appears ${stress}/10. ${stress > 6 ? "Consider a quick walk or meditation." : "Keep maintaining your balanced approach."}`,
+            recommendations: stress > 6 ? ["Deep breathing (4-7-8 method)", "5 min walk", "Drink water", "Break task into smaller steps"] : ["Review notes lightly", "Practice active recall", "Stay consistent"]
+        });
+    }
+    if (type === 'tasks') return JSON.stringify(["Review notes", "Create flashcards", "Take a break"]);
+    return "I'm your AI study assistant! Ask me anything about your subjects! 📚";
 }
 function navigateTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
@@ -372,254 +340,161 @@ function navigateTo(pageId) {
     document.querySelector(`.nav-btn[data-page="${pageId}"]`).classList.add('active');
 }
 function setTheme(theme) { document.body.classList.remove('night-theme'); if (theme === 'night') document.body.classList.add('night-theme'); localStorage.setItem('focuswell_theme', theme); }
-function speakText(text) { if (!text) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.rate = 0.95; window.speechSynthesis.speak(utterance); }
-function openPomodoro() { let seconds = 1500; const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content" style="text-align:center"><h3>🍅 Focus Timer</h3><h1 id="timerDisplay">25:00</h1><button class="btn-primary" id="startTimerBtn">Start</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`; document.body.appendChild(modal); document.getElementById('startTimerBtn').onclick = function() { this.disabled = true; const interval = setInterval(() => { if (seconds > 0) { seconds--; const mins = Math.floor(seconds / 60); const secs = seconds % 60; document.getElementById('timerDisplay').innerText = `${mins}:${secs.toString().padStart(2, '0')}`; } else { clearInterval(interval); speakText("Time's up!"); modal.remove(); } }, 1000); }; }
+function speakText(text) { if (!text) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.rate = 0.9; window.speechSynthesis.speak(utterance); }
+function openPomodoro() { let seconds = 1500; const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content" style="text-align:center"><h3>🍅 Focus Timer</h3><h1 id="timerDisplay">25:00</h1><button class="btn-primary" id="startTimerBtn">Start</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`; document.body.appendChild(modal); document.getElementById('startTimerBtn').onclick = function() { this.disabled = true; const interval = setInterval(() => { if (seconds > 0) { seconds--; const mins = Math.floor(seconds/60); const secs = seconds%60; document.getElementById('timerDisplay').innerText = `${mins}:${secs.toString().padStart(2,'0')}`; } else { clearInterval(interval); speakText("Time's up!"); modal.remove(); } }, 1000); }; }
 
-// ==================== NEW FEATURES IMPLEMENTATION ====================
-// 1. Virtual Study Pet
+// ========== VIRTUAL PET ==========
 let petXP = parseInt(localStorage.getItem('petXP') || '0');
 let petLevel = parseInt(localStorage.getItem('petLevel') || '1');
-const petAvatars = ['🐣','🐥','🐔','🦉','🐉'];
 function updatePet() {
     document.getElementById('petXP').innerText = petXP;
     document.getElementById('petLevel').innerText = petLevel;
-    document.getElementById('petExpBar').style.width = `${(petXP % 100)}%`;
-    let avatarIndex = Math.min(Math.floor(petLevel/3), petAvatars.length-1);
-    document.getElementById('petAvatar').innerText = petAvatars[avatarIndex];
-    localStorage.setItem('petXP', petXP);
-    localStorage.setItem('petLevel', petLevel);
+    document.getElementById('petExpBar').style.width = `${petXP % 100}%`;
+    const avatars = ['🐣','🐥','🐔','🦉','🐉'];
+    document.getElementById('petAvatar').innerText = avatars[Math.min(Math.floor(petLevel/3), avatars.length-1)];
+    localStorage.setItem('petXP', petXP); localStorage.setItem('petLevel', petLevel);
 }
-function addPetXP(amount) {
-    petXP += amount;
-    if(petXP >= 100) { petLevel++; petXP -= 100; speakText(`Your pet grew to level ${petLevel}!`); showCuteAnimalPopup(`🎉 Your pet leveled up to ${petLevel}!`); }
-    updatePet();
-}
-// 2. Sentiment Trend
+function addPetXP(amount) { petXP += amount; if(petXP >= 100) { petLevel++; petXP -= 100; speakText(`Pet level ${petLevel}!`); showPopup(`🎉 Pet leveled up to ${petLevel}!`); } updatePet(); }
+
+// ========== SENTIMENT TREND ==========
 let sentimentHistory = JSON.parse(localStorage.getItem('sentimentHistory') || '[]');
-function renderSentimentTrend() {
+function renderTrend() {
     const container = document.getElementById('sentimentTrendChart');
     if(!container) return;
-    if(sentimentHistory.length === 0) { container.innerHTML = "<p>No sentiment data yet. Use Stress Analysis to build trend!</p>"; return; }
-    let html = '<div style="display:flex; flex-direction:column; gap:5px;">';
+    if(sentimentHistory.length === 0) { container.innerHTML = "<p>No data yet. Use Stress Analysis!</p>"; return; }
+    let html = '';
     sentimentHistory.slice(-7).forEach(s => {
-        let stressPercent = s.stress * 10;
-        html += `<div><small>${s.date}</small><div class="trend-bar"><div class="trend-fill" style="width:${stressPercent}%; background:${s.stress>6?'#ff6b6b':'var(--primary)'}"></div></div><span>Stress: ${s.stress}/10</span></div>`;
+        let percent = s.stress * 10;
+        html += `<div><small>${s.date}</small><div class="trend-bar"><div class="trend-fill" style="width:${percent}%; background:${s.stress>6?'#ff6b6b':'var(--primary)'}"></div></div><span>Stress: ${s.stress}/10</span></div>`;
     });
-    html += '</div>';
     container.innerHTML = html;
-    let avgStress = sentimentHistory.reduce((a,b)=>a+b.stress,0)/sentimentHistory.length;
-    document.getElementById('trendInsight').innerHTML = avgStress > 6 ? "⚠️ Your stress trend is high. Try our breathing exercises!" : "✅ Your stress levels are balanced. Keep it up!";
+    let avg = sentimentHistory.reduce((a,b)=>a+b.stress,0)/sentimentHistory.length;
+    document.getElementById('trendInsight').innerHTML = avg > 6 ? "⚠️ High stress trend. Try our relaxation tips!" : "✅ Stress levels balanced. Keep going!";
 }
-// 3. Study Path Recommender
+
+// ========== ENHANCED STRESS ANALYSIS (FULLY WORKING) ==========
+document.getElementById('analyzeSentimentBtn').onclick = async () => {
+    const text = document.getElementById('sentimentText').value.trim();
+    if (!text) { alert("Please share how you're feeling"); return; }
+    const workload = document.getElementById('workloadSelect').value;
+    const resultDiv = document.getElementById('sentimentResult');
+    const fillBar = document.getElementById('stressFillBar');
+    resultDiv.innerHTML = "🧠 Analyzing your emotional state...";
+    const analysisRaw = await callSecureAI(JSON.stringify({ text, workload, detailed: true }), 'sentiment');
+    try {
+        const data = JSON.parse(analysisRaw);
+        const stressLevel = data.stressLevel || 5;
+        fillBar.style.width = `${stressLevel * 10}%`;
+        let html = `<div style="background:var(--bg-card); border-radius:20px; padding:1rem;"><strong>📊 Analysis:</strong> ${data.detailedAnalysis || data.advice}</div>`;
+        html += `<div style="margin-top:12px;"><strong>💡 Recommendations:</strong><ul>${(data.recommendations || ["Take deep breaths", "Short walk", "Hydrate"]).map(r => `<li>✨ ${r}</li>`).join('')}</ul></div>`;
+        html += `<div style="margin-top:8px;"><strong>🧘 Encouragement:</strong> ${data.encouragement || "You've got this!"}</div>`;
+        html += `<div style="margin-top:12px;"><button class="btn-primary" onclick="speakText('${data.advice.replace(/'/g, "\\'")}')">🔊 Listen to Advice</button></div>`;
+        resultDiv.innerHTML = html;
+        speakText(data.advice);
+        // Save to trend
+        sentimentHistory.push({ date: new Date().toLocaleDateString(), stress: stressLevel });
+        if(sentimentHistory.length > 30) sentimentHistory.shift();
+        localStorage.setItem('sentimentHistory', JSON.stringify(sentimentHistory));
+        renderTrend();
+        showPopup(`🧠 Analysis complete! Stress level: ${stressLevel}/10`);
+    } catch(e) { resultDiv.innerHTML = `<div class="stress-detailed-card">💚 ${getLocalFallback(text,'sentiment').advice}</div>`; }
+};
+
+// ========== OTHER FEATURES ==========
 async function generateStudyPath() {
     const notes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
-    const topics = notes.map(n=>n.title).join(', ');
-    const recommendation = await callSecureAI(`Suggest a study path for topics: ${topics || 'general study'}`, 'chat');
-    document.getElementById('studyPathRecommendation').innerHTML = `<p>${recommendation.substring(0,300)}</p><p>✨ Next: Review flashcards and take a quiz!</p>`;
-    showCuteAnimalPopup("📚 Your personalized study path is ready!");
+    const rec = await callSecureAI(`Suggest study path for: ${notes.map(n=>n.title).join(', ') || 'general study'}`, 'chat');
+    document.getElementById('studyPathRecommendation').innerHTML = `<p>${rec.substring(0,250)}</p><p>📌 Next: Practice quizzes and review flashcards!</p>`;
+    showPopup("📚 Study path ready!");
 }
-// 4. Goal Setting
 let dailyGoal = parseInt(localStorage.getItem('dailyGoal') || '0');
-let flashcardGoal = parseInt(localStorage.getItem('flashcardGoal') || '0');
-let studyMinutesToday = parseInt(localStorage.getItem('studyMinutesToday') || '0');
+let studyMinutes = parseInt(localStorage.getItem('studyMinutesToday') || '0');
 function updateGoalUI() {
-    document.getElementById('goalDisplay').innerHTML = `📚 Daily goal: ${dailyGoal} min | Flashcards: ${flashcardGoal} | Today: ${studyMinutesToday} min`;
-    let percent = Math.min(100, (studyMinutesToday/dailyGoal)*100);
-    document.getElementById('goalProgressFill').style.width = `${percent || 0}%`;
-    if(studyMinutesToday >= dailyGoal && dailyGoal>0) { speakText("Congratulations! You've achieved your daily study goal!"); showCuteAnimalPopup("🏆 Goal achieved! Amazing work! 🌟"); }
+    document.getElementById('goalDisplay').innerHTML = `📚 Goal: ${dailyGoal} min | Today: ${studyMinutes} min`;
+    let percent = dailyGoal ? Math.min(100, (studyMinutes/dailyGoal)*100) : 0;
+    document.getElementById('goalProgressFill').style.width = `${percent}%`;
+    if(studyMinutes >= dailyGoal && dailyGoal>0) { speakText("Goal achieved!"); showPopup("🏆 Daily goal achieved! Amazing!"); }
 }
-// 5. Website Blocker
 let blockedSites = JSON.parse(localStorage.getItem('blockedSites') || '[]');
 let blockerActive = false;
 function updateBlockerUI() {
-    const listDiv = document.getElementById('blockedSitesList');
-    listDiv.innerHTML = blockedSites.map(site => `<span class="blocked-site">${site} <button onclick="removeBlockedSite('${site}')">❌</button></span>`).join('');
+    document.getElementById('blockedSitesList').innerHTML = blockedSites.map(s => `<span class="blocked-site">${s} <button onclick="removeSite('${s}')">❌</button></span>`).join('');
     document.getElementById('blockerStatus').innerText = `Blocker: ${blockerActive ? 'ACTIVE 🛡️' : 'OFF'}`;
 }
-window.removeBlockedSite = (site) => { blockedSites = blockedSites.filter(s=>s!==site); localStorage.setItem('blockedSites', JSON.stringify(blockedSites)); updateBlockerUI(); };
-function checkBlocker() { if(blockerActive) { let currentHost = window.location.hostname; if(blockedSites.some(s=>currentHost.includes(s))) { alert("Focus Mode: This site is blocked! Stay on FocusWell."); window.location.href = window.location.origin; } } }
-setInterval(checkBlocker, 2000);
-// 6. Timer Variations
-let variationInterval, variationSeconds, variationWorkTime = 25, variationBreakTime = 5, variationIsWork = true;
-function startVariationTimer(workMins, breakMins) {
-    if(variationInterval) clearInterval(variationInterval);
-    variationIsWork = true;
-    variationSeconds = workMins * 60;
-    const display = document.getElementById('variationTimerDisplay');
-    function updateDisplay() { let mins = Math.floor(variationSeconds/60), secs = variationSeconds%60; display.innerText = `${mins}:${secs.toString().padStart(2,'0')}`; }
-    updateDisplay();
-    variationInterval = setInterval(() => {
-        if(variationSeconds <= 0) {
-            if(variationIsWork) { speakText(`Work session complete! Take a ${variationBreakTime} minute break.`); showCuteAnimalPopup(`🍅 Great focus! Take a ${variationBreakTime} min break.`); variationSeconds = variationBreakTime * 60; variationIsWork = false; }
-            else { speakText("Break over! Time to focus again."); showCuteAnimalPopup("⏰ Break's over! Let's get back to studying!"); variationSeconds = variationWorkTime * 60; variationIsWork = true; }
-            updateDisplay();
-        } else { variationSeconds--; updateDisplay(); }
-    }, 1000);
-}
-// 7. Quotes
-const quotes = ["The expert in anything was once a beginner.","Study while others are sleeping; work while others are loafing.","Success is the sum of small efforts.","Don't study until you get it right, study until you can't get it wrong.","Your future self is watching you right now through memories."];
+window.removeSite = (s) => { blockedSites = blockedSites.filter(x=>x!==s); localStorage.setItem('blockedSites',JSON.stringify(blockedSites)); updateBlockerUI(); };
+setInterval(() => { if(blockerActive && blockedSites.some(s=>location.hostname.includes(s))) { alert("Focus Mode: Site blocked!"); location.href = location.origin; } }, 2000);
+let timerInterval, timerSeconds, workMins=25, breakMins=5, isWork=true;
+function startTimer(w,b) { if(timerInterval) clearInterval(timerInterval); isWork=true; timerSeconds=w*60; const disp=document.getElementById('variationTimerDisplay'); function update(){ let m=Math.floor(timerSeconds/60), s=timerSeconds%60; disp.innerText=`${m}:${s.toString().padStart(2,'0')}`; } update(); timerInterval=setInterval(()=>{ if(timerSeconds<=0){ if(isWork){ speakText(`Work done! ${b} min break.`); showPopup(`🍅 Focus complete! Take ${b} min break.`); timerSeconds=b*60; isWork=false; } else { speakText("Break over! Back to study!"); showPopup("⏰ Break's over! Let's focus!"); timerSeconds=w*60; isWork=true; } update(); } else { timerSeconds--; update(); } },1000); }
+const quotes = ["Believe you can and you're halfway there.", "Study hard, dream big.", "Small progress is still progress.", "Your future self will thank you.", "Consistency beats intensity."];
 function updateQuote() { document.getElementById('quoteCard').innerHTML = `"${quotes[Math.floor(Math.random()*quotes.length)]}" — FocusWell`; }
-// 8. Pronunciation Helper
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-document.getElementById('recordPronounceBtn')?.addEventListener('click', () => {
-    const word = document.getElementById('pronounceWord').value;
-    if(!word) { alert("Enter a word first"); return; }
-    recognition.lang = 'en-US';
-    recognition.onresult = (e) => { let spoken = e.results[0][0].transcript.toLowerCase(); if(spoken.includes(word.toLowerCase())) { document.getElementById('pronounceFeedback').innerHTML = "✅ Great pronunciation!"; showCuteAnimalPopup("🎤 Excellent pronunciation! Keep practicing!"); } else document.getElementById('pronounceFeedback').innerHTML = `❌ Try again. You said "${spoken}"`; };
-    recognition.start();
-});
-document.getElementById('listenWordBtn')?.addEventListener('click', () => { let w = document.getElementById('pronounceWord').value; if(w) speakText(w); });
-// 9. Handwriting Mode
-let canvas = document.getElementById('handwritingCanvas');
-let ctx = canvas?.getContext('2d');
-let drawing = false;
-if(canvas) {
-    canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
-    ctx.fillStyle = 'white'; ctx.fillRect(0,0,canvas.width,canvas.height);
-    canvas.addEventListener('mousedown', (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); });
-    canvas.addEventListener('mousemove', (e) => { if(drawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } });
-    canvas.addEventListener('mouseup', () => drawing = false);
-    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); let rect = canvas.getBoundingClientRect(); drawing=true; ctx.beginPath(); ctx.moveTo(e.touches[0].clientX-rect.left, e.touches[0].clientY-rect.top); });
-    canvas.addEventListener('touchmove', (e) => { if(drawing) { e.preventDefault(); let rect = canvas.getBoundingClientRect(); ctx.lineTo(e.touches[0].clientX-rect.left, e.touches[0].clientY-rect.top); ctx.stroke(); } });
-    canvas.addEventListener('touchend', () => drawing=false);
-    document.getElementById('clearCanvasBtn')?.addEventListener('click', () => { ctx.fillStyle = 'white'; ctx.fillRect(0,0,canvas.width,canvas.height); });
-    document.getElementById('saveHandwritingBtn')?.addEventListener('click', () => { let dataURL = canvas.toDataURL(); let notes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]'); notes.push({ id: Date.now(), title: "Handwritten Note", content: "Drawing saved", image: dataURL }); localStorage.setItem('focuswell_notes', JSON.stringify(notes)); speakText("Handwriting saved as note!"); showCuteAnimalPopup("✍️ Handwriting saved to notes!"); });
-}
-// 10. Study Templates
-document.getElementById('applyTemplateBtn')?.addEventListener('click', () => {
-    let template = document.getElementById('templateSelect').value;
-    let output = "";
-    if(template === 'cornell') output = "<h4>Cornell Notes</h4><p><strong>Main Ideas:</strong><br>_________________<br><strong>Details:</strong><br>_________________<br><strong>Summary:</strong><br>_________________</p>";
-    else if(template === 'mindmap') output = "<h4>Mind Map</h4><p>Central Topic: _____<br>Branch 1: _____<br>Branch 2: _____<br>Branch 3: _____</p>";
-    else if(template === 'flashcard') output = "<h4>Flashcard Study Template</h4><p>Front: _____<br>Back: _____<br>Review date: _____</p>";
-    else output = "<h4>Exam Cram Plan</h4><p>Day 1: Review notes<br>Day 2: Practice quiz<br>Day 3: Flashcards<br>Day 4: Mock test</p>";
-    document.getElementById('templateOutput').innerHTML = output;
-    showCuteAnimalPopup("📋 Template applied! Start studying!");
-});
+document.getElementById('recordPronounceBtn')?.addEventListener('click',()=>{ let w=document.getElementById('pronounceWord').value; if(!w){alert("Enter word");return;} recognition.onresult=(e)=>{ let spoken=e.results[0][0].transcript.toLowerCase(); if(spoken.includes(w.toLowerCase())){ document.getElementById('pronounceFeedback').innerHTML="✅ Perfect!"; showPopup("🎤 Great pronunciation!"); } else document.getElementById('pronounceFeedback').innerHTML=`❌ You said "${spoken}"`; }; recognition.start(); });
+let canvas=document.getElementById('handwritingCanvas'), ctx=canvas?.getContext('2d'), drawing=false;
+if(canvas){ canvas.width=canvas.clientWidth; canvas.height=canvas.clientHeight; ctx.fillStyle='white'; ctx.fillRect(0,0,canvas.width,canvas.height);
+canvas.addEventListener('mousedown',(e)=>{drawing=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);});
+canvas.addEventListener('mousemove',(e)=>{if(drawing){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}});
+canvas.addEventListener('mouseup',()=>drawing=false);
+canvas.addEventListener('touchstart',(e)=>{e.preventDefault();let rect=canvas.getBoundingClientRect();drawing=true;ctx.beginPath();ctx.moveTo(e.touches[0].clientX-rect.left,e.touches[0].clientY-rect.top);});
+canvas.addEventListener('touchmove',(e)=>{if(drawing){e.preventDefault();let rect=canvas.getBoundingClientRect();ctx.lineTo(e.touches[0].clientX-rect.left,e.touches[0].clientY-rect.top);ctx.stroke();}});
+canvas.addEventListener('touchend',()=>drawing=false);
+document.getElementById('clearCanvasBtn')?.addEventListener('click',()=>{ctx.fillStyle='white';ctx.fillRect(0,0,canvas.width,canvas.height);});
+document.getElementById('saveHandwritingBtn')?.addEventListener('click',()=>{let notes=JSON.parse(localStorage.getItem('focuswell_notes')||'[]');notes.push({id:Date.now(),title:"Handwritten Note",content:"Drawing saved"});localStorage.setItem('focuswell_notes',JSON.stringify(notes));speakText("Saved!");showPopup("✍️ Handwriting saved!");renderNotes();});}
+document.getElementById('applyTemplateBtn')?.addEventListener('click',()=>{let t=document.getElementById('templateSelect').value,out={cornell:"<strong>Cornell Notes</strong><br>Main Ideas: ____<br>Details: ____<br>Summary: ____",mindmap:"<strong>Mind Map</strong><br>Center: ____<br>Branches: ____",flashcard:"<strong>Flashcard</strong><br>Front: ____<br>Back: ____",exam:"<strong>Exam Cram</strong><br>Day1: Review<br>Day2: Quiz<br>Day3: Practice"}[t];document.getElementById('templateOutput').innerHTML=out;showPopup("📋 Template applied!");});
 
-// ==================== CUTE ANIMAL POPUPS ====================
-const cuteAnimalsList = [
-    { emoji: "🐣", msg: "You're doing amazing! Keep shining ✨" },
-    { emoji: "🦊", msg: "Take a tiny break, you deserve it! 🍃" },
-    { emoji: "🐱", msg: "Paws-itive vibes only! Meow~ 📚" },
-    { emoji: "🐶", msg: "Woof! You've got this, scholar! 🎓" },
-    { emoji: "🐸", msg: "Hop to it! One step at a time 🌱" },
-    { emoji: "🐝", msg: "Bee-lieve in yourself! 🍯" },
-    { emoji: "🦄", msg: "Magical progress today! ✨" },
-    { emoji: "🐼", msg: "Stay chill and study well 🎋" },
-    { emoji: "🐥", msg: "Cheep cheep! Great effort! 🐤" },
-    { emoji: "🦋", msg: "Little by little, you're transforming! 📖" }
-];
-let popupTimeout = null;
-function showCuteAnimalPopup(customMessage = null) {
-    const randomAnimal = cuteAnimalsList[Math.floor(Math.random() * cuteAnimalsList.length)];
-    const message = customMessage || randomAnimal.msg;
-    const existingPopup = document.querySelector('.animal-popup');
-    if (existingPopup) existingPopup.remove();
-    const popupDiv = document.createElement('div');
-    popupDiv.className = 'animal-popup';
-    popupDiv.innerHTML = `<div class="animal-popup-avatar">${randomAnimal.emoji}</div><div class="animal-popup-text">${message}</div>`;
-    document.body.appendChild(popupDiv);
-    popupDiv.addEventListener('click', () => { speakText(message.replace(/[^a-zA-Z0-9 .,!?]/g, '')); popupDiv.remove(); if(popupTimeout) clearTimeout(popupTimeout); });
-    if(popupTimeout) clearTimeout(popupTimeout);
-    popupTimeout = setTimeout(() => { if(popupDiv && popupDiv.remove) popupDiv.classList.add('fade-out-popup'); setTimeout(() => { if(popupDiv && popupDiv.remove) popupDiv.remove(); }, 500); }, 5000);
-}
-setInterval(() => { if(document.getElementById('mainApp').style.display === 'block') showCuteAnimalPopup(); }, Math.random() * 60000 + 90000);
+// ========== POPUPS & MUSIC ==========
+const cuteList = [{emoji:"🐣",msg:"Keep shining!"},{emoji:"🦊",msg:"You've got this!"},{emoji:"🐱",msg:"Pawsitive vibes!"},{emoji:"🐶",msg:"Woof! Great work!"},{emoji:"🦄",msg:"Magical progress!"},{emoji:"🐼",msg:"Stay focused!"}];
+let popupTimer;
+function showPopup(msg=null){ let r=cuteList[Math.floor(Math.random()*cuteList.length)]; let m=msg||r.msg; let old=document.querySelector('.animal-popup'); if(old)old.remove(); let div=document.createElement('div'); div.className='animal-popup'; div.innerHTML=`<div class="animal-popup-avatar">${r.emoji}</div><div class="animal-popup-text">${m}</div>`; document.body.appendChild(div); div.onclick=()=>{speakText(m.replace(/[^a-zA-Z0-9 .,!?]/g,''));div.remove();if(popupTimer)clearTimeout(popupTimer);}; if(popupTimer)clearTimeout(popupTimer); popupTimer=setTimeout(()=>{if(div&&div.remove)div.classList.add('fade-out-popup');setTimeout(()=>{if(div&&div.remove)div.remove();},400);},4500); }
+setInterval(()=>{if(document.getElementById('mainApp').style.display==='block')showPopup();}, 90000);
+const tracks={lofi:["https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"],classical:["https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"],nature:["https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"],jazz:["https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"]};
+let audio=null, musicPlaying=false, currGenre='lofi', trackIdx=0;
+function loadTrack(){ if(audio){ let url=tracks[currGenre][trackIdx]; audio.src=url; document.getElementById('musicTrackTitle').innerText=currGenre.toUpperCase(); if(musicPlaying) audio.play().catch(e=>console.log); } }
+function initMusic(){ audio=new Audio(); audio.volume=0.25; loadTrack(); document.getElementById('playPauseMusicBtn').onclick=()=>{ if(musicPlaying){ audio.pause(); musicPlaying=false; document.getElementById('playPauseMusicBtn').className='fas fa-play-circle'; }else{ audio.play().catch(e=>console.log); musicPlaying=true; document.getElementById('playPauseMusicBtn').className='fas fa-pause-circle'; showPopup("🎵 Music on! Focus mode!"); } }; document.getElementById('prevTrackBtn').onclick=()=>{ trackIdx=(trackIdx-1+tracks[currGenre].length)%tracks[currGenre].length; loadTrack(); if(musicPlaying) audio.play(); }; document.getElementById('nextTrackBtn').onclick=()=>{ trackIdx=(trackIdx+1)%tracks[currGenre].length; loadTrack(); if(musicPlaying) audio.play(); }; document.getElementById('musicVolumeSlider').oninput=(e)=>{ if(audio) audio.volume=e.target.value; }; document.getElementById('musicGenreSelect').onchange=(e)=>{ currGenre=e.target.value; trackIdx=0; loadTrack(); if(musicPlaying) audio.play(); showPopup(`🎵 Switched to ${currGenre}`); }; audio.onended=()=>{ trackIdx=(trackIdx+1)%tracks[currGenre].length; loadTrack(); if(musicPlaying) audio.play(); }; }
 
-// ==================== MUSIC PLAYER ====================
-const musicTracks = {
-    lofi: [{ name: "🎧 Lofi Study Beats", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }, { name: "🎧 Chill Lofi", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }],
-    classical: [{ name: "🎹 Moonlight Sonata", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }, { name: "🎹 Für Elise", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }],
-    nature: [{ name: "🌧️ Rain Sounds", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }, { name: "🌊 Ocean Waves", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }],
-    jazz: [{ name: "🎷 Smooth Jazz", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }, { name: "🎺 Café Jazz", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }],
-    ambient: [{ name: "✨ Ambient Dream", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }, { name: "🌌 Space Drone", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }]
-};
-let currentGenre = 'lofi';
-let currentTrackIndex = 0;
-let audioPlayer = null;
-let isMusicPlaying = false;
-function initMusicPlayer() {
-    audioPlayer = new Audio();
-    audioPlayer.volume = 0.3;
-    loadTrack();
-    const playPauseBtn = document.getElementById('playPauseMusicBtn');
-    const prevBtn = document.getElementById('prevTrackBtn');
-    const nextBtn = document.getElementById('nextTrackBtn');
-    const volumeSlider = document.getElementById('musicVolumeSlider');
-    const genreSelect = document.getElementById('musicGenreSelect');
-    playPauseBtn.addEventListener('click', () => {
-        if (isMusicPlaying) { audioPlayer.pause(); playPauseBtn.className = 'fas fa-play-circle'; isMusicPlaying = false; }
-        else { audioPlayer.play().catch(e => console.log); playPauseBtn.className = 'fas fa-pause-circle'; isMusicPlaying = true; showCuteAnimalPopup("🎵 Music on! Let's focus! 🎧"); }
-    });
-    prevBtn.addEventListener('click', () => { currentTrackIndex = (currentTrackIndex - 1 + musicTracks[currentGenre].length) % musicTracks[currentGenre].length; loadTrack(); if(isMusicPlaying) audioPlayer.play(); });
-    nextBtn.addEventListener('click', () => { currentTrackIndex = (currentTrackIndex + 1) % musicTracks[currentGenre].length; loadTrack(); if(isMusicPlaying) audioPlayer.play(); });
-    volumeSlider.addEventListener('input', (e) => { if(audioPlayer) audioPlayer.volume = e.target.value; });
-    genreSelect.addEventListener('change', (e) => { currentGenre = e.target.value; currentTrackIndex = 0; loadTrack(); if(isMusicPlaying) audioPlayer.play(); showCuteAnimalPopup(`🎵 Switched to ${genreSelect.options[genreSelect.selectedIndex].text}`); });
-    audioPlayer.addEventListener('ended', () => { currentTrackIndex = (currentTrackIndex + 1) % musicTracks[currentGenre].length; loadTrack(); if(isMusicPlaying) audioPlayer.play(); });
-}
-function loadTrack() {
-    const track = musicTracks[currentGenre][currentTrackIndex];
-    audioPlayer.src = track.url;
-    document.getElementById('musicTrackTitle').innerText = track.name;
-}
-
-// Event Listeners for new features
-document.getElementById('feedPetBtn')?.addEventListener('click', () => addPetXP(10));
-document.getElementById('playPetBtn')?.addEventListener('click', () => addPetXP(5));
-document.getElementById('refreshTrendBtn')?.addEventListener('click', renderSentimentTrend);
-document.getElementById('generatePathBtn')?.addEventListener('click', generateStudyPath);
-document.getElementById('setGoalBtn')?.addEventListener('click', () => { dailyGoal = parseInt(document.getElementById('goalInput').value) || 0; flashcardGoal = parseInt(document.getElementById('flashcardGoalInput').value) || 0; localStorage.setItem('dailyGoal', dailyGoal); localStorage.setItem('flashcardGoal', flashcardGoal); updateGoalUI(); showCuteAnimalPopup("🎯 Goals set! You've got this!"); });
-document.getElementById('logStudyTimeBtn')?.addEventListener('click', () => { studyMinutesToday += 10; localStorage.setItem('studyMinutesToday', studyMinutesToday); updateGoalUI(); addPetXP(5); showCuteAnimalPopup("📝 +10 min logged! Keep going!"); });
-document.getElementById('addBlockedSiteBtn')?.addEventListener('click', () => { let site = document.getElementById('blockSiteInput').value.trim(); if(site) { blockedSites.push(site); localStorage.setItem('blockedSites', JSON.stringify(blockedSites)); updateBlockerUI(); showCuteAnimalPopup(`🚫 ${site} added to blocklist`); } });
-document.getElementById('toggleBlockerBtn')?.addEventListener('click', () => { blockerActive = !blockerActive; updateBlockerUI(); speakText(blockerActive ? "Focus mode enabled" : "Focus mode disabled"); showCuteAnimalPopup(blockerActive ? "🛡️ Focus Mode ON - Stay productive!" : "🔓 Focus Mode OFF"); });
-document.querySelectorAll('.timer-preset').forEach(el => { el.addEventListener('click', () => { variationWorkTime = parseInt(el.dataset.work); variationBreakTime = parseInt(el.dataset.break); startVariationTimer(variationWorkTime, variationBreakTime); showCuteAnimalPopup(`⏱️ Timer set: ${variationWorkTime}/${variationBreakTime} min`); }); });
-document.getElementById('startVariationTimerBtn')?.addEventListener('click', () => startVariationTimer(variationWorkTime, variationBreakTime));
-document.getElementById('refreshQuoteBtn')?.addEventListener('click', updateQuote);
-
-// Capture sentiment for trend
-const originalAnalyze = document.getElementById('analyzeSentimentBtn').onclick;
-document.getElementById('analyzeSentimentBtn').onclick = async () => {
-    if(originalAnalyze) await originalAnalyze();
-    let fakeStress = Math.floor(Math.random() * 10);
-    sentimentHistory.push({ date: new Date().toLocaleDateString(), stress: fakeStress });
-    if(sentimentHistory.length > 30) sentimentHistory.shift();
-    localStorage.setItem('sentimentHistory', JSON.stringify(sentimentHistory));
-    renderSentimentTrend();
-    showCuteAnimalPopup("🧠 Stress analyzed! Check your trend chart.");
-};
-
-// Initialization
+// ========== INITIALIZATION ==========
 document.addEventListener('DOMContentLoaded', () => {
-    const loginOverlay = document.getElementById('loginOverlay');
-    const mainApp = document.getElementById('mainApp');
     document.getElementById('loginBtn').onclick = () => {
         let name = document.getElementById('loginUsername').value.trim() || "Scholar";
         localStorage.setItem('focuswell_user', name);
         document.getElementById('userNameDisplay').innerText = name;
-        loginOverlay.style.display = 'none';
-        mainApp.style.display = 'block';
-        speakText(`Welcome ${name}! Let's study with focus.`);
-        updatePet(); renderSentimentTrend(); updateGoalUI(); updateBlockerUI(); updateQuote(); initMusicPlayer();
-        setTimeout(() => showCuteAnimalPopup(`🎉 Welcome ${name}! Your study buddy is here! 🌟`), 1000);
-        // Original chat/notes init
-        const chatDiv = document.getElementById('chatMessages');
-        const sendBtn = document.getElementById('sendChatBtn');
-        const chatInput = document.getElementById('chatInput');
-        async function sendMessage() { const msg = chatInput.value.trim(); if (!msg) return; chatDiv.innerHTML += `<div class="chat-message user-msg">${msg}</div>`; chatInput.value = ''; const reply = await callSecureAI(msg, 'chat'); chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`; chatDiv.scrollTop = chatDiv.scrollHeight; speakText(reply.substring(0, 200)); }
-        sendBtn.onclick = sendMessage; chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-        document.getElementById('voiceChatBtn').onclick = () => { const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; if (SpeechRecognition) { const rec = new SpeechRecognition(); rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); }; rec.start(); } else alert("Voice input not supported"); };
-        let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
-        function renderNotes() { const container = document.getElementById('notesListPanel'); if(!container) return; container.innerHTML = savedNotes.map(n => `<div class="note-item"><div><strong>${n.title}</strong><br>${n.content?.substring(0,80)}</div><div><button onclick="readNote(${n.id})" style="background:var(--primary); border:none; border-radius:20px; padding:5px 10px; color:white;">🔊 Read</button><button onclick="deleteNote(${n.id})" style="background:#ff6b6b; border:none; border-radius:20px; margin-left:5px;">❌</button></div></div>`).join(''); }
-        window.readNote = (id) => { const note = savedNotes.find(n=>n.id===id); if(note) speakText(`Title: ${note.title}. Content: ${note.content}`); };
-        window.deleteNote = (id) => { savedNotes = savedNotes.filter(n=>n.id!==id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
-        document.getElementById('saveNoteBtn').onclick = () => { const title = document.getElementById('noteTitleInput').value.trim() || "Untitled"; const content = document.getElementById('noteContentInput').value.trim(); if(!content) return; savedNotes.push({ id: Date.now(), title, content }); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); document.getElementById('noteContentInput').value = ""; speakText("Note saved!"); addPetXP(3); showCuteAnimalPopup("📓 Note saved! Great organization!"); };
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        speakText(`Welcome ${name}! Let's study.`);
+        updatePet(); renderTrend(); updateGoalUI(); updateBlockerUI(); updateQuote(); initMusic();
+        setTimeout(()=>showPopup(`🎉 Welcome ${name}!`),500);
+        // Chat
+        const chatDiv=document.getElementById('chatMessages'), sendBtn=document.getElementById('sendChatBtn'), chatInp=document.getElementById('chatInput');
+        async function sendMsg(){ let msg=chatInp.value.trim(); if(!msg)return; chatDiv.innerHTML+=`<div class="chat-message user-msg">${msg}</div>`; chatInp.value=''; let reply=await callSecureAI(msg,'chat'); chatDiv.innerHTML+=`<div class="chat-message bot-msg">${reply}</div>`; chatDiv.scrollTop=chatDiv.scrollHeight; speakText(reply.substring(0,150)); }
+        sendBtn.onclick=sendMsg; chatInp.addEventListener('keypress',e=>{if(e.key==='Enter')sendMsg();});
+        document.getElementById('voiceChatBtn').onclick=()=>{ let rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)(); rec.onresult=e=>{chatInp.value=e.results[0][0].transcript;sendMsg();}; rec.start(); };
+        // Notes
+        let savedNotes=JSON.parse(localStorage.getItem('focuswell_notes')||'[]');
+        function renderNotes(){ let cont=document.getElementById('notesListPanel'); if(!cont)return; if(savedNotes.length===0){cont.innerHTML="<p>✨ No notes yet.</p>";return;} cont.innerHTML=savedNotes.map(n=>`<div class="note-item"><div><strong>${n.title}</strong><br>${(n.content||'').substring(0,60)}</div><div><button onclick="readNote(${n.id})" style="background:var(--primary);border:none;border-radius:20px;padding:4px 8px;color:white;">🔊</button><button onclick="deleteNote(${n.id})" style="background:#ff6b6b;border:none;border-radius:20px;padding:4px 8px;margin-left:5px;">❌</button></div></div>`).join(''); }
+        window.readNote=(id)=>{let n=savedNotes.find(x=>x.id===id);if(n)speakText(`Title: ${n.title}. Content: ${n.content}`);};
+        window.deleteNote=(id)=>{savedNotes=savedNotes.filter(x=>x.id!==id);localStorage.setItem('focuswell_notes',JSON.stringify(savedNotes));renderNotes();};
+        document.getElementById('saveNoteBtn').onclick=()=>{let title=document.getElementById('noteTitleInput').value.trim()||"Untitled",content=document.getElementById('noteContentInput').value.trim();if(!content)return;savedNotes.push({id:Date.now(),title,content});localStorage.setItem('focuswell_notes',JSON.stringify(savedNotes));renderNotes();document.getElementById('noteContentInput').value="";speakText("Note saved!");addPetXP(3);showPopup("📓 Note saved!");};
         renderNotes();
-        document.getElementById('animalCompanion').onclick = () => { const msgs = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈", "Try a quick quiz! 📝"]; const msg = msgs[Math.floor(Math.random() * msgs.length)]; document.querySelector('.animal-speech').innerText = msg; speakText(msg); showCuteAnimalPopup(msg); };
+        document.getElementById('animalCompanion').onclick=()=>{let msgs=["Stay focused!","Take a breath!","Great progress!","Keep going!"]; let m=msgs[Math.floor(Math.random()*msgs.length)]; document.querySelector('.animal-speech').innerText=m; speakText(m); showPopup(m); };
+        // Quiz
+        document.getElementById('generateQuizBtn').onclick=async()=>{let topic=document.getElementById('quizTopicInput').value.trim()||"general"; let area=document.getElementById('quizDisplayArea'); area.innerHTML="Generating..."; let data=await callSecureAI(topic,'quiz'); try{ let quiz=JSON.parse(data); let html=`<div id="quizQs"></div><button class="btn-primary" id="subQuiz">Submit</button><div id="quizScore"></div>`; area.innerHTML=html; let answers=new Array(quiz.length).fill(-1); quiz.forEach((q,idx)=>{let d=document.createElement('div');d.style.margin="10px 0";d.innerHTML=`<strong>${idx+1}. ${q.question}</strong>`; q.options.forEach((opt,optIdx)=>{let lbl=document.createElement('label');lbl.style.display="block";lbl.innerHTML=`<input type="radio" name="q${idx}" value="${optIdx}"> ${opt}`; lbl.onclick=()=>answers[idx]=optIdx; d.appendChild(lbl);}); document.getElementById('quizQs').appendChild(d);}); document.getElementById('subQuiz').onclick=()=>{let score=answers.filter((a,i)=>a===quiz[i].correct).length; document.getElementById('quizScore').innerHTML=`<strong>Score: ${score}/${quiz.length}</strong>`; speakText(`Score ${score} out of ${quiz.length}`); addPetXP(5); showPopup(`📝 Quiz done! Score: ${score}/${quiz.length}`);}; }catch(e){area.innerHTML="✨ Quiz ready! Try a different topic."; addPetXP(3);} };
     };
-    if (localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.onclick = () => navigateTo(btn.dataset.page));
-    document.getElementById('generateQuizBtn').onclick = async () => { const topic = document.getElementById('quizTopicInput').value; document.getElementById('quizDisplayArea').innerHTML = "Quiz generated! (AI demo)"; addPetXP(5); showCuteAnimalPopup("📝 Quiz ready! Test your knowledge!"); };
+    if(localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
+    document.querySelectorAll('.nav-btn').forEach(btn=>btn.onclick=()=>navigateTo(btn.dataset.page));
+    // Event bindings for new features
+    document.getElementById('feedPetBtn')?.addEventListener('click',()=>addPetXP(10));
+    document.getElementById('playPetBtn')?.addEventListener('click',()=>addPetXP(5));
+    document.getElementById('refreshTrendBtn')?.addEventListener('click',renderTrend);
+    document.getElementById('generatePathBtn')?.addEventListener('click',generateStudyPath);
+    document.getElementById('setGoalBtn')?.addEventListener('click',()=>{dailyGoal=parseInt(document.getElementById('goalInput').value)||0; localStorage.setItem('dailyGoal',dailyGoal); updateGoalUI(); showPopup("🎯 Goals updated!");});
+    document.getElementById('logStudyTimeBtn')?.addEventListener('click',()=>{studyMinutes+=10; localStorage.setItem('studyMinutesToday',studyMinutes); updateGoalUI(); addPetXP(5); showPopup("📝 +10 min logged!");});
+    document.getElementById('addBlockedSiteBtn')?.addEventListener('click',()=>{let s=document.getElementById('blockSiteInput').value.trim(); if(s){blockedSites.push(s);localStorage.setItem('blockedSites',JSON.stringify(blockedSites));updateBlockerUI();showPopup(`🚫 ${s} blocked`);}});
+    document.getElementById('toggleBlockerBtn')?.addEventListener('click',()=>{blockerActive=!blockerActive; updateBlockerUI(); speakText(blockerActive?"Focus mode on":"Focus mode off"); showPopup(blockerActive?"🛡️ Focus Mode ON":"🔓 Focus Mode OFF");});
+    document.querySelectorAll('.timer-preset').forEach(el=>{el.addEventListener('click',()=>{workMins=parseInt(el.dataset.work); breakMins=parseInt(el.dataset.break); startTimer(workMins,breakMins); showPopup(`⏱️ Timer: ${workMins}/${breakMins} min`);});});
+    document.getElementById('startVariationTimerBtn')?.addEventListener('click',()=>startTimer(workMins,breakMins));
+    document.getElementById('refreshQuoteBtn')?.addEventListener('click',updateQuote);
+    document.getElementById('listenWordBtn')?.addEventListener('click',()=>{let w=document.getElementById('pronounceWord').value; if(w) speakText(w);});
 });
 </script>
 </body>
 </html>
+```
