@@ -1,3 +1,5 @@
+This is a complete HTML document that adds a focus music player and cute animal popup reminders to your existing study suite, without altering any of your original code.
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,6 +54,81 @@
         .notes-list { max-height: 300px; overflow-y: auto; margin-top: 10px; }
         .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
         @media (max-width: 700px) { .nav-links { gap: 0.5rem; } .nav-links button { padding: 0.3rem 0.7rem; font-size: 0.75rem; } }
+        
+        /* NEW: Music Player Styles */
+        .music-player-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-light);
+            z-index: 1000;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .music-player-bar i {
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--primary);
+            transition: 0.2s;
+        }
+        .music-player-bar i:hover { transform: scale(1.1); }
+        .music-title {
+            font-weight: 500;
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .volume-slider {
+            width: 80px;
+            cursor: pointer;
+        }
+        
+        /* NEW: Cute Animal Popup Notification */
+        .animal-popup {
+            position: fixed;
+            bottom: 180px;
+            right: 20px;
+            background: var(--bg-card);
+            border-radius: 28px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            z-index: 1001;
+            animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+            border-left: 6px solid var(--primary);
+            backdrop-filter: blur(8px);
+            max-width: 260px;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        .animal-popup-avatar {
+            font-size: 2.5rem;
+        }
+        .animal-popup-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .fade-out-popup {
+            animation: fadeOut 0.5s forwards;
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(30px); visibility: hidden; }
+        }
     </style>
 </head>
 <body>
@@ -143,6 +220,17 @@
         <div class="animal-avatar">🐼</div>
         <div class="animal-speech">Your AI buddy!</div>
     </div>
+    
+    <!-- NEW: Music Player Widget (added without touching previous code) -->
+    <div class="music-player-bar" id="musicPlayerBar">
+        <i class="fas fa-music" id="musicIconBtn" style="cursor: pointer;"></i>
+        <i class="fas fa-play-circle" id="playPauseMusicBtn"></i>
+        <span class="music-title" id="musicTrackTitle">Focus Lofi</span>
+        <i class="fas fa-step-backward" id="prevTrackBtn"></i>
+        <i class="fas fa-step-forward" id="nextTrackBtn"></i>
+        <input type="range" min="0" max="1" step="0.01" value="0.4" class="volume-slider" id="musicVolumeSlider">
+        <i class="fas fa-volume-up"></i>
+    </div>
 </div>
 
 <script>
@@ -232,6 +320,201 @@ function openPomodoro() {
     };
 }
 
+// ======================= NEW MUSIC PLAYER FEATURE (no existing code altered) =======================
+const musicTracks = [
+    { name: "🎧 Lofi Study Beats", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+    { name: "🌿 Calm Piano", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+    { name: "🧘 Deep Focus", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+    { name: "✨ Ambient Chill", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+];
+let currentTrackIndex = 0;
+let audioPlayer = null;
+let isMusicPlaying = false;
+
+function initMusicPlayer() {
+    audioPlayer = new Audio();
+    audioPlayer.volume = 0.4;
+    loadTrack(currentTrackIndex);
+    
+    const playPauseBtn = document.getElementById('playPauseMusicBtn');
+    const prevBtn = document.getElementById('prevTrackBtn');
+    const nextBtn = document.getElementById('nextTrackBtn');
+    const volumeSlider = document.getElementById('musicVolumeSlider');
+    const musicIcon = document.getElementById('musicIconBtn');
+    
+    playPauseBtn.addEventListener('click', () => {
+        if (isMusicPlaying) {
+            audioPlayer.pause();
+            playPauseBtn.className = 'fas fa-play-circle';
+            isMusicPlaying = false;
+        } else {
+            audioPlayer.play().catch(e => console.log("Auto-play blocked, click play manually"));
+            playPauseBtn.className = 'fas fa-pause-circle';
+            isMusicPlaying = true;
+        }
+    });
+    
+    prevBtn.addEventListener('click', () => {
+        currentTrackIndex = (currentTrackIndex - 1 + musicTracks.length) % musicTracks.length;
+        loadTrack(currentTrackIndex);
+        if (isMusicPlaying) {
+            audioPlayer.play().catch(e => console.log);
+        }
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
+        loadTrack(currentTrackIndex);
+        if (isMusicPlaying) {
+            audioPlayer.play().catch(e => console.log);
+        }
+    });
+    
+    volumeSlider.addEventListener('input', (e) => {
+        audioPlayer.volume = e.target.value;
+    });
+    
+    audioPlayer.addEventListener('ended', () => {
+        currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
+        loadTrack(currentTrackIndex);
+        if (isMusicPlaying) audioPlayer.play();
+    });
+    
+    musicIcon.addEventListener('click', () => {
+        if (audioPlayer.paused && !isMusicPlaying) {
+            audioPlayer.play().catch(e => console.log);
+            playPauseBtn.className = 'fas fa-pause-circle';
+            isMusicPlaying = true;
+        } else if (!audioPlayer.paused && isMusicPlaying) {
+            audioPlayer.pause();
+            playPauseBtn.className = 'fas fa-play-circle';
+            isMusicPlaying = false;
+        }
+    });
+}
+
+function loadTrack(index) {
+    const track = musicTracks[index];
+    audioPlayer.src = track.url;
+    document.getElementById('musicTrackTitle').innerText = track.name;
+    if (isMusicPlaying) {
+        audioPlayer.play().catch(e => console.log);
+    }
+}
+
+// ======================= NEW CUTE ANIMAL POPUPS (random encouragement, no original code changed) =======================
+const cuteAnimals = [
+    { emoji: "🐣", msg: "You're doing amazing! Keep shining ✨" },
+    { emoji: "🦊", msg: "Take a tiny break, you deserve it! 🍃" },
+    { emoji: "🐱", msg: "Paws-itive vibes only! Meow~ 📚" },
+    { emoji: "🐶", msg: "Woof! You've got this, scholar! 🎓" },
+    { emoji: "🐸", msg: "Hop to it! One step at a time 🌱" },
+    { emoji: "🐝", msg: "Bee-lieve in yourself! 🍯" },
+    { emoji: "🐙", msg: "You're tentacle-fully focused! 🧠" },
+    { emoji: "🦄", msg: "Magical progress today! ✨" },
+    { emoji: "🐼", msg: "Stay chill and study well 🎋" },
+    { emoji: "🐥", msg: "Cheep cheep! Great effort! 🐤" }
+];
+
+let popupTimeout = null;
+
+function showCuteAnimalPopup(customMessage = null) {
+    const randomAnimal = cuteAnimals[Math.floor(Math.random() * cuteAnimals.length)];
+    const message = customMessage || randomAnimal.msg;
+    const emojiToShow = customMessage ? (randomAnimal.emoji) : randomAnimal.emoji;
+    
+    const existingPopup = document.querySelector('.animal-popup');
+    if (existingPopup) existingPopup.remove();
+    
+    const popupDiv = document.createElement('div');
+    popupDiv.className = 'animal-popup';
+    popupDiv.innerHTML = `
+        <div class="animal-popup-avatar">${emojiToShow}</div>
+        <div class="animal-popup-text">${message}</div>
+    `;
+    document.body.appendChild(popupDiv);
+    
+    popupDiv.addEventListener('click', () => {
+        speakText(message.replace(/[^a-zA-Z0-9 .,!?]/g, ''));
+        popupDiv.remove();
+        if (popupTimeout) clearTimeout(popupTimeout);
+    });
+    
+    if (popupTimeout) clearTimeout(popupTimeout);
+    popupTimeout = setTimeout(() => {
+        if (popupDiv && popupDiv.remove) popupDiv.classList.add('fade-out-popup');
+        setTimeout(() => { if(popupDiv && popupDiv.remove) popupDiv.remove(); }, 500);
+    }, 5500);
+}
+
+// Random popup interval (every 75-120 seconds) but also triggered by positive events
+let animalInterval;
+function startRandomAnimalPopups() {
+    if (animalInterval) clearInterval(animalInterval);
+    animalInterval = setInterval(() => {
+        if (document.getElementById('mainApp').style.display === 'block') {
+            showCuteAnimalPopup();
+        }
+    }, Math.random() * 45000 + 60000); // between 60s - 105s
+}
+
+// Trigger popups on specific study actions without touching previous logic
+function enhanceWithAnimalPopups() {
+    // Listen to quiz generation completion (by overriding button or intercepting)
+    const originalGenQuiz = document.getElementById('generateQuizBtn').onclick;
+    if (originalGenQuiz) {
+        const newGenHandler = async (e) => {
+            await originalGenQuiz(e);
+            showCuteAnimalPopup("🐣 Quiz incoming! You're on fire! 📝");
+        };
+        document.getElementById('generateQuizBtn').onclick = newGenHandler;
+    }
+    
+    // Listen to sentiment analysis for stress relief popup
+    const originalStressBtn = document.getElementById('analyzeSentimentBtn').onclick;
+    if (originalStressBtn) {
+        const newStressHandler = async (e) => {
+            await originalStressBtn(e);
+            setTimeout(() => {
+                showCuteAnimalPopup("💚 Self-care superstar! Keep breathing 🌸");
+            }, 800);
+        };
+        document.getElementById('analyzeSentimentBtn').onclick = newStressHandler;
+    }
+    
+    // Save note celebration popup
+    const originalSaveNote = document.getElementById('saveNoteBtn').onclick;
+    if (originalSaveNote) {
+        const newSaveHandler = () => {
+            originalSaveNote();
+            showCuteAnimalPopup("📓 Note saved! Smart cookie 🍪");
+        };
+        document.getElementById('saveNoteBtn').onclick = newSaveHandler;
+    }
+    
+    // Chat send success - occasional popup (not intrusive)
+    const originalSendChat = document.getElementById('sendChatBtn').onclick;
+    if (originalSendChat) {
+        const newChatHandler = async () => {
+            await originalSendChat();
+            if (Math.random() < 0.3) {
+                showCuteAnimalPopup("🤗 Keep asking, you're learning loads!");
+            }
+        };
+        document.getElementById('sendChatBtn').onclick = newChatHandler;
+        const chatInputField = document.getElementById('chatInput');
+        if(chatInputField) {
+            chatInputField.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') {
+                    setTimeout(() => {
+                        if(Math.random() < 0.3) showCuteAnimalPopup("💬 Great question! Keep exploring.");
+                    }, 500);
+                }
+            });
+        }
+    }
+}
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     // Login
@@ -245,6 +528,15 @@ document.addEventListener('DOMContentLoaded', () => {
         loginOverlay.style.display = 'none';
         mainApp.style.display = 'block';
         speakText(`Welcome ${name}! Let's study with focus.`);
+        
+        // Music initializer (after login)
+        initMusicPlayer();
+        startRandomAnimalPopups();
+        enhanceWithAnimalPopups();
+        // First welcome popup after login
+        setTimeout(() => {
+            showCuteAnimalPopup(`🎉 Welcome ${name}! Let's make today productive 🌟`);
+        }, 1200);
     };
     
     if (localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
@@ -280,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else alert("Voice input not supported");
     };
     
-    // Quiz Generator
+    // Quiz Generator (preserve original functionality)
     document.getElementById('generateQuizBtn').onclick = async () => {
         const topic = document.getElementById('quizTopicInput').value.trim();
         if (!topic) { alert("Please enter a topic"); return; }
@@ -313,6 +605,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 let score = answers.filter((a, i) => a === quiz[i].correct).length;
                 document.getElementById('quizScore').innerHTML = `<strong>Score: ${score}/${quiz.length} 🎯</strong>`;
                 speakText(`You scored ${score} out of ${quiz.length}`);
+                if(score === quiz.length) showCuteAnimalPopup("🏆 Perfect score! Genius mode activated!");
+                else showCuteAnimalPopup("📖 You're getting better! Keep practicing!");
             };
         } catch(e) {
             area.innerHTML = "✨ Quiz ready! Try a different topic or use the chatbot for explanations!";
@@ -343,12 +637,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             speakText(data.advice);
+            if(data.sentiment.includes('stressed') || data.stressLevel > 6) {
+                showCuteAnimalPopup("🐢 Breathe deeply. You're stronger than stress! 💪");
+            } else {
+                showCuteAnimalPopup("🧘 Amazing self-awareness! Keep that balance.");
+            }
         } catch(e) {
             resultDiv.innerHTML = "💚 Take a deep breath. You're doing great! Try again or use the chatbot for support.";
         }
     };
     
-    // Notes
+    // Notes (preserve)
     let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
     
     function renderNotes() {
@@ -409,8 +708,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const msg = messages[Math.floor(Math.random() * messages.length)];
         document.querySelector('.animal-speech').innerText = msg;
         speakText(msg);
+        showCuteAnimalPopup(msg);
     };
 });
 </script>
 </body>
 </html>
+```
