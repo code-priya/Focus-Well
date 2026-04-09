@@ -29,7 +29,7 @@ export default async function handler(req, res) {
             userPrompt = `Analyze this student's message: "${data.text}". Workload: ${data.workload}. Return JSON: {"sentiment":"positive/neutral/negative/stressed","stressLevel":1-10,"advice":"short helpful tip","encouragement":"motivational quote"}`;
         }
         
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
