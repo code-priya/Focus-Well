@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FocusWell | Complete AI Study Suite</title>
+    <title>FocusWell | Secure AI Study Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -21,74 +20,59 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-dark); transition: all 0.3s ease; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: var(--bg-card); box-shadow: 0 8px 30px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
         .logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .nav-links button { background: none; border: none; font-weight: 600; cursor: pointer; padding: 0.5rem 0.8rem; border-radius: 30px; color: var(--text-dark); font-size: 0.85rem; }
+        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-links button { background: none; border: none; font-weight: 600; cursor: pointer; padding: 0.5rem 1rem; border-radius: 30px; color: var(--text-dark); }
         .nav-links button.active { background: var(--primary); color: white; }
         .theme-selector { display: flex; gap: 6px; }
         .theme-btn { width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer; }
-        .page { display: none; padding: 1.5rem 5%; animation: fadeIn 0.3s ease; }
+        .page { display: none; padding: 2rem 5%; animation: fadeIn 0.3s ease; }
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .tool-card { background: var(--bg-card); border-radius: 24px; padding: 1.2rem; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-light); }
-        .tool-card:hover { transform: translateY(-3px); }
-        .tool-card i { font-size: 2rem; color: var(--primary); margin-bottom: 0.8rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .tool-card { background: var(--bg-card); border-radius: 28px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 30px rgba(0,0,0,0.05); border: 1px solid var(--border-light); }
+        .tool-card:hover { transform: translateY(-5px); }
+        .tool-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: var(--bg-card); border-radius: 28px; padding: 1.5rem; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; }
-        .chat-message { padding: 10px 14px; margin: 6px 0; border-radius: 18px; max-width: 85%; }
+        .modal-content { background: var(--bg-card); border-radius: 32px; padding: 2rem; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
+        .chat-message { padding: 12px 16px; margin: 8px 0; border-radius: 20px; max-width: 85%; }
         .user-msg { background: var(--primary); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
         .bot-msg { background: var(--primary-light); color: var(--text-dark); border-bottom-left-radius: 4px; }
-        .btn-primary { background: var(--primary); color: white; padding: 0.6rem 1.2rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; }
-        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 38px; height: 38px; cursor: pointer; color: white; }
-        .animal-companion { position: fixed; bottom: 100px; right: 15px; cursor: pointer; z-index: 999; }
-        .animal-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 32px; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-        .animal-speech { position: absolute; bottom: 70px; right: 5px; background: var(--bg-card); padding: 5px 10px; border-radius: 16px; font-size: 0.7rem; white-space: nowrap; }
+        .btn-primary { background: var(--primary); color: white; padding: 0.8rem 1.8rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .voice-btn { background: var(--primary); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; color: white; }
+        .animal-companion { position: fixed; bottom: 100px; right: 20px; cursor: pointer; z-index: 999; }
+        .animal-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 40px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .animal-speech { position: absolute; bottom: 80px; right: 10px; background: var(--bg-card); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; white-space: nowrap; }
         .login-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .login-box { background: var(--bg-card); padding: 2rem; border-radius: 40px; width: 90%; max-width: 350px; text-align: center; }
+        .login-box { background: var(--bg-card); padding: 2.5rem; border-radius: 48px; width: 90%; max-width: 400px; text-align: center; }
         .main-app { display: none; }
-        textarea, input[type="text"], select { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--border-light); margin: 6px 0; font-family: inherit; background: var(--bg-card); color: var(--text-dark); }
+        textarea, input[type="text"], select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); margin: 8px 0; font-family: inherit; background: var(--bg-card); color: var(--text-dark); }
         .stress-meter { height: 8px; background: #e0e0e0; border-radius: 10px; margin: 10px 0; }
         .stress-fill { width: 0%; height: 100%; border-radius: 10px; background: var(--primary); transition: width 0.3s; }
-        .notes-list { max-height: 250px; overflow-y: auto; margin-top: 10px; }
-        .note-item { background: var(--primary-light); margin: 6px 0; padding: 10px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .notes-list { max-height: 300px; overflow-y: auto; margin-top: 10px; }
+        .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+        @media (max-width: 700px) { .nav-links { gap: 0.5rem; } .nav-links button { padding: 0.3rem 0.7rem; font-size: 0.75rem; } }
         
-        /* Feature Styles */
-        .pet-container { text-align: center; padding: 1rem; background: var(--bg-card); border-radius: 24px; margin: 1rem 0; }
-        .pet-avatar { font-size: 4rem; cursor: pointer; transition: transform 0.2s; }
-        .pet-avatar:hover { transform: scale(1.05); }
-        .trend-bar { height: 25px; background: var(--primary-light); border-radius: 12px; margin: 5px 0; overflow: hidden; }
-        .trend-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.5s; }
-        .handwriting-canvas { border: 2px solid var(--border-light); border-radius: 16px; background: white; cursor: crosshair; width: 100%; height: 180px; touch-action: none; }
-        .blocked-site { background: var(--primary-light); padding: 5px 10px; border-radius: 20px; margin: 4px; display: inline-block; font-size: 0.8rem; }
-        .quote-card { background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); padding: 1rem; border-radius: 24px; text-align: center; font-style: italic; margin: 1rem 0; }
-        .goal-progress { height: 10px; background: #e0e0e0; border-radius: 10px; margin: 8px 0; }
-        .timer-preset { display: inline-block; margin: 4px; padding: 6px 12px; background: var(--primary-light); border-radius: 25px; cursor: pointer; font-size: 0.75rem; }
-        .music-player-bar { position: fixed; bottom: 15px; left: 15px; background: var(--bg-card); backdrop-filter: blur(10px); border-radius: 40px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid var(--border-light); z-index: 1000; flex-wrap: wrap; font-size: 0.8rem; }
-        .music-player-bar i { font-size: 1rem; cursor: pointer; color: var(--primary); }
-        .music-title { max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .volume-slider { width: 60px; }
-        .genre-select { background: var(--primary-light); border: none; border-radius: 20px; padding: 4px 8px; font-size: 0.7rem; }
-        .animal-popup { position: fixed; bottom: 170px; right: 15px; background: var(--bg-card); border-radius: 20px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 1001; animation: slideInRight 0.3s ease; border-left: 4px solid var(--primary); max-width: 250px; cursor: pointer; }
-        .animal-popup-avatar { font-size: 2rem; }
-        .animal-popup-text { font-size: 0.8rem; font-weight: 500; }
-        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-        .fade-out-popup { animation: fadeOut 0.4s forwards; }
-        @keyframes fadeOut { to { opacity: 0; transform: translateX(30px); visibility: hidden; } }
-        .section-card { background: var(--bg-card); border-radius: 24px; padding: 1.2rem; margin-bottom: 1.5rem; border: 1px solid var(--border-light); }
-        .section-title { font-size: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-        @media (max-width: 700px) { .nav-links button { padding: 0.3rem 0.5rem; font-size: 0.7rem; } .page { padding: 1rem; } }
+        /* New styles for flashcards, calendar, tasks */
+        .flashcard { background: var(--bg-card); border-radius: 24px; padding: 2rem; margin: 1rem 0; text-align: center; cursor: pointer; transition: 0.2s; border: 1px solid var(--border-light); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .flashcard:hover { transform: scale(1.01); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 1rem; }
+        .calendar-day { padding: 10px; text-align: center; border-radius: 12px; background: var(--primary-light); cursor: pointer; transition: 0.2s; }
+        .calendar-day.selected { background: var(--primary); color: white; }
+        .task-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--primary-light); margin: 8px 0; border-radius: 16px; }
+        .task-item.completed { opacity: 0.6; text-decoration: line-through; }
+        .stress-detailed-card { background: var(--bg-card); border-radius: 20px; padding: 1rem; margin-top: 1rem; border-left: 4px solid var(--primary); }
     </style>
 </head>
 <body>
 
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
-        <i class="fas fa-graduation-cap" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.8rem;"></i>
+        <i class="fas fa-graduation-cap" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
         <h2>🌸 FocusWell</h2>
-        <p>Complete AI Study Suite</p>
+        <p>Secure AI Study Suite</p>
         <input type="text" id="loginUsername" placeholder="Enter your name">
-        <button class="btn-primary" id="loginBtn" style="width:100%;">✨ Start Studying ✨</button>
+        <button class="btn-primary" id="loginBtn" style="width:100%;">✨ Enter Study Zone ✨</button>
     </div>
 </div>
 
@@ -96,12 +80,14 @@
     <nav class="navbar">
         <div class="logo"><h1>FOCUSWELL 🧠</h1></div>
         <div class="nav-links">
-            <button class="nav-btn active" data-page="dashboard">🏠 Home</button>
-            <button class="nav-btn" data-page="chatbot">💬 AI Chat</button>
+            <button class="nav-btn active" data-page="dashboard">🏠 Dashboard</button>
+            <button class="nav-btn" data-page="chatbot">🤖 AI Chat</button>
             <button class="nav-btn" data-page="quiz">📝 Quiz</button>
             <button class="nav-btn" data-page="stress">💚 Stress</button>
             <button class="nav-btn" data-page="notes">📓 Notes</button>
-            <button class="nav-btn" data-page="enhanced">✨ Studio</button>
+            <button class="nav-btn" data-page="flashcards">🃏 Flashcards</button>
+            <button class="nav-btn" data-page="calendar">📅 Calendar</button>
+            <button class="nav-btn" data-page="tasks">✅ Tasks</button>
         </div>
         <div class="theme-selector">
             <button class="theme-btn" style="background:#2b7a4b;" onclick="setTheme('day')"></button>
@@ -109,28 +95,27 @@
         </div>
     </nav>
 
-    <!-- Dashboard -->
     <div id="dashboard-page" class="page active-page">
-        <div style="background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); border-radius: 28px; padding: 1.5rem; margin-bottom: 1.5rem;">
+        <div style="background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); border-radius: 32px; padding: 2rem; margin-bottom: 2rem;">
             <h2>Welcome, <span id="userNameDisplay">Scholar</span>! 🌟</h2>
-            <p>Your complete AI-powered study companion</p>
-            <div id="quoteOfDayDisplay" style="margin-top: 0.8rem; font-size: 0.85rem;"></div>
+            <p>Your secure AI-powered study companion</p>
         </div>
         <div class="tools-grid">
-            <div class="tool-card" onclick="navigateTo('chatbot')"><i class="fas fa-comment-dots"></i><h3>AI Chatbot</h3></div>
-            <div class="tool-card" onclick="navigateTo('quiz')"><i class="fas fa-question-circle"></i><h3>Quiz Gen</h3></div>
-            <div class="tool-card" onclick="navigateTo('stress')"><i class="fas fa-brain"></i><h3>Stress Care</h3></div>
+            <div class="tool-card" onclick="navigateTo('chatbot')"><i class="fas fa-comment-dots"></i><h3>AI Chatbot</h3><p>Voice + Text</p></div>
+            <div class="tool-card" onclick="navigateTo('quiz')"><i class="fas fa-question-circle"></i><h3>Quiz Generator</h3></div>
+            <div class="tool-card" onclick="navigateTo('stress')"><i class="fas fa-brain"></i><h3>Stress Analysis</h3></div>
             <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>Pomodoro</h3></div>
-            <div class="tool-card" onclick="navigateTo('enhanced')"><i class="fas fa-star-of-life"></i><h3>All Tools</h3></div>
+            <div class="tool-card" onclick="navigateTo('flashcards')"><i class="fas fa-layer-group"></i><h3>Flashcards</h3></div>
+            <div class="tool-card" onclick="navigateTo('calendar')"><i class="fas fa-calendar-alt"></i><h3>Study Calendar</h3></div>
+            <div class="tool-card" onclick="navigateTo('tasks')"><i class="fas fa-check-circle"></i><h3>Task Manager</h3></div>
         </div>
     </div>
 
-    <!-- Chatbot -->
     <div id="chatbot-page" class="page">
-        <div class="section-card">
-            <h3>🤖 AI Study Assistant</h3>
-            <div id="chatMessages" style="height: 350px; overflow-y: auto; border-radius: 20px; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border-light);"></div>
-            <div style="display: flex; gap: 8px;">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>🤖 AI Study Chatbot</h3>
+            <div id="chatMessages" style="height: 400px; overflow-y: auto; border-radius: 20px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-light);"></div>
+            <div style="display: flex; gap: 10px;">
                 <input type="text" id="chatInput" placeholder="Ask anything..." style="flex:1;">
                 <button class="voice-btn" id="voiceChatBtn"><i class="fas fa-microphone"></i></button>
                 <button class="btn-primary" id="sendChatBtn">Send</button>
@@ -138,34 +123,31 @@
         </div>
     </div>
 
-    <!-- Quiz -->
     <div id="quiz-page" class="page">
-        <div class="section-card">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
             <h3>📝 AI Quiz Generator</h3>
-            <input type="text" id="quizTopicInput" placeholder="Enter topic (Python, History, Science...)">
-            <button class="btn-primary" id="generateQuizBtn">✨ Generate Smart Quiz</button>
-            <div id="quizDisplayArea" style="margin-top: 15px;"></div>
+            <input type="text" id="quizTopicInput" placeholder="Enter topic (e.g., Python, History, Science)">
+            <button class="btn-primary" id="generateQuizBtn">✨ Generate Quiz</button>
+            <div id="quizDisplayArea" style="margin-top: 20px;"></div>
         </div>
     </div>
 
-    <!-- Stress Analysis (FULLY FUNCTIONAL) -->
     <div id="stress-page" class="page">
-        <div class="section-card">
-            <h3>💚 Advanced Stress & Sentiment Analysis</h3>
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>💚 Enhanced Stress & Sentiment Analysis</h3>
             <textarea id="sentimentText" rows="3" placeholder="How are you feeling today? Describe your emotions, workload, or any challenges..."></textarea>
             <select id="workloadSelect">
                 <option>Light</option><option>Moderate</option><option>Heavy</option><option>Extreme</option>
             </select>
             <button class="btn-primary" id="analyzeSentimentBtn">🔍 Deep Analysis & Get Help</button>
             <div class="stress-meter"><div class="stress-fill" id="stressFillBar"></div></div>
-            <div id="sentimentResult" style="margin-top: 15px;"></div>
+            <div id="sentimentResult" style="margin-top: 20px; border-radius: 20px;"></div>
         </div>
     </div>
 
-    <!-- Notes -->
     <div id="notes-page" class="page">
-        <div class="section-card">
-            <h3>📓 My Study Notes</h3>
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>📓 My Notes</h3>
             <input type="text" id="noteTitleInput" placeholder="Title">
             <textarea id="noteContentInput" rows="3" placeholder="Write your note..."></textarea>
             <button class="btn-primary" id="saveNoteBtn">Save Note</button>
@@ -173,208 +155,348 @@
         </div>
     </div>
 
-    <!-- Enhanced Page - All Features -->
-    <div id="enhanced-page" class="page">
-        <!-- Virtual Pet -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-paw"></i> Virtual Study Pet</div>
-            <div class="pet-container">
-                <div class="pet-avatar" id="petAvatar">🐣</div>
-                <p id="petStatus">Happy studier!</p>
-                <div class="goal-progress"><div id="petExpBar" style="width:0%; height:100%; background:var(--primary); border-radius:10px;"></div></div>
-                <p>Level <span id="petLevel">1</span> | XP: <span id="petXP">0</span>/100</p>
-                <button class="btn-primary" id="feedPetBtn">🍎 Feed (+10 XP)</button>
-                <button class="btn-primary" id="playPetBtn">🎾 Play (+5 XP)</button>
+    <!-- New Pages: Flashcards, Calendar, Tasks -->
+    <div id="flashcards-page" class="page">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>🃏 Study Flashcards</h3>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <input type="text" id="flashcardQuestion" placeholder="Question/Term" style="flex:1;">
+                <input type="text" id="flashcardAnswer" placeholder="Answer/Definition" style="flex:1;">
+                <button class="btn-primary" id="addFlashcardBtn">➕ Add Card</button>
+            </div>
+            <div id="flashcardContainer" style="margin-top: 20px;">
+                <div class="flashcard" id="currentFlashcardDisplay">
+                    <i class="fas fa-lightbulb" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <p id="flashcardQuestionText">Click "Start Review" to begin</p>
+                    <button id="revealAnswerBtn" class="btn-primary" style="margin-top: 15px;">Reveal Answer</button>
+                    <div id="flashcardAnswerText" style="margin-top: 15px; font-weight: 500; display: none;"></div>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                    <button id="prevFlashcardBtn" class="btn-primary">◀ Previous</button>
+                    <button id="nextFlashcardBtn" class="btn-primary">Next ▶</button>
+                </div>
+            </div>
+            <div id="flashcardList" style="margin-top: 20px; max-height: 300px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <div id="calendar-page" class="page">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>📅 Study Calendar & Events</h3>
+            <div id="calendarHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button id="prevMonthBtn" class="btn-primary">◀</button>
+                <h3 id="monthYearDisplay"></h3>
+                <button id="nextMonthBtn" class="btn-primary">▶</button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <div style="margin-top: 20px;">
+                <input type="text" id="eventTitle" placeholder="Event title (e.g., Math Exam)">
+                <button class="btn-primary" id="addEventBtn">Add Event to Selected Date</button>
+                <div id="eventsList" style="margin-top: 15px; padding: 15px; background: var(--primary-light); border-radius: 20px;"></div>
             </div>
         </div>
+    </div>
 
-        <!-- Sentiment Trend -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-chart-line"></i> Sentiment Trend</div>
-            <div id="sentimentTrendChart"></div>
-            <button class="btn-primary" id="refreshTrendBtn">Refresh</button>
-            <p id="trendInsight" style="margin-top: 8px; font-size:0.85rem;"></p>
-        </div>
-
-        <!-- Study Path -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-map"></i> AI Study Path</div>
-            <div id="studyPathRecommendation" style="background: var(--primary-light); border-radius: 16px; padding: 0.8rem; margin: 0.5rem 0;"></div>
-            <button class="btn-primary" id="generatePathBtn">Generate Path</button>
-        </div>
-
-        <!-- Goals -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-bullseye"></i> Daily Goals</div>
-            <input type="number" id="goalInput" placeholder="Daily minutes goal">
-            <input type="number" id="flashcardGoalInput" placeholder="Flashcards goal">
-            <button class="btn-primary" id="setGoalBtn">Set Goals</button>
-            <div id="goalDisplay" style="margin:8px 0; font-size:0.85rem;"></div>
-            <div class="goal-progress"><div id="goalProgressFill" style="width:0%; height:100%; background:var(--primary); border-radius:10px;"></div></div>
-            <button class="btn-primary" id="logStudyTimeBtn">📝 Log 10 min Study</button>
-        </div>
-
-        <!-- Website Blocker -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-shield-alt"></i> Focus Blocker</div>
-            <input type="text" id="blockSiteInput" placeholder="e.g., youtube.com">
-            <button class="btn-primary" id="addBlockedSiteBtn">Add Site</button>
-            <div id="blockedSitesList"></div>
-            <button class="btn-primary" id="toggleBlockerBtn">🔴 Enable Focus Mode</button>
-            <p id="blockerStatus" style="margin-top:6px; font-size:0.75rem;">Blocker: OFF</p>
-        </div>
-
-        <!-- Timer Variations -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-hourglass-half"></i> Study Timers</div>
-            <div id="timerPresets">
-                <span class="timer-preset" data-work="25" data-break="5">🍅 25/5</span>
-                <span class="timer-preset" data-work="52" data-break="17">⚡ 52/17</span>
-                <span class="timer-preset" data-work="90" data-break="20">🌊 90/20</span>
-                <span class="timer-preset" data-work="10" data-break="2">⚡ 10/2</span>
+    <div id="tasks-page" class="page">
+        <div style="background: var(--bg-card); border-radius: 28px; padding: 1.5rem;">
+            <h3>✅ Smart Task Generator & Manager</h3>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <input type="text" id="taskInput" placeholder="Write a task..." style="flex:2;">
+                <button class="btn-primary" id="addTaskBtn">➕ Add Task</button>
+                <button class="btn-primary" id="aiGenerateTasksBtn">✨ AI Generate Tasks (from notes/quiz)</button>
             </div>
-            <button class="btn-primary" id="startVariationTimerBtn">Start Timer</button>
-            <div id="variationTimerDisplay" style="font-size: 1.8rem; text-align: center; margin: 0.8rem 0;"></div>
-        </div>
-
-        <!-- Quote -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-quote-left"></i> Inspiration</div>
-            <div class="quote-card" id="quoteCard"></div>
-            <button class="btn-primary" id="refreshQuoteBtn">New Quote</button>
-        </div>
-
-        <!-- Pronunciation -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-microphone-alt"></i> Pronunciation Coach</div>
-            <input type="text" id="pronounceWord" placeholder="Enter a word">
-            <button class="btn-primary" id="listenWordBtn">🔊 Listen</button>
-            <button class="btn-primary" id="recordPronounceBtn">🎙️ Record & Check</button>
-            <p id="pronounceFeedback" style="font-size:0.85rem; margin-top:6px;"></p>
-        </div>
-
-        <!-- Handwriting -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-pencil-alt"></i> Handwriting Notes</div>
-            <canvas id="handwritingCanvas" class="handwriting-canvas" width="500" height="180"></canvas>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                <button class="btn-primary" id="clearCanvasBtn">Clear</button>
-                <button class="btn-primary" id="saveHandwritingBtn">Save to Notes</button>
-            </div>
-        </div>
-
-        <!-- Templates -->
-        <div class="section-card">
-            <div class="section-title"><i class="fas fa-copy"></i> Study Templates</div>
-            <select id="templateSelect">
-                <option value="cornell">Cornell Notes</option>
-                <option value="mindmap">Mind Map</option>
-                <option value="flashcard">Flashcard Template</option>
-                <option value="exam">Exam Cram</option>
-            </select>
-            <button class="btn-primary" id="applyTemplateBtn">Apply</button>
-            <div id="templateOutput" style="margin-top: 10px; background: var(--primary-light); padding: 0.8rem; border-radius: 16px; font-size:0.85rem;"></div>
+            <div id="taskListContainer" style="margin-top: 20px;"></div>
         </div>
     </div>
 
     <div class="animal-companion" id="animalCompanion">
         <div class="animal-avatar">🐼</div>
-        <div class="animal-speech">Study buddy!</div>
-    </div>
-    
-    <div class="music-player-bar" id="musicPlayerBar">
-        <i class="fas fa-music" id="musicIconBtn"></i>
-        <i class="fas fa-play-circle" id="playPauseMusicBtn"></i>
-        <span class="music-title" id="musicTrackTitle">Lofi</span>
-        <select id="musicGenreSelect" class="genre-select">
-            <option value="lofi">🎧 Lofi</option><option value="classical">🎹 Classical</option>
-            <option value="nature">🌧️ Nature</option><option value="jazz">🎷 Jazz</option>
-        </select>
-        <i class="fas fa-step-backward" id="prevTrackBtn"></i>
-        <i class="fas fa-step-forward" id="nextTrackBtn"></i>
-        <input type="range" min="0" max="1" step="0.01" value="0.25" class="volume-slider" id="musicVolumeSlider">
-        <i class="fas fa-volume-up"></i>
+        <div class="animal-speech">Your AI buddy!</div>
     </div>
 </div>
 
 <script>
-// ========== CORE FUNCTIONS ==========
+// ==================== ORIGINAL CODE (PRESERVED) ====================
 const API_URL = '/api/ai';
+
 async function callSecureAI(prompt, type = 'chat') {
     try {
         const response = await fetch(API_URL, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt, type })
         });
-        if (!response.ok) throw new Error();
+        if (!response.ok) throw new Error('API request failed');
         const data = await response.json();
         return data.result;
     } catch (error) {
+        console.error('API Error:', error);
         return getLocalFallback(prompt, type);
     }
 }
+
 function getLocalFallback(prompt, type) {
-    if (type === 'quiz') return JSON.stringify([{ question: "What is the main concept?", options: ["Option A", "Option B", "Option C", "Option D"], correct: 0 }]);
-    if (type === 'sentiment') {
-        const lowerPrompt = prompt.toLowerCase();
-        let stress = 5;
-        if (lowerPrompt.includes('stressed') || lowerPrompt.includes('anxious')) stress = 8;
-        else if (lowerPrompt.includes('tired')) stress = 6;
-        else if (lowerPrompt.includes('happy') || lowerPrompt.includes('great')) stress = 3;
-        return JSON.stringify({ 
-            sentiment: stress > 6 ? "Stressed" : (stress < 4 ? "Relaxed" : "Neutral"), 
-            stressLevel: stress, 
-            advice: stress > 6 ? "Take a 5-minute break and breathe deeply. You've got this!" : (stress < 4 ? "Great energy! Keep up the momentum!" : "You're doing well. Stay hydrated and take short breaks."),
-            encouragement: "Every small step counts toward your goals!",
-            detailedAnalysis: `Based on your input, your stress level appears ${stress}/10. ${stress > 6 ? "Consider a quick walk or meditation." : "Keep maintaining your balanced approach."}`,
-            recommendations: stress > 6 ? ["Deep breathing (4-7-8 method)", "5 min walk", "Drink water", "Break task into smaller steps"] : ["Review notes lightly", "Practice active recall", "Stay consistent"]
-        });
-    }
-    if (type === 'tasks') return JSON.stringify(["Review notes", "Create flashcards", "Take a break"]);
-    return "I'm your AI study assistant! Ask me anything about your subjects! 📚";
+    if (type === 'quiz') return JSON.stringify([
+        { question: "What is the main concept?", options: ["Option A", "Option B", "Option C", "Option D"], correct: 0 },
+        { question: "Why is this important?", options: ["Reason 1", "Reason 2", "Reason 3", "All of above"], correct: 3 },
+        { question: "Best way to learn?", options: ["Practice", "Reading", "Memorization", "Teaching others"], correct: 0 }
+    ]);
+    if (type === 'sentiment') return JSON.stringify({ sentiment: "neutral", stressLevel: 5, advice: "Take short breaks and stay hydrated!", encouragement: "You've got this!", detailedAnalysis: "Your energy seems balanced. Consider a 5-min mindfulness break.", recommendations: ["Drink water", "Stretch", "Review notes lightly"] });
+    if (type === 'tasks') return JSON.stringify(["Review today's notes", "Create 3 flashcards", "Take a 5-min break"]);
+    return "I'm your AI study assistant! Ask me about any topic, or try generating a quiz! 📚";
 }
+
 function navigateTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
     document.getElementById(`${pageId}-page`).classList.add('active-page');
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`.nav-btn[data-page="${pageId}"]`).classList.add('active');
+    if(pageId === 'flashcards') renderFlashcardList();
+    if(pageId === 'calendar') renderCalendar();
+    if(pageId === 'tasks') renderTasks();
 }
-function setTheme(theme) { document.body.classList.remove('night-theme'); if (theme === 'night') document.body.classList.add('night-theme'); localStorage.setItem('focuswell_theme', theme); }
-function speakText(text) { if (!text) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.rate = 0.9; window.speechSynthesis.speak(utterance); }
-function openPomodoro() { let seconds = 1500; const modal = document.createElement('div'); modal.className = 'modal'; modal.innerHTML = `<div class="modal-content" style="text-align:center"><h3>🍅 Focus Timer</h3><h1 id="timerDisplay">25:00</h1><button class="btn-primary" id="startTimerBtn">Start</button><button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button></div>`; document.body.appendChild(modal); document.getElementById('startTimerBtn').onclick = function() { this.disabled = true; const interval = setInterval(() => { if (seconds > 0) { seconds--; const mins = Math.floor(seconds/60); const secs = seconds%60; document.getElementById('timerDisplay').innerText = `${mins}:${secs.toString().padStart(2,'0')}`; } else { clearInterval(interval); speakText("Time's up!"); modal.remove(); } }, 1000); }; }
 
-// ========== VIRTUAL PET ==========
-let petXP = parseInt(localStorage.getItem('petXP') || '0');
-let petLevel = parseInt(localStorage.getItem('petLevel') || '1');
-function updatePet() {
-    document.getElementById('petXP').innerText = petXP;
-    document.getElementById('petLevel').innerText = petLevel;
-    document.getElementById('petExpBar').style.width = `${petXP % 100}%`;
-    const avatars = ['🐣','🐥','🐔','🦉','🐉'];
-    document.getElementById('petAvatar').innerText = avatars[Math.min(Math.floor(petLevel/3), avatars.length-1)];
-    localStorage.setItem('petXP', petXP); localStorage.setItem('petLevel', petLevel);
+function setTheme(theme) {
+    document.body.classList.remove('night-theme');
+    if (theme === 'night') document.body.classList.add('night-theme');
+    localStorage.setItem('focuswell_theme', theme);
 }
-function addPetXP(amount) { petXP += amount; if(petXP >= 100) { petLevel++; petXP -= 100; speakText(`Pet level ${petLevel}!`); showPopup(`🎉 Pet leveled up to ${petLevel}!`); } updatePet(); }
 
-// ========== SENTIMENT TREND ==========
-let sentimentHistory = JSON.parse(localStorage.getItem('sentimentHistory') || '[]');
-function renderTrend() {
-    const container = document.getElementById('sentimentTrendChart');
+function speakText(text) {
+    if (!text) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+}
+
+function openPomodoro() {
+    let seconds = 1500;
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `<div class="modal-content" style="text-align:center">
+        <h3>🍅 Focus Timer</h3>
+        <h1 id="timerDisplay">25:00</h1>
+        <button class="btn-primary" id="startTimerBtn">Start</button>
+        <button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button>
+    </div>`;
+    document.body.appendChild(modal);
+    document.getElementById('startTimerBtn').onclick = function() {
+        this.disabled = true;
+        const interval = setInterval(() => {
+            if (seconds > 0) {
+                seconds--;
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                document.getElementById('timerDisplay').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+            } else {
+                clearInterval(interval);
+                speakText("Time's up! Great focus session!");
+                modal.remove();
+            }
+        }, 1000);
+    };
+}
+
+// ==================== NEW FEATURES: FLASHCARDS ====================
+let flashcards = JSON.parse(localStorage.getItem('focuswell_flashcards') || '[]');
+let currentFlashcardIndex = 0;
+
+function renderFlashcardList() {
+    const container = document.getElementById('flashcardList');
     if(!container) return;
-    if(sentimentHistory.length === 0) { container.innerHTML = "<p>No data yet. Use Stress Analysis!</p>"; return; }
-    let html = '';
-    sentimentHistory.slice(-7).forEach(s => {
-        let percent = s.stress * 10;
-        html += `<div><small>${s.date}</small><div class="trend-bar"><div class="trend-fill" style="width:${percent}%; background:${s.stress>6?'#ff6b6b':'var(--primary)'}"></div></div><span>Stress: ${s.stress}/10</span></div>`;
-    });
-    container.innerHTML = html;
-    let avg = sentimentHistory.reduce((a,b)=>a+b.stress,0)/sentimentHistory.length;
-    document.getElementById('trendInsight').innerHTML = avg > 6 ? "⚠️ High stress trend. Try our relaxation tips!" : "✅ Stress levels balanced. Keep going!";
+    if(flashcards.length === 0) { container.innerHTML = "<p>✨ No flashcards yet. Add some above!</p>"; return; }
+    container.innerHTML = flashcards.map((card, idx) => `
+        <div style="background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between;">
+            <div><strong>Q:</strong> ${escapeHtml(card.question)}<br><small>A: ${escapeHtml(card.answer)}</small></div>
+            <button onclick="deleteFlashcard(${idx})" style="background:#ff6b6b; border:none; border-radius:20px; padding:5px 12px; color:white;">❌</button>
+        </div>
+    `).join('');
+    if(flashcards.length > 0) updateFlashcardDisplay();
 }
 
-// ========== ENHANCED STRESS ANALYSIS (FULLY WORKING) ==========
+function updateFlashcardDisplay() {
+    const qText = document.getElementById('flashcardQuestionText');
+    const aText = document.getElementById('flashcardAnswerText');
+    if(flashcards.length === 0) {
+        qText.innerText = "No flashcards yet! Add some cards to start reviewing.";
+        aText.style.display = 'none';
+        return;
+    }
+    qText.innerText = flashcards[currentFlashcardIndex].question;
+    aText.innerText = flashcards[currentFlashcardIndex].answer;
+    aText.style.display = 'none';
+}
+
+window.deleteFlashcard = (idx) => {
+    flashcards.splice(idx, 1);
+    localStorage.setItem('focuswell_flashcards', JSON.stringify(flashcards));
+    if(currentFlashcardIndex >= flashcards.length) currentFlashcardIndex = Math.max(0, flashcards.length-1);
+    renderFlashcardList();
+    updateFlashcardDisplay();
+};
+
+document.addEventListener('click', (e) => {
+    if(e.target.id === 'addFlashcardBtn') {
+        const question = document.getElementById('flashcardQuestion').value.trim();
+        const answer = document.getElementById('flashcardAnswer').value.trim();
+        if(!question || !answer) { alert("Please enter both question and answer"); return; }
+        flashcards.push({ question, answer });
+        localStorage.setItem('focuswell_flashcards', JSON.stringify(flashcards));
+        document.getElementById('flashcardQuestion').value = '';
+        document.getElementById('flashcardAnswer').value = '';
+        renderFlashcardList();
+        if(flashcards.length === 1) currentFlashcardIndex = 0;
+        updateFlashcardDisplay();
+        speakText("Flashcard added!");
+    }
+    if(e.target.id === 'revealAnswerBtn') {
+        const aDiv = document.getElementById('flashcardAnswerText');
+        if(aDiv.style.display === 'none') aDiv.style.display = 'block';
+        else aDiv.style.display = 'none';
+    }
+    if(e.target.id === 'prevFlashcardBtn') {
+        if(flashcards.length === 0) return;
+        currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcards.length) % flashcards.length;
+        updateFlashcardDisplay();
+    }
+    if(e.target.id === 'nextFlashcardBtn') {
+        if(flashcards.length === 0) return;
+        currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcards.length;
+        updateFlashcardDisplay();
+    }
+});
+
+// ==================== CALENDAR ====================
+let currentDate = new Date();
+let selectedDateStr = new Date().toISOString().split('T')[0];
+let calendarEvents = JSON.parse(localStorage.getItem('focuswell_events') || '{}');
+
+function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const grid = document.getElementById('calendarGrid');
+    if(!grid) return;
+    grid.innerHTML = '';
+    document.getElementById('monthYearDisplay').innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
+    for(let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
+    for(let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const div = document.createElement('div');
+        div.className = 'calendar-day';
+        if(dateStr === selectedDateStr) div.classList.add('selected');
+        div.innerText = d;
+        div.onclick = () => {
+            selectedDateStr = dateStr;
+            renderCalendar();
+            renderEventsForDate();
+        };
+        grid.appendChild(div);
+    }
+    renderEventsForDate();
+}
+
+function renderEventsForDate() {
+    const events = calendarEvents[selectedDateStr] || [];
+    const container = document.getElementById('eventsList');
+    if(!container) return;
+    if(events.length === 0) container.innerHTML = "<p>📭 No events for this day. Add one!</p>";
+    else container.innerHTML = events.map((ev, idx) => `<div style="background:var(--bg-card); padding:8px; border-radius:16px; margin:5px 0; display:flex; justify-content:space-between;"><span>📌 ${escapeHtml(ev)}</span><button onclick="deleteEvent('${selectedDateStr}', ${idx})" style="background:none; border:none; color:red;">❌</button></div>`).join('');
+}
+
+window.deleteEvent = (dateStr, idx) => {
+    if(calendarEvents[dateStr]) calendarEvents[dateStr].splice(idx,1);
+    if(calendarEvents[dateStr]?.length === 0) delete calendarEvents[dateStr];
+    localStorage.setItem('focuswell_events', JSON.stringify(calendarEvents));
+    renderEventsForDate();
+    renderCalendar();
+};
+
+document.addEventListener('click', (e) => {
+    if(e.target.id === 'addEventBtn') {
+        const title = document.getElementById('eventTitle').value.trim();
+        if(!title) { alert("Enter event title"); return; }
+        if(!calendarEvents[selectedDateStr]) calendarEvents[selectedDateStr] = [];
+        calendarEvents[selectedDateStr].push(title);
+        localStorage.setItem('focuswell_events', JSON.stringify(calendarEvents));
+        document.getElementById('eventTitle').value = '';
+        renderEventsForDate();
+        speakText(`Event added for ${selectedDateStr}`);
+    }
+    if(e.target.id === 'prevMonthBtn') {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    }
+    if(e.target.id === 'nextMonthBtn') {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    }
+});
+
+// ==================== TASK MANAGER & AI TASK GENERATOR ====================
+let tasks = JSON.parse(localStorage.getItem('focuswell_tasks') || '[]');
+
+function renderTasks() {
+    const container = document.getElementById('taskListContainer');
+    if(!container) return;
+    if(tasks.length === 0) { container.innerHTML = "<p>✨ No tasks. Add some or let AI generate tasks from your notes/quiz!</p>"; return; }
+    container.innerHTML = tasks.map((task, idx) => `
+        <div class="task-item ${task.completed ? 'completed' : ''}">
+            <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${idx})">
+            <span style="flex:1">${escapeHtml(task.text)}</span>
+            <button onclick="deleteTask(${idx})" style="background:#ff6b6b; border:none; border-radius:20px; padding:5px 12px; color:white;">🗑️</button>
+        </div>
+    `).join('');
+}
+
+window.toggleTask = (idx) => {
+    tasks[idx].completed = !tasks[idx].completed;
+    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+    renderTasks();
+};
+
+window.deleteTask = (idx) => {
+    tasks.splice(idx,1);
+    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+    renderTasks();
+};
+
+document.getElementById('addTaskBtn')?.addEventListener('click', () => {
+    const text = document.getElementById('taskInput').value.trim();
+    if(!text) return;
+    tasks.push({ text, completed: false });
+    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+    document.getElementById('taskInput').value = '';
+    renderTasks();
+    speakText("Task added");
+});
+
+document.getElementById('aiGenerateTasksBtn')?.addEventListener('click', async () => {
+    const notesContent = JSON.parse(localStorage.getItem('focuswell_notes') || '[]').map(n=>n.content).join(" ");
+    const recentQuizTopics = localStorage.getItem('lastQuizTopic') || "study";
+    const prompt = `Based on these notes: ${notesContent.substring(0,500)} and quiz interests: ${recentQuizTopics}, suggest 3 actionable study tasks. Return as JSON array of strings.`;
+    const aiTasksRaw = await callSecureAI(prompt, 'tasks');
+    try {
+        let newTasks = JSON.parse(aiTasksRaw);
+        if(Array.isArray(newTasks)) {
+            newTasks.forEach(t => tasks.push({ text: t, completed: false }));
+            localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+            renderTasks();
+            speakText("AI generated tasks added!");
+        } else throw new Error();
+    } catch(e) {
+        const fallbackTasks = ["Review flashcards", "Complete pending quiz", "Take a mindful break"];
+        fallbackTasks.forEach(t => tasks.push({ text: t, completed: false }));
+        localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+        renderTasks();
+    }
+});
+
+// ==================== ENHANCED STRESS FEATURE ====================
 document.getElementById('analyzeSentimentBtn').onclick = async () => {
-    const text = document.getElementById('sentimentText').value.trim();
+    const text = document.getElementById('sentimentText').value;
     if (!text) { alert("Please share how you're feeling"); return; }
     const workload = document.getElementById('workloadSelect').value;
     const resultDiv = document.getElementById('sentimentResult');
@@ -383,118 +505,100 @@ document.getElementById('analyzeSentimentBtn').onclick = async () => {
     const analysisRaw = await callSecureAI(JSON.stringify({ text, workload, detailed: true }), 'sentiment');
     try {
         const data = JSON.parse(analysisRaw);
-        const stressLevel = data.stressLevel || 5;
-        fillBar.style.width = `${stressLevel * 10}%`;
-        let html = `<div style="background:var(--bg-card); border-radius:20px; padding:1rem;"><strong>📊 Analysis:</strong> ${data.detailedAnalysis || data.advice}</div>`;
-        html += `<div style="margin-top:12px;"><strong>💡 Recommendations:</strong><ul>${(data.recommendations || ["Take deep breaths", "Short walk", "Hydrate"]).map(r => `<li>✨ ${r}</li>`).join('')}</ul></div>`;
-        html += `<div style="margin-top:8px;"><strong>🧘 Encouragement:</strong> ${data.encouragement || "You've got this!"}</div>`;
-        html += `<div style="margin-top:12px;"><button class="btn-primary" onclick="speakText('${data.advice.replace(/'/g, "\\'")}')">🔊 Listen to Advice</button></div>`;
-        resultDiv.innerHTML = html;
+        fillBar.style.width = `${data.stressLevel * 10}%`;
+        let detailedHtml = `<div class="stress-detailed-card"><strong>📊 Analysis:</strong> ${data.detailedAnalysis || data.advice}</div>`;
+        detailedHtml += `<div><strong>💡 Personalized Recommendations:</strong><ul>${(data.recommendations || ["Take 5 deep breaths", "Hydrate", "Short walk"]).map(r => `<li>✨ ${r}</li>`).join('')}</ul></div>`;
+        detailedHtml += `<div><strong>🧘 Coping Strategy:</strong> ${data.encouragement || "You've got this! Small steps matter."}</div>`;
+        detailedHtml += `<div style="margin-top:12px;"><button class="btn-primary" onclick="speakText('${data.advice.replace(/'/g, "\\'")}')">🔊 Listen to Advice</button></div>`;
+        resultDiv.innerHTML = detailedHtml;
         speakText(data.advice);
-        // Save to trend
-        sentimentHistory.push({ date: new Date().toLocaleDateString(), stress: stressLevel });
-        if(sentimentHistory.length > 30) sentimentHistory.shift();
-        localStorage.setItem('sentimentHistory', JSON.stringify(sentimentHistory));
-        renderTrend();
-        showPopup(`🧠 Analysis complete! Stress level: ${stressLevel}/10`);
-    } catch(e) { resultDiv.innerHTML = `<div class="stress-detailed-card">💚 ${getLocalFallback(text,'sentiment').advice}</div>`; }
+        if(data.stressLevel > 6) speakText("Your stress seems high. Please consider a break or talk to someone.");
+    } catch(e) {
+        resultDiv.innerHTML = `<div class="stress-detailed-card">💚 Deep breath. You're doing great! Try writing more about your feelings for deeper insights.</div>`;
+    }
 };
 
-// ========== OTHER FEATURES ==========
-async function generateStudyPath() {
-    const notes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
-    const rec = await callSecureAI(`Suggest study path for: ${notes.map(n=>n.title).join(', ') || 'general study'}`, 'chat');
-    document.getElementById('studyPathRecommendation').innerHTML = `<p>${rec.substring(0,250)}</p><p>📌 Next: Practice quizzes and review flashcards!</p>`;
-    showPopup("📚 Study path ready!");
-}
-let dailyGoal = parseInt(localStorage.getItem('dailyGoal') || '0');
-let studyMinutes = parseInt(localStorage.getItem('studyMinutesToday') || '0');
-function updateGoalUI() {
-    document.getElementById('goalDisplay').innerHTML = `📚 Goal: ${dailyGoal} min | Today: ${studyMinutes} min`;
-    let percent = dailyGoal ? Math.min(100, (studyMinutes/dailyGoal)*100) : 0;
-    document.getElementById('goalProgressFill').style.width = `${percent}%`;
-    if(studyMinutes >= dailyGoal && dailyGoal>0) { speakText("Goal achieved!"); showPopup("🏆 Daily goal achieved! Amazing!"); }
-}
-let blockedSites = JSON.parse(localStorage.getItem('blockedSites') || '[]');
-let blockerActive = false;
-function updateBlockerUI() {
-    document.getElementById('blockedSitesList').innerHTML = blockedSites.map(s => `<span class="blocked-site">${s} <button onclick="removeSite('${s}')">❌</button></span>`).join('');
-    document.getElementById('blockerStatus').innerText = `Blocker: ${blockerActive ? 'ACTIVE 🛡️' : 'OFF'}`;
-}
-window.removeSite = (s) => { blockedSites = blockedSites.filter(x=>x!==s); localStorage.setItem('blockedSites',JSON.stringify(blockedSites)); updateBlockerUI(); };
-setInterval(() => { if(blockerActive && blockedSites.some(s=>location.hostname.includes(s))) { alert("Focus Mode: Site blocked!"); location.href = location.origin; } }, 2000);
-let timerInterval, timerSeconds, workMins=25, breakMins=5, isWork=true;
-function startTimer(w,b) { if(timerInterval) clearInterval(timerInterval); isWork=true; timerSeconds=w*60; const disp=document.getElementById('variationTimerDisplay'); function update(){ let m=Math.floor(timerSeconds/60), s=timerSeconds%60; disp.innerText=`${m}:${s.toString().padStart(2,'0')}`; } update(); timerInterval=setInterval(()=>{ if(timerSeconds<=0){ if(isWork){ speakText(`Work done! ${b} min break.`); showPopup(`🍅 Focus complete! Take ${b} min break.`); timerSeconds=b*60; isWork=false; } else { speakText("Break over! Back to study!"); showPopup("⏰ Break's over! Let's focus!"); timerSeconds=w*60; isWork=true; } update(); } else { timerSeconds--; update(); } },1000); }
-const quotes = ["Believe you can and you're halfway there.", "Study hard, dream big.", "Small progress is still progress.", "Your future self will thank you.", "Consistency beats intensity."];
-function updateQuote() { document.getElementById('quoteCard').innerHTML = `"${quotes[Math.floor(Math.random()*quotes.length)]}" — FocusWell`; }
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-document.getElementById('recordPronounceBtn')?.addEventListener('click',()=>{ let w=document.getElementById('pronounceWord').value; if(!w){alert("Enter word");return;} recognition.onresult=(e)=>{ let spoken=e.results[0][0].transcript.toLowerCase(); if(spoken.includes(w.toLowerCase())){ document.getElementById('pronounceFeedback').innerHTML="✅ Perfect!"; showPopup("🎤 Great pronunciation!"); } else document.getElementById('pronounceFeedback').innerHTML=`❌ You said "${spoken}"`; }; recognition.start(); });
-let canvas=document.getElementById('handwritingCanvas'), ctx=canvas?.getContext('2d'), drawing=false;
-if(canvas){ canvas.width=canvas.clientWidth; canvas.height=canvas.clientHeight; ctx.fillStyle='white'; ctx.fillRect(0,0,canvas.width,canvas.height);
-canvas.addEventListener('mousedown',(e)=>{drawing=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);});
-canvas.addEventListener('mousemove',(e)=>{if(drawing){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}});
-canvas.addEventListener('mouseup',()=>drawing=false);
-canvas.addEventListener('touchstart',(e)=>{e.preventDefault();let rect=canvas.getBoundingClientRect();drawing=true;ctx.beginPath();ctx.moveTo(e.touches[0].clientX-rect.left,e.touches[0].clientY-rect.top);});
-canvas.addEventListener('touchmove',(e)=>{if(drawing){e.preventDefault();let rect=canvas.getBoundingClientRect();ctx.lineTo(e.touches[0].clientX-rect.left,e.touches[0].clientY-rect.top);ctx.stroke();}});
-canvas.addEventListener('touchend',()=>drawing=false);
-document.getElementById('clearCanvasBtn')?.addEventListener('click',()=>{ctx.fillStyle='white';ctx.fillRect(0,0,canvas.width,canvas.height);});
-document.getElementById('saveHandwritingBtn')?.addEventListener('click',()=>{let notes=JSON.parse(localStorage.getItem('focuswell_notes')||'[]');notes.push({id:Date.now(),title:"Handwritten Note",content:"Drawing saved"});localStorage.setItem('focuswell_notes',JSON.stringify(notes));speakText("Saved!");showPopup("✍️ Handwriting saved!");renderNotes();});}
-document.getElementById('applyTemplateBtn')?.addEventListener('click',()=>{let t=document.getElementById('templateSelect').value,out={cornell:"<strong>Cornell Notes</strong><br>Main Ideas: ____<br>Details: ____<br>Summary: ____",mindmap:"<strong>Mind Map</strong><br>Center: ____<br>Branches: ____",flashcard:"<strong>Flashcard</strong><br>Front: ____<br>Back: ____",exam:"<strong>Exam Cram</strong><br>Day1: Review<br>Day2: Quiz<br>Day3: Practice"}[t];document.getElementById('templateOutput').innerHTML=out;showPopup("📋 Template applied!");});
+// Preserve original quiz generator + store last topic
+const originalQuizGen = document.getElementById('generateQuizBtn').onclick;
+document.getElementById('generateQuizBtn').onclick = async () => {
+    const topic = document.getElementById('quizTopicInput').value.trim();
+    if(topic) localStorage.setItem('lastQuizTopic', topic);
+    if(originalQuizGen) await originalQuizGen();
+};
 
-// ========== POPUPS & MUSIC ==========
-const cuteList = [{emoji:"🐣",msg:"Keep shining!"},{emoji:"🦊",msg:"You've got this!"},{emoji:"🐱",msg:"Pawsitive vibes!"},{emoji:"🐶",msg:"Woof! Great work!"},{emoji:"🦄",msg:"Magical progress!"},{emoji:"🐼",msg:"Stay focused!"}];
-let popupTimer;
-function showPopup(msg=null){ let r=cuteList[Math.floor(Math.random()*cuteList.length)]; let m=msg||r.msg; let old=document.querySelector('.animal-popup'); if(old)old.remove(); let div=document.createElement('div'); div.className='animal-popup'; div.innerHTML=`<div class="animal-popup-avatar">${r.emoji}</div><div class="animal-popup-text">${m}</div>`; document.body.appendChild(div); div.onclick=()=>{speakText(m.replace(/[^a-zA-Z0-9 .,!?]/g,''));div.remove();if(popupTimer)clearTimeout(popupTimer);}; if(popupTimer)clearTimeout(popupTimer); popupTimer=setTimeout(()=>{if(div&&div.remove)div.classList.add('fade-out-popup');setTimeout(()=>{if(div&&div.remove)div.remove();},400);},4500); }
-setInterval(()=>{if(document.getElementById('mainApp').style.display==='block')showPopup();}, 90000);
-const tracks={lofi:["https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"],classical:["https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"],nature:["https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"],jazz:["https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3","https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"]};
-let audio=null, musicPlaying=false, currGenre='lofi', trackIdx=0;
-function loadTrack(){ if(audio){ let url=tracks[currGenre][trackIdx]; audio.src=url; document.getElementById('musicTrackTitle').innerText=currGenre.toUpperCase(); if(musicPlaying) audio.play().catch(e=>console.log); } }
-function initMusic(){ audio=new Audio(); audio.volume=0.25; loadTrack(); document.getElementById('playPauseMusicBtn').onclick=()=>{ if(musicPlaying){ audio.pause(); musicPlaying=false; document.getElementById('playPauseMusicBtn').className='fas fa-play-circle'; }else{ audio.play().catch(e=>console.log); musicPlaying=true; document.getElementById('playPauseMusicBtn').className='fas fa-pause-circle'; showPopup("🎵 Music on! Focus mode!"); } }; document.getElementById('prevTrackBtn').onclick=()=>{ trackIdx=(trackIdx-1+tracks[currGenre].length)%tracks[currGenre].length; loadTrack(); if(musicPlaying) audio.play(); }; document.getElementById('nextTrackBtn').onclick=()=>{ trackIdx=(trackIdx+1)%tracks[currGenre].length; loadTrack(); if(musicPlaying) audio.play(); }; document.getElementById('musicVolumeSlider').oninput=(e)=>{ if(audio) audio.volume=e.target.value; }; document.getElementById('musicGenreSelect').onchange=(e)=>{ currGenre=e.target.value; trackIdx=0; loadTrack(); if(musicPlaying) audio.play(); showPopup(`🎵 Switched to ${currGenre}`); }; audio.onended=()=>{ trackIdx=(trackIdx+1)%tracks[currGenre].length; loadTrack(); if(musicPlaying) audio.play(); }; }
-
-// ========== INITIALIZATION ==========
+// ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
+    const loginOverlay = document.getElementById('loginOverlay');
+    const mainApp = document.getElementById('mainApp');
     document.getElementById('loginBtn').onclick = () => {
         let name = document.getElementById('loginUsername').value.trim() || "Scholar";
         localStorage.setItem('focuswell_user', name);
         document.getElementById('userNameDisplay').innerText = name;
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'block';
-        speakText(`Welcome ${name}! Let's study.`);
-        updatePet(); renderTrend(); updateGoalUI(); updateBlockerUI(); updateQuote(); initMusic();
-        setTimeout(()=>showPopup(`🎉 Welcome ${name}!`),500);
-        // Chat
-        const chatDiv=document.getElementById('chatMessages'), sendBtn=document.getElementById('sendChatBtn'), chatInp=document.getElementById('chatInput');
-        async function sendMsg(){ let msg=chatInp.value.trim(); if(!msg)return; chatDiv.innerHTML+=`<div class="chat-message user-msg">${msg}</div>`; chatInp.value=''; let reply=await callSecureAI(msg,'chat'); chatDiv.innerHTML+=`<div class="chat-message bot-msg">${reply}</div>`; chatDiv.scrollTop=chatDiv.scrollHeight; speakText(reply.substring(0,150)); }
-        sendBtn.onclick=sendMsg; chatInp.addEventListener('keypress',e=>{if(e.key==='Enter')sendMsg();});
-        document.getElementById('voiceChatBtn').onclick=()=>{ let rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)(); rec.onresult=e=>{chatInp.value=e.results[0][0].transcript;sendMsg();}; rec.start(); };
-        // Notes
-        let savedNotes=JSON.parse(localStorage.getItem('focuswell_notes')||'[]');
-        function renderNotes(){ let cont=document.getElementById('notesListPanel'); if(!cont)return; if(savedNotes.length===0){cont.innerHTML="<p>✨ No notes yet.</p>";return;} cont.innerHTML=savedNotes.map(n=>`<div class="note-item"><div><strong>${n.title}</strong><br>${(n.content||'').substring(0,60)}</div><div><button onclick="readNote(${n.id})" style="background:var(--primary);border:none;border-radius:20px;padding:4px 8px;color:white;">🔊</button><button onclick="deleteNote(${n.id})" style="background:#ff6b6b;border:none;border-radius:20px;padding:4px 8px;margin-left:5px;">❌</button></div></div>`).join(''); }
-        window.readNote=(id)=>{let n=savedNotes.find(x=>x.id===id);if(n)speakText(`Title: ${n.title}. Content: ${n.content}`);};
-        window.deleteNote=(id)=>{savedNotes=savedNotes.filter(x=>x.id!==id);localStorage.setItem('focuswell_notes',JSON.stringify(savedNotes));renderNotes();};
-        document.getElementById('saveNoteBtn').onclick=()=>{let title=document.getElementById('noteTitleInput').value.trim()||"Untitled",content=document.getElementById('noteContentInput').value.trim();if(!content)return;savedNotes.push({id:Date.now(),title,content});localStorage.setItem('focuswell_notes',JSON.stringify(savedNotes));renderNotes();document.getElementById('noteContentInput').value="";speakText("Note saved!");addPetXP(3);showPopup("📓 Note saved!");};
-        renderNotes();
-        document.getElementById('animalCompanion').onclick=()=>{let msgs=["Stay focused!","Take a breath!","Great progress!","Keep going!"]; let m=msgs[Math.floor(Math.random()*msgs.length)]; document.querySelector('.animal-speech').innerText=m; speakText(m); showPopup(m); };
-        // Quiz
-        document.getElementById('generateQuizBtn').onclick=async()=>{let topic=document.getElementById('quizTopicInput').value.trim()||"general"; let area=document.getElementById('quizDisplayArea'); area.innerHTML="Generating..."; let data=await callSecureAI(topic,'quiz'); try{ let quiz=JSON.parse(data); let html=`<div id="quizQs"></div><button class="btn-primary" id="subQuiz">Submit</button><div id="quizScore"></div>`; area.innerHTML=html; let answers=new Array(quiz.length).fill(-1); quiz.forEach((q,idx)=>{let d=document.createElement('div');d.style.margin="10px 0";d.innerHTML=`<strong>${idx+1}. ${q.question}</strong>`; q.options.forEach((opt,optIdx)=>{let lbl=document.createElement('label');lbl.style.display="block";lbl.innerHTML=`<input type="radio" name="q${idx}" value="${optIdx}"> ${opt}`; lbl.onclick=()=>answers[idx]=optIdx; d.appendChild(lbl);}); document.getElementById('quizQs').appendChild(d);}); document.getElementById('subQuiz').onclick=()=>{let score=answers.filter((a,i)=>a===quiz[i].correct).length; document.getElementById('quizScore').innerHTML=`<strong>Score: ${score}/${quiz.length}</strong>`; speakText(`Score ${score} out of ${quiz.length}`); addPetXP(5); showPopup(`📝 Quiz done! Score: ${score}/${quiz.length}`);}; }catch(e){area.innerHTML="✨ Quiz ready! Try a different topic."; addPetXP(3);} };
+        loginOverlay.style.display = 'none';
+        mainApp.style.display = 'block';
+        speakText(`Welcome ${name}! Let's study with focus.`);
+        renderFlashcardList();
+        renderCalendar();
+        renderTasks();
     };
-    if(localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
-    document.querySelectorAll('.nav-btn').forEach(btn=>btn.onclick=()=>navigateTo(btn.dataset.page));
-    // Event bindings for new features
-    document.getElementById('feedPetBtn')?.addEventListener('click',()=>addPetXP(10));
-    document.getElementById('playPetBtn')?.addEventListener('click',()=>addPetXP(5));
-    document.getElementById('refreshTrendBtn')?.addEventListener('click',renderTrend);
-    document.getElementById('generatePathBtn')?.addEventListener('click',generateStudyPath);
-    document.getElementById('setGoalBtn')?.addEventListener('click',()=>{dailyGoal=parseInt(document.getElementById('goalInput').value)||0; localStorage.setItem('dailyGoal',dailyGoal); updateGoalUI(); showPopup("🎯 Goals updated!");});
-    document.getElementById('logStudyTimeBtn')?.addEventListener('click',()=>{studyMinutes+=10; localStorage.setItem('studyMinutesToday',studyMinutes); updateGoalUI(); addPetXP(5); showPopup("📝 +10 min logged!");});
-    document.getElementById('addBlockedSiteBtn')?.addEventListener('click',()=>{let s=document.getElementById('blockSiteInput').value.trim(); if(s){blockedSites.push(s);localStorage.setItem('blockedSites',JSON.stringify(blockedSites));updateBlockerUI();showPopup(`🚫 ${s} blocked`);}});
-    document.getElementById('toggleBlockerBtn')?.addEventListener('click',()=>{blockerActive=!blockerActive; updateBlockerUI(); speakText(blockerActive?"Focus mode on":"Focus mode off"); showPopup(blockerActive?"🛡️ Focus Mode ON":"🔓 Focus Mode OFF");});
-    document.querySelectorAll('.timer-preset').forEach(el=>{el.addEventListener('click',()=>{workMins=parseInt(el.dataset.work); breakMins=parseInt(el.dataset.break); startTimer(workMins,breakMins); showPopup(`⏱️ Timer: ${workMins}/${breakMins} min`);});});
-    document.getElementById('startVariationTimerBtn')?.addEventListener('click',()=>startTimer(workMins,breakMins));
-    document.getElementById('refreshQuoteBtn')?.addEventListener('click',updateQuote);
-    document.getElementById('listenWordBtn')?.addEventListener('click',()=>{let w=document.getElementById('pronounceWord').value; if(w) speakText(w);});
+    if (localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.onclick = () => navigateTo(btn.dataset.page));
+    
+    // Chatbot core
+    const chatDiv = document.getElementById('chatMessages');
+    const sendBtn = document.getElementById('sendChatBtn');
+    const chatInput = document.getElementById('chatInput');
+    async function sendMessage() {
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+        chatDiv.innerHTML += `<div class="chat-message user-msg">${msg}</div>`;
+        chatInput.value = '';
+        const reply = await callSecureAI(msg, 'chat');
+        chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`;
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+        speakText(reply.substring(0, 200));
+    }
+    sendBtn.onclick = sendMessage;
+    chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    document.getElementById('voiceChatBtn').onclick = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const rec = new SpeechRecognition();
+            rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); };
+            rec.start();
+        } else alert("Voice input not supported");
+    };
+    
+    // Notes system
+    let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
+    function renderNotes() {
+        const container = document.getElementById('notesListPanel');
+        if(!container) return;
+        if(savedNotes.length === 0) { container.innerHTML = "<p>✨ No notes yet.</p>"; return; }
+        container.innerHTML = savedNotes.map(n => `<div class="note-item"><div><strong>${escapeHtml(n.title)}</strong><br>${escapeHtml(n.content.substring(0,80))}</div><div><button onclick="readNote(${n.id})" style="background:var(--primary); border:none; border-radius:20px; padding:5px 10px; color:white;">🔊 Read</button><button onclick="deleteNote(${n.id})" style="background:#ff6b6b; border:none; border-radius:20px; padding:5px 10px; margin-left:5px;">❌</button></div></div>`).join('');
+    }
+    window.readNote = (id) => { const note = savedNotes.find(n=>n.id===id); if(note) speakText(`Title: ${note.title}. Content: ${note.content}`); };
+    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n=>n.id!==id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    document.getElementById('saveNoteBtn').onclick = () => {
+        const title = document.getElementById('noteTitleInput').value.trim() || "Untitled";
+        const content = document.getElementById('noteContentInput').value.trim();
+        if(!content) return;
+        savedNotes.push({ id: Date.now(), title, content });
+        localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes));
+        renderNotes();
+        document.getElementById('noteContentInput').value = "";
+        speakText("Note saved!");
+    };
+    renderNotes();
+    
+    document.getElementById('animalCompanion').onclick = () => {
+        const msgs = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈", "Try a quick quiz! 📝"];
+        const msg = msgs[Math.floor(Math.random() * msgs.length)];
+        document.querySelector('.animal-speech').innerText = msg;
+        speakText(msg);
+    };
 });
 </script>
 </body>
 </html>
-```
