@@ -66,6 +66,63 @@
         .quote-card { background: linear-gradient(135deg, var(--primary-light), var(--bg-card)); padding: 1.5rem; border-radius: 28px; text-align: center; font-style: italic; margin: 1rem 0; }
         .goal-progress { height: 12px; background: #e0e0e0; border-radius: 20px; margin: 10px 0; }
         .timer-preset { display: inline-block; margin: 5px; padding: 8px 16px; background: var(--primary-light); border-radius: 30px; cursor: pointer; }
+        
+        /* Music Player Styles */
+        .music-player-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-light);
+            z-index: 1000;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .music-player-bar i {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--primary);
+            transition: 0.2s;
+        }
+        .music-player-bar i:hover { transform: scale(1.1); }
+        .music-title { font-weight: 500; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .volume-slider { width: 70px; cursor: pointer; }
+        .genre-select { background: var(--primary-light); border: none; border-radius: 20px; padding: 5px 10px; font-size: 0.75rem; cursor: pointer; }
+        
+        /* Cute Animal Popup */
+        .animal-popup {
+            position: fixed;
+            bottom: 180px;
+            right: 20px;
+            background: var(--bg-card);
+            border-radius: 28px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            z-index: 1001;
+            animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+            border-left: 6px solid var(--primary);
+            backdrop-filter: blur(8px);
+            max-width: 280px;
+            cursor: pointer;
+        }
+        .animal-popup-avatar { font-size: 2.5rem; }
+        .animal-popup-text { font-size: 0.85rem; font-weight: 500; }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .fade-out-popup { animation: fadeOut 0.5s forwards; }
+        @keyframes fadeOut { to { opacity: 0; transform: translateX(30px); visibility: hidden; } }
     </style>
 </head>
 <body>
@@ -265,6 +322,24 @@
         <div class="animal-avatar">🐼</div>
         <div class="animal-speech">Your AI buddy!</div>
     </div>
+    
+    <!-- NEW: Music Player -->
+    <div class="music-player-bar" id="musicPlayerBar">
+        <i class="fas fa-music" id="musicIconBtn"></i>
+        <i class="fas fa-play-circle" id="playPauseMusicBtn"></i>
+        <span class="music-title" id="musicTrackTitle">Lofi Study</span>
+        <select id="musicGenreSelect" class="genre-select">
+            <option value="lofi">🎧 Lofi Hip Hop</option>
+            <option value="classical">🎹 Classical Piano</option>
+            <option value="nature">🌧️ Nature Rain</option>
+            <option value="jazz">🎷 Jazz Café</option>
+            <option value="ambient">✨ Ambient Space</option>
+        </select>
+        <i class="fas fa-step-backward" id="prevTrackBtn"></i>
+        <i class="fas fa-step-forward" id="nextTrackBtn"></i>
+        <input type="range" min="0" max="1" step="0.01" value="0.3" class="volume-slider" id="musicVolumeSlider">
+        <i class="fas fa-volume-up"></i>
+    </div>
 </div>
 
 <script>
@@ -316,7 +391,7 @@ function updatePet() {
 }
 function addPetXP(amount) {
     petXP += amount;
-    if(petXP >= 100) { petLevel++; petXP -= 100; speakText(`Your pet grew to level ${petLevel}!`); }
+    if(petXP >= 100) { petLevel++; petXP -= 100; speakText(`Your pet grew to level ${petLevel}!`); showCuteAnimalPopup(`🎉 Your pet leveled up to ${petLevel}!`); }
     updatePet();
 }
 // 2. Sentiment Trend
@@ -341,6 +416,7 @@ async function generateStudyPath() {
     const topics = notes.map(n=>n.title).join(', ');
     const recommendation = await callSecureAI(`Suggest a study path for topics: ${topics || 'general study'}`, 'chat');
     document.getElementById('studyPathRecommendation').innerHTML = `<p>${recommendation.substring(0,300)}</p><p>✨ Next: Review flashcards and take a quiz!</p>`;
+    showCuteAnimalPopup("📚 Your personalized study path is ready!");
 }
 // 4. Goal Setting
 let dailyGoal = parseInt(localStorage.getItem('dailyGoal') || '0');
@@ -350,7 +426,7 @@ function updateGoalUI() {
     document.getElementById('goalDisplay').innerHTML = `📚 Daily goal: ${dailyGoal} min | Flashcards: ${flashcardGoal} | Today: ${studyMinutesToday} min`;
     let percent = Math.min(100, (studyMinutesToday/dailyGoal)*100);
     document.getElementById('goalProgressFill').style.width = `${percent || 0}%`;
-    if(studyMinutesToday >= dailyGoal && dailyGoal>0) speakText("Congratulations! You've achieved your daily study goal!");
+    if(studyMinutesToday >= dailyGoal && dailyGoal>0) { speakText("Congratulations! You've achieved your daily study goal!"); showCuteAnimalPopup("🏆 Goal achieved! Amazing work! 🌟"); }
 }
 // 5. Website Blocker
 let blockedSites = JSON.parse(localStorage.getItem('blockedSites') || '[]');
@@ -374,8 +450,8 @@ function startVariationTimer(workMins, breakMins) {
     updateDisplay();
     variationInterval = setInterval(() => {
         if(variationSeconds <= 0) {
-            if(variationIsWork) { speakText(`Work session complete! Take a ${variationBreakTime} minute break.`); variationSeconds = variationBreakTime * 60; variationIsWork = false; }
-            else { speakText("Break over! Time to focus again."); variationSeconds = variationWorkTime * 60; variationIsWork = true; }
+            if(variationIsWork) { speakText(`Work session complete! Take a ${variationBreakTime} minute break.`); showCuteAnimalPopup(`🍅 Great focus! Take a ${variationBreakTime} min break.`); variationSeconds = variationBreakTime * 60; variationIsWork = false; }
+            else { speakText("Break over! Time to focus again."); showCuteAnimalPopup("⏰ Break's over! Let's get back to studying!"); variationSeconds = variationWorkTime * 60; variationIsWork = true; }
             updateDisplay();
         } else { variationSeconds--; updateDisplay(); }
     }, 1000);
@@ -389,7 +465,7 @@ document.getElementById('recordPronounceBtn')?.addEventListener('click', () => {
     const word = document.getElementById('pronounceWord').value;
     if(!word) { alert("Enter a word first"); return; }
     recognition.lang = 'en-US';
-    recognition.onresult = (e) => { let spoken = e.results[0][0].transcript.toLowerCase(); if(spoken.includes(word.toLowerCase())) document.getElementById('pronounceFeedback').innerHTML = "✅ Great pronunciation!"; else document.getElementById('pronounceFeedback').innerHTML = `❌ Try again. You said "${spoken}"`; };
+    recognition.onresult = (e) => { let spoken = e.results[0][0].transcript.toLowerCase(); if(spoken.includes(word.toLowerCase())) { document.getElementById('pronounceFeedback').innerHTML = "✅ Great pronunciation!"; showCuteAnimalPopup("🎤 Excellent pronunciation! Keep practicing!"); } else document.getElementById('pronounceFeedback').innerHTML = `❌ Try again. You said "${spoken}"`; };
     recognition.start();
 });
 document.getElementById('listenWordBtn')?.addEventListener('click', () => { let w = document.getElementById('pronounceWord').value; if(w) speakText(w); });
@@ -407,7 +483,7 @@ if(canvas) {
     canvas.addEventListener('touchmove', (e) => { if(drawing) { e.preventDefault(); let rect = canvas.getBoundingClientRect(); ctx.lineTo(e.touches[0].clientX-rect.left, e.touches[0].clientY-rect.top); ctx.stroke(); } });
     canvas.addEventListener('touchend', () => drawing=false);
     document.getElementById('clearCanvasBtn')?.addEventListener('click', () => { ctx.fillStyle = 'white'; ctx.fillRect(0,0,canvas.width,canvas.height); });
-    document.getElementById('saveHandwritingBtn')?.addEventListener('click', () => { let dataURL = canvas.toDataURL(); let notes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]'); notes.push({ id: Date.now(), title: "Handwritten Note", content: "Drawing saved", image: dataURL }); localStorage.setItem('focuswell_notes', JSON.stringify(notes)); speakText("Handwriting saved as note!"); });
+    document.getElementById('saveHandwritingBtn')?.addEventListener('click', () => { let dataURL = canvas.toDataURL(); let notes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]'); notes.push({ id: Date.now(), title: "Handwritten Note", content: "Drawing saved", image: dataURL }); localStorage.setItem('focuswell_notes', JSON.stringify(notes)); speakText("Handwriting saved as note!"); showCuteAnimalPopup("✍️ Handwriting saved to notes!"); });
 }
 // 10. Study Templates
 document.getElementById('applyTemplateBtn')?.addEventListener('click', () => {
@@ -418,31 +494,98 @@ document.getElementById('applyTemplateBtn')?.addEventListener('click', () => {
     else if(template === 'flashcard') output = "<h4>Flashcard Study Template</h4><p>Front: _____<br>Back: _____<br>Review date: _____</p>";
     else output = "<h4>Exam Cram Plan</h4><p>Day 1: Review notes<br>Day 2: Practice quiz<br>Day 3: Flashcards<br>Day 4: Mock test</p>";
     document.getElementById('templateOutput').innerHTML = output;
+    showCuteAnimalPopup("📋 Template applied! Start studying!");
 });
+
+// ==================== CUTE ANIMAL POPUPS ====================
+const cuteAnimalsList = [
+    { emoji: "🐣", msg: "You're doing amazing! Keep shining ✨" },
+    { emoji: "🦊", msg: "Take a tiny break, you deserve it! 🍃" },
+    { emoji: "🐱", msg: "Paws-itive vibes only! Meow~ 📚" },
+    { emoji: "🐶", msg: "Woof! You've got this, scholar! 🎓" },
+    { emoji: "🐸", msg: "Hop to it! One step at a time 🌱" },
+    { emoji: "🐝", msg: "Bee-lieve in yourself! 🍯" },
+    { emoji: "🦄", msg: "Magical progress today! ✨" },
+    { emoji: "🐼", msg: "Stay chill and study well 🎋" },
+    { emoji: "🐥", msg: "Cheep cheep! Great effort! 🐤" },
+    { emoji: "🦋", msg: "Little by little, you're transforming! 📖" }
+];
+let popupTimeout = null;
+function showCuteAnimalPopup(customMessage = null) {
+    const randomAnimal = cuteAnimalsList[Math.floor(Math.random() * cuteAnimalsList.length)];
+    const message = customMessage || randomAnimal.msg;
+    const existingPopup = document.querySelector('.animal-popup');
+    if (existingPopup) existingPopup.remove();
+    const popupDiv = document.createElement('div');
+    popupDiv.className = 'animal-popup';
+    popupDiv.innerHTML = `<div class="animal-popup-avatar">${randomAnimal.emoji}</div><div class="animal-popup-text">${message}</div>`;
+    document.body.appendChild(popupDiv);
+    popupDiv.addEventListener('click', () => { speakText(message.replace(/[^a-zA-Z0-9 .,!?]/g, '')); popupDiv.remove(); if(popupTimeout) clearTimeout(popupTimeout); });
+    if(popupTimeout) clearTimeout(popupTimeout);
+    popupTimeout = setTimeout(() => { if(popupDiv && popupDiv.remove) popupDiv.classList.add('fade-out-popup'); setTimeout(() => { if(popupDiv && popupDiv.remove) popupDiv.remove(); }, 500); }, 5000);
+}
+setInterval(() => { if(document.getElementById('mainApp').style.display === 'block') showCuteAnimalPopup(); }, Math.random() * 60000 + 90000);
+
+// ==================== MUSIC PLAYER ====================
+const musicTracks = {
+    lofi: [{ name: "🎧 Lofi Study Beats", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }, { name: "🎧 Chill Lofi", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }],
+    classical: [{ name: "🎹 Moonlight Sonata", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }, { name: "🎹 Für Elise", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }],
+    nature: [{ name: "🌧️ Rain Sounds", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }, { name: "🌊 Ocean Waves", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }],
+    jazz: [{ name: "🎷 Smooth Jazz", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }, { name: "🎺 Café Jazz", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }],
+    ambient: [{ name: "✨ Ambient Dream", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }, { name: "🌌 Space Drone", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }]
+};
+let currentGenre = 'lofi';
+let currentTrackIndex = 0;
+let audioPlayer = null;
+let isMusicPlaying = false;
+function initMusicPlayer() {
+    audioPlayer = new Audio();
+    audioPlayer.volume = 0.3;
+    loadTrack();
+    const playPauseBtn = document.getElementById('playPauseMusicBtn');
+    const prevBtn = document.getElementById('prevTrackBtn');
+    const nextBtn = document.getElementById('nextTrackBtn');
+    const volumeSlider = document.getElementById('musicVolumeSlider');
+    const genreSelect = document.getElementById('musicGenreSelect');
+    playPauseBtn.addEventListener('click', () => {
+        if (isMusicPlaying) { audioPlayer.pause(); playPauseBtn.className = 'fas fa-play-circle'; isMusicPlaying = false; }
+        else { audioPlayer.play().catch(e => console.log); playPauseBtn.className = 'fas fa-pause-circle'; isMusicPlaying = true; showCuteAnimalPopup("🎵 Music on! Let's focus! 🎧"); }
+    });
+    prevBtn.addEventListener('click', () => { currentTrackIndex = (currentTrackIndex - 1 + musicTracks[currentGenre].length) % musicTracks[currentGenre].length; loadTrack(); if(isMusicPlaying) audioPlayer.play(); });
+    nextBtn.addEventListener('click', () => { currentTrackIndex = (currentTrackIndex + 1) % musicTracks[currentGenre].length; loadTrack(); if(isMusicPlaying) audioPlayer.play(); });
+    volumeSlider.addEventListener('input', (e) => { if(audioPlayer) audioPlayer.volume = e.target.value; });
+    genreSelect.addEventListener('change', (e) => { currentGenre = e.target.value; currentTrackIndex = 0; loadTrack(); if(isMusicPlaying) audioPlayer.play(); showCuteAnimalPopup(`🎵 Switched to ${genreSelect.options[genreSelect.selectedIndex].text}`); });
+    audioPlayer.addEventListener('ended', () => { currentTrackIndex = (currentTrackIndex + 1) % musicTracks[currentGenre].length; loadTrack(); if(isMusicPlaying) audioPlayer.play(); });
+}
+function loadTrack() {
+    const track = musicTracks[currentGenre][currentTrackIndex];
+    audioPlayer.src = track.url;
+    document.getElementById('musicTrackTitle').innerText = track.name;
+}
 
 // Event Listeners for new features
 document.getElementById('feedPetBtn')?.addEventListener('click', () => addPetXP(10));
 document.getElementById('playPetBtn')?.addEventListener('click', () => addPetXP(5));
 document.getElementById('refreshTrendBtn')?.addEventListener('click', renderSentimentTrend);
 document.getElementById('generatePathBtn')?.addEventListener('click', generateStudyPath);
-document.getElementById('setGoalBtn')?.addEventListener('click', () => { dailyGoal = parseInt(document.getElementById('goalInput').value) || 0; flashcardGoal = parseInt(document.getElementById('flashcardGoalInput').value) || 0; localStorage.setItem('dailyGoal', dailyGoal); localStorage.setItem('flashcardGoal', flashcardGoal); updateGoalUI(); });
-document.getElementById('logStudyTimeBtn')?.addEventListener('click', () => { studyMinutesToday += 10; localStorage.setItem('studyMinutesToday', studyMinutesToday); updateGoalUI(); addPetXP(5); });
-document.getElementById('addBlockedSiteBtn')?.addEventListener('click', () => { let site = document.getElementById('blockSiteInput').value.trim(); if(site) { blockedSites.push(site); localStorage.setItem('blockedSites', JSON.stringify(blockedSites)); updateBlockerUI(); } });
-document.getElementById('toggleBlockerBtn')?.addEventListener('click', () => { blockerActive = !blockerActive; updateBlockerUI(); speakText(blockerActive ? "Focus mode enabled" : "Focus mode disabled"); });
-document.querySelectorAll('.timer-preset').forEach(el => { el.addEventListener('click', () => { variationWorkTime = parseInt(el.dataset.work); variationBreakTime = parseInt(el.dataset.break); startVariationTimer(variationWorkTime, variationBreakTime); }); });
+document.getElementById('setGoalBtn')?.addEventListener('click', () => { dailyGoal = parseInt(document.getElementById('goalInput').value) || 0; flashcardGoal = parseInt(document.getElementById('flashcardGoalInput').value) || 0; localStorage.setItem('dailyGoal', dailyGoal); localStorage.setItem('flashcardGoal', flashcardGoal); updateGoalUI(); showCuteAnimalPopup("🎯 Goals set! You've got this!"); });
+document.getElementById('logStudyTimeBtn')?.addEventListener('click', () => { studyMinutesToday += 10; localStorage.setItem('studyMinutesToday', studyMinutesToday); updateGoalUI(); addPetXP(5); showCuteAnimalPopup("📝 +10 min logged! Keep going!"); });
+document.getElementById('addBlockedSiteBtn')?.addEventListener('click', () => { let site = document.getElementById('blockSiteInput').value.trim(); if(site) { blockedSites.push(site); localStorage.setItem('blockedSites', JSON.stringify(blockedSites)); updateBlockerUI(); showCuteAnimalPopup(`🚫 ${site} added to blocklist`); } });
+document.getElementById('toggleBlockerBtn')?.addEventListener('click', () => { blockerActive = !blockerActive; updateBlockerUI(); speakText(blockerActive ? "Focus mode enabled" : "Focus mode disabled"); showCuteAnimalPopup(blockerActive ? "🛡️ Focus Mode ON - Stay productive!" : "🔓 Focus Mode OFF"); });
+document.querySelectorAll('.timer-preset').forEach(el => { el.addEventListener('click', () => { variationWorkTime = parseInt(el.dataset.work); variationBreakTime = parseInt(el.dataset.break); startVariationTimer(variationWorkTime, variationBreakTime); showCuteAnimalPopup(`⏱️ Timer set: ${variationWorkTime}/${variationBreakTime} min`); }); });
 document.getElementById('startVariationTimerBtn')?.addEventListener('click', () => startVariationTimer(variationWorkTime, variationBreakTime));
 document.getElementById('refreshQuoteBtn')?.addEventListener('click', updateQuote);
 
-// Capture sentiment for trend when stress analysis is used
+// Capture sentiment for trend
 const originalAnalyze = document.getElementById('analyzeSentimentBtn').onclick;
 document.getElementById('analyzeSentimentBtn').onclick = async () => {
     if(originalAnalyze) await originalAnalyze();
-    let stressText = document.getElementById('sentimentText').value;
     let fakeStress = Math.floor(Math.random() * 10);
     sentimentHistory.push({ date: new Date().toLocaleDateString(), stress: fakeStress });
     if(sentimentHistory.length > 30) sentimentHistory.shift();
     localStorage.setItem('sentimentHistory', JSON.stringify(sentimentHistory));
     renderSentimentTrend();
+    showCuteAnimalPopup("🧠 Stress analyzed! Check your trend chart.");
 };
 
 // Initialization
@@ -456,7 +599,8 @@ document.addEventListener('DOMContentLoaded', () => {
         loginOverlay.style.display = 'none';
         mainApp.style.display = 'block';
         speakText(`Welcome ${name}! Let's study with focus.`);
-        updatePet(); renderSentimentTrend(); updateGoalUI(); updateBlockerUI(); updateQuote();
+        updatePet(); renderSentimentTrend(); updateGoalUI(); updateBlockerUI(); updateQuote(); initMusicPlayer();
+        setTimeout(() => showCuteAnimalPopup(`🎉 Welcome ${name}! Your study buddy is here! 🌟`), 1000);
         // Original chat/notes init
         const chatDiv = document.getElementById('chatMessages');
         const sendBtn = document.getElementById('sendChatBtn');
@@ -468,15 +612,14 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderNotes() { const container = document.getElementById('notesListPanel'); if(!container) return; container.innerHTML = savedNotes.map(n => `<div class="note-item"><div><strong>${n.title}</strong><br>${n.content?.substring(0,80)}</div><div><button onclick="readNote(${n.id})" style="background:var(--primary); border:none; border-radius:20px; padding:5px 10px; color:white;">🔊 Read</button><button onclick="deleteNote(${n.id})" style="background:#ff6b6b; border:none; border-radius:20px; margin-left:5px;">❌</button></div></div>`).join(''); }
         window.readNote = (id) => { const note = savedNotes.find(n=>n.id===id); if(note) speakText(`Title: ${note.title}. Content: ${note.content}`); };
         window.deleteNote = (id) => { savedNotes = savedNotes.filter(n=>n.id!==id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
-        document.getElementById('saveNoteBtn').onclick = () => { const title = document.getElementById('noteTitleInput').value.trim() || "Untitled"; const content = document.getElementById('noteContentInput').value.trim(); if(!content) return; savedNotes.push({ id: Date.now(), title, content }); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); document.getElementById('noteContentInput').value = ""; speakText("Note saved!"); addPetXP(3); };
+        document.getElementById('saveNoteBtn').onclick = () => { const title = document.getElementById('noteTitleInput').value.trim() || "Untitled"; const content = document.getElementById('noteContentInput').value.trim(); if(!content) return; savedNotes.push({ id: Date.now(), title, content }); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); document.getElementById('noteContentInput').value = ""; speakText("Note saved!"); addPetXP(3); showCuteAnimalPopup("📓 Note saved! Great organization!"); };
         renderNotes();
-        document.getElementById('animalCompanion').onclick = () => { const msgs = ["Stay focused! 🎯", "Take a deep breath! 🌬️"]; const msg = msgs[Math.floor(Math.random() * msgs.length)]; document.querySelector('.animal-speech').innerText = msg; speakText(msg); };
+        document.getElementById('animalCompanion').onclick = () => { const msgs = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈", "Try a quick quiz! 📝"]; const msg = msgs[Math.floor(Math.random() * msgs.length)]; document.querySelector('.animal-speech').innerText = msg; speakText(msg); showCuteAnimalPopup(msg); };
     };
     if (localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
     document.querySelectorAll('.nav-btn').forEach(btn => btn.onclick = () => navigateTo(btn.dataset.page));
-    document.getElementById('generateQuizBtn').onclick = async () => { const topic = document.getElementById('quizTopicInput').value; document.getElementById('quizDisplayArea').innerHTML = "Quiz generated! (AI demo)"; addPetXP(5); };
+    document.getElementById('generateQuizBtn').onclick = async () => { const topic = document.getElementById('quizTopicInput').value; document.getElementById('quizDisplayArea').innerHTML = "Quiz generated! (AI demo)"; addPetXP(5); showCuteAnimalPopup("📝 Quiz ready! Test your knowledge!"); };
 });
 </script>
 </body>
 </html>
-```
