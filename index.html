@@ -1,5 +1,4 @@
-This is a complete HTML document that adds a lofi music player, daily mode, a task manager with a timer and date, and cute emoji pop-ups to your existing study suite.
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +54,7 @@ This is a complete HTML document that adds a lofi music player, daily mode, a ta
         .note-item { background: var(--primary-light); margin: 8px 0; padding: 12px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
         @media (max-width: 700px) { .nav-links { gap: 0.5rem; } .nav-links button { padding: 0.3rem 0.7rem; font-size: 0.75rem; } }
         
-        /* NEW: Music Player Styles */
+        /* Music Player Styles */
         .music-player-bar {
             position: fixed;
             bottom: 20px;
@@ -92,7 +91,7 @@ This is a complete HTML document that adds a lofi music player, daily mode, a ta
             cursor: pointer;
         }
         
-        /* NEW: Cute Animal Popup Notification */
+        /* Cute Animal Popup Notification - Enhanced */
         .animal-popup {
             position: fixed;
             bottom: 180px;
@@ -108,7 +107,7 @@ This is a complete HTML document that adds a lofi music player, daily mode, a ta
             animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
             border-left: 6px solid var(--primary);
             backdrop-filter: blur(8px);
-            max-width: 260px;
+            max-width: 280px;
             pointer-events: auto;
             cursor: pointer;
         }
@@ -130,7 +129,7 @@ This is a complete HTML document that adds a lofi music player, daily mode, a ta
             to { opacity: 0; transform: translateX(30px); visibility: hidden; }
         }
         
-        /* NEW: Daily Mode + Task Manager Styles */
+        /* Daily Mode + Task Manager Styles */
         .daily-mode-card {
             background: var(--bg-card);
             border-radius: 28px;
@@ -186,14 +185,6 @@ This is a complete HTML document that adds a lofi music player, daily mode, a ta
         }
         .add-task-area input {
             flex: 2;
-        }
-        .completion-badge {
-            font-size: 0.75rem;
-            background: var(--primary);
-            color: white;
-            border-radius: 30px;
-            padding: 4px 8px;
-            margin-left: 8px;
         }
     </style>
 </head>
@@ -284,7 +275,7 @@ This is a complete HTML document that adds a lofi music player, daily mode, a ta
         </div>
     </div>
 
-    <!-- NEW: Daily Mode Page with Task Manager + Timer + Date -->
+    <!-- Daily Mode Page with Task Manager + Timer + Date -->
     <div id="daily-page" class="page">
         <div class="daily-mode-card">
             <div class="daily-date" id="currentDateDisplay"></div>
@@ -306,7 +297,7 @@ This is a complete HTML document that adds a lofi music player, daily mode, a ta
         <div class="animal-speech">Your AI buddy!</div>
     </div>
     
-    <!-- NEW: Music Player Widget (Lofi Focus) -->
+    <!-- Music Player Widget -->
     <div class="music-player-bar" id="musicPlayerBar">
         <i class="fas fa-music" id="musicIconBtn" style="cursor: pointer;"></i>
         <i class="fas fa-play-circle" id="playPauseMusicBtn"></i>
@@ -355,12 +346,15 @@ function navigateTo(pageId) {
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`.nav-btn[data-page="${pageId}"]`).classList.add('active');
     if (pageId === 'daily') refreshDailyUI();
+    // Emoji popup on navigation
+    showCuteAnimalPopup(`🌟 Exploring ${pageId} section! Keep learning! 📚`);
 }
 
 function setTheme(theme) {
     document.body.classList.remove('night-theme');
     if (theme === 'night') document.body.classList.add('night-theme');
     localStorage.setItem('focuswell_theme', theme);
+    showCuteAnimalPopup(theme === 'night' ? "🌙 Night mode activated! Easy on the eyes ✨" : "☀️ Day mode! Bright and focused!");
 }
 
 function speakText(text) {
@@ -382,8 +376,10 @@ function openPomodoro() {
         <button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button>
     </div>`;
     document.body.appendChild(modal);
+    showCuteAnimalPopup("🍅 Pomodoro timer ready! 25 minutes of deep focus ahead!");
     document.getElementById('startTimerBtn').onclick = function() {
         this.disabled = true;
+        showCuteAnimalPopup("⏰ Timer started! Stay focused and crush your goals!");
         const interval = setInterval(() => {
             if (seconds > 0) {
                 seconds--;
@@ -400,7 +396,7 @@ function openPomodoro() {
     };
 }
 
-// ======================= LOFI MUSIC PLAYER (Relaxing Focus Tracks) =======================
+// ======================= LOFI MUSIC PLAYER =======================
 const musicTracks = [
     { name: "🎧 Lofi Study Beats", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
     { name: "🌿 Calm Piano", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -425,37 +421,44 @@ function initMusicPlayer() {
             audioPlayer.pause();
             playPauseBtn.className = 'fas fa-play-circle';
             isMusicPlaying = false;
+            showCuteAnimalPopup("🎵 Music paused. Take a mindful moment! 🧘");
         } else {
             audioPlayer.play().catch(e => console.log("Auto-play blocked"));
             playPauseBtn.className = 'fas fa-pause-circle';
             isMusicPlaying = true;
+            showCuteAnimalPopup("🎶 Lofi beats playing! Let the focus flow ✨");
         }
     });
     prevBtn.addEventListener('click', () => {
         currentTrackIndex = (currentTrackIndex - 1 + musicTracks.length) % musicTracks.length;
         loadTrack(currentTrackIndex);
         if (isMusicPlaying) audioPlayer.play().catch(e => console.log);
+        showCuteAnimalPopup(`⏮️ Now playing: ${musicTracks[currentTrackIndex].name}`);
     });
     nextBtn.addEventListener('click', () => {
         currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
         loadTrack(currentTrackIndex);
         if (isMusicPlaying) audioPlayer.play().catch(e => console.log);
+        showCuteAnimalPopup(`⏭️ Now playing: ${musicTracks[currentTrackIndex].name}`);
     });
     volumeSlider.addEventListener('input', (e) => { audioPlayer.volume = e.target.value; });
     audioPlayer.addEventListener('ended', () => {
         currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
         loadTrack(currentTrackIndex);
         if (isMusicPlaying) audioPlayer.play();
+        showCuteAnimalPopup("🎵 Track finished! Next vibe coming up ~");
     });
     musicIcon.addEventListener('click', () => {
         if (audioPlayer.paused && !isMusicPlaying) {
             audioPlayer.play().catch(e => console.log);
             playPauseBtn.className = 'fas fa-pause-circle';
             isMusicPlaying = true;
+            showCuteAnimalPopup("🎶 Let the music guide your study flow!");
         } else if (!audioPlayer.paused && isMusicPlaying) {
             audioPlayer.pause();
             playPauseBtn.className = 'fas fa-play-circle';
             isMusicPlaying = false;
+            showCuteAnimalPopup("🎵 Music paused. Take a deep breath!");
         }
     });
 }
@@ -467,13 +470,15 @@ function loadTrack(index) {
     if (isMusicPlaying) audioPlayer.play().catch(e => console.log);
 }
 
-// ======================= CUTE ANIMAL POPUPS (random and event-based) =======================
+// ======================= ENHANCED EMOJI POPUPS (Everywhere!) =======================
 const cuteAnimals = [
     { emoji: "🐣", msg: "You're doing amazing! Keep shining ✨" }, { emoji: "🦊", msg: "Take a tiny break, you deserve it! 🍃" },
     { emoji: "🐱", msg: "Paws-itive vibes only! Meow~ 📚" }, { emoji: "🐶", msg: "Woof! You've got this, scholar! 🎓" },
     { emoji: "🐸", msg: "Hop to it! One step at a time 🌱" }, { emoji: "🐝", msg: "Bee-lieve in yourself! 🍯" },
     { emoji: "🐙", msg: "You're tentacle-fully focused! 🧠" }, { emoji: "🦄", msg: "Magical progress today! ✨" },
-    { emoji: "🐼", msg: "Stay chill and study well 🎋" }, { emoji: "🐥", msg: "Cheep cheep! Great effort! 🐤" }
+    { emoji: "🐼", msg: "Stay chill and study well 🎋" }, { emoji: "🐥", msg: "Cheep cheep! Great effort! 🐤" },
+    { emoji: "🦋", msg: "Small steps, big transformations! 🌸" }, { emoji: "🐢", msg: "Slow and steady wins the race! 📖" },
+    { emoji: "🦉", msg: "Wise choice to study today! 📚" }, { emoji: "🐬", msg: "Dive deep into knowledge! 🌊" }
 ];
 
 let popupTimeout = null;
@@ -503,11 +508,13 @@ let animalInterval;
 function startRandomAnimalPopups() {
     if (animalInterval) clearInterval(animalInterval);
     animalInterval = setInterval(() => {
-        if (document.getElementById('mainApp').style.display === 'block') showCuteAnimalPopup();
-    }, Math.random() * 45000 + 60000);
+        if (document.getElementById('mainApp').style.display === 'block') {
+            showCuteAnimalPopup();
+        }
+    }, Math.random() * 40000 + 50000); // between 50-90 seconds
 }
 
-// ======================= DAILY MODE + TASK MANAGER with TIMER =======================
+// ======================= DAILY MODE + TASK MANAGER =======================
 let tasks = JSON.parse(localStorage.getItem('focuswell_tasks') || '[]');
 let taskTimers = {};
 
@@ -527,7 +534,7 @@ function startTaskTimer(taskId, durationSeconds) {
             clearInterval(interval);
             taskElement.innerText = "Time's up! ✅";
             speakText(`Task ${tasks.find(t=>t.id==taskId)?.name} completed! Great job!`);
-            showCuteAnimalPopup("🎉 Task finished! You're crushing it!");
+            showCuteAnimalPopup("🎉 Task finished! You're crushing it! 🌟");
             delete taskTimers[taskId];
         } else {
             remaining--;
@@ -561,7 +568,7 @@ window.startTaskById = (id, durationSec) => {
     localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
     startTaskTimer(id, durationSec);
     speakText(`Starting timer for ${task.name}`);
-    showCuteAnimalPopup(`⏰ Timer started for "${task.name}"! Stay focused!`);
+    showCuteAnimalPopup(`⏰ Timer started for "${task.name}"! Stay focused! 💪`);
     renderTasks();
 };
 
@@ -570,7 +577,7 @@ window.completeTask = (id) => {
     tasks = tasks.filter(t => t.id !== id);
     localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
     renderTasks();
-    showCuteAnimalPopup("✅ Task completed! You're awesome!");
+    showCuteAnimalPopup("✅ Task completed! You're awesome! 🎯");
     speakText("Task completed! Keep going!");
 };
 
@@ -579,7 +586,7 @@ window.deleteTask = (id) => {
     tasks = tasks.filter(t => t.id !== id);
     localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
     renderTasks();
-    showCuteAnimalPopup("🗑️ Task removed. Stay productive!");
+    showCuteAnimalPopup("🗑️ Task removed. Stay productive! 📋");
 };
 
 function addNewTask() {
@@ -592,7 +599,7 @@ function addNewTask() {
     localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
     renderTasks();
     document.getElementById('newTaskName').value = '';
-    showCuteAnimalPopup(`➕ Added "${name}"! Let's focus!`);
+    showCuteAnimalPopup(`➕ Added "${name}"! Let's focus! 🎯`);
     speakText(`New task added: ${name}`);
 }
 
@@ -609,7 +616,7 @@ function refreshDailyUI() {
     renderTasks();
 }
 
-// Enhance event listeners with popups
+// Main initialization
 document.addEventListener('DOMContentLoaded', () => {
     const loginOverlay = document.getElementById('loginOverlay');
     const mainApp = document.getElementById('mainApp');
@@ -628,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
     document.querySelectorAll('.nav-btn').forEach(btn => { btn.onclick = () => navigateTo(btn.dataset.page); });
     
-    // Chatbot handlers (preserved)
+    // Chatbot handlers with emoji popups
     const chatDiv = document.getElementById('chatMessages');
     const sendBtn = document.getElementById('sendChatBtn');
     const chatInput = document.getElementById('chatInput');
@@ -637,25 +644,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!msg) return;
         chatDiv.innerHTML += `<div class="chat-message user-msg">${msg}</div>`;
         chatInput.value = '';
+        showCuteAnimalPopup("💭 Asking AI... smart move!");
         const reply = await callSecureAI(msg, 'chat');
         chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`;
         chatDiv.scrollTop = chatDiv.scrollHeight;
         speakText(reply.substring(0, 200));
-        if(Math.random() < 0.3) showCuteAnimalPopup("💬 Great conversation! Keep exploring!");
+        showCuteAnimalPopup("🤖 AI says: " + reply.substring(0, 60) + "...");
     }
     sendBtn.onclick = sendMessage;
     chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
     document.getElementById('voiceChatBtn').onclick = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognition) { const rec = new SpeechRecognition(); rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); }; rec.start(); }
-        else alert("Voice input not supported");
+        if (SpeechRecognition) { 
+            showCuteAnimalPopup("🎤 Listening... speak clearly!");
+            const rec = new SpeechRecognition(); 
+            rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); }; 
+            rec.start(); 
+        } else alert("Voice input not supported");
     };
-    // Quiz & others (original logic)
+    
+    // Quiz generator with popups
     document.getElementById('generateQuizBtn').onclick = async () => {
         const topic = document.getElementById('quizTopicInput').value.trim();
-        if (!topic) { alert("Please enter a topic"); return; }
+        if (!topic) { showCuteAnimalPopup("📝 Please enter a topic first!"); return; }
         const area = document.getElementById('quizDisplayArea');
         area.innerHTML = "Generating quiz... 🤖";
+        showCuteAnimalPopup(`✨ Generating quiz on ${topic}... Get ready!`);
         const quizData = await callSecureAI(topic, 'quiz');
         try {
             const quiz = JSON.parse(quizData);
@@ -672,43 +686,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 let score = answers.filter((a, i) => a === quiz[i].correct).length;
                 document.getElementById('quizScore').innerHTML = `<strong>Score: ${score}/${quiz.length} 🎯</strong>`;
                 speakText(`You scored ${score} out of ${quiz.length}`);
-                if(score === quiz.length) showCuteAnimalPopup("🏆 Perfect score! Genius mode!");
-                else showCuteAnimalPopup("📖 Keep practicing! You're improving!");
+                if(score === quiz.length) showCuteAnimalPopup("🏆 Perfect score! Genius mode activated! 🧠");
+                else showCuteAnimalPopup(`📖 Score: ${score}/${quiz.length}. Keep practicing! You're improving!`);
             };
         } catch(e) { area.innerHTML = "✨ Quiz ready! Try a different topic!"; }
     };
+    
+    // Sentiment analysis with popups
     document.getElementById('analyzeSentimentBtn').onclick = async () => {
         const text = document.getElementById('sentimentText').value;
-        if (!text) { alert("Please share how you're feeling"); return; }
+        if (!text) { showCuteAnimalPopup("💚 Share how you're feeling first!"); return; }
         const workload = document.getElementById('workloadSelect').value;
         const resultDiv = document.getElementById('sentimentResult');
         const fillBar = document.getElementById('stressFillBar');
         resultDiv.innerHTML = "Analyzing your sentiment... 🧠";
+        showCuteAnimalPopup("🔍 Analyzing your vibes... almost there!");
         const analysis = await callSecureAI(JSON.stringify({ text, workload }), 'sentiment');
         try {
             const data = JSON.parse(analysis);
             fillBar.style.width = `${data.stressLevel * 10}%`;
             resultDiv.innerHTML = `<div><p><strong>😔 Sentiment:</strong> ${data.sentiment}</p><p><strong>🧘 Advice:</strong> ${data.advice}</p><p><strong>✨ Encouragement:</strong> ${data.encouragement}</p><button class="btn-primary" onclick="speakText('${data.advice}')">🔊 Listen</button></div>`;
             speakText(data.advice);
-            if(data.sentiment.includes('stressed') || data.stressLevel > 6) showCuteAnimalPopup("🐢 Breathe deeply. You're stronger than stress!");
-            else showCuteAnimalPopup("🧘 Amazing self-awareness! Keep balance.");
+            if(data.sentiment.includes('stressed') || data.stressLevel > 6) showCuteAnimalPopup("🐢 Breathe deeply. You're stronger than stress! 💪");
+            else showCuteAnimalPopup("🧘 Amazing self-awareness! Keep that balance. 🌈");
         } catch(e) { resultDiv.innerHTML = "💚 Take a deep breath. You're doing great!"; }
     };
-    // Notes logic (preserved)
+    
+    // Notes logic with popups
     let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
     function renderNotes() {
         const container = document.getElementById('notesListPanel');
         if (!container) return;
-        if (savedNotes.length === 0) { container.innerHTML = "<p>✨ No notes yet.</p>"; return; }
+        if (savedNotes.length === 0) { container.innerHTML = "<p>✨ No notes yet. Create your first study note!</p>"; return; }
         container.innerHTML = savedNotes.map(n => `<div class="note-item"><div><strong>${escapeHtml(n.title)}</strong><br>${escapeHtml(n.content.substring(0, 80))}</div><div><button onclick="readNote(${n.id})">🔊 Read</button><button onclick="deleteNote(${n.id})">❌</button></div></div>`).join('');
     }
-    window.readNote = (id) => { const note = savedNotes.find(n => n.id === id); if (note) speakText(`Title: ${note.title}. Content: ${note.content}`); };
-    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
+    window.readNote = (id) => { const note = savedNotes.find(n => n.id === id); if (note) { speakText(`Title: ${note.title}. Content: ${note.content}`); showCuteAnimalPopup(`📖 Reading note: ${note.title}`); } };
+    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); showCuteAnimalPopup("🗑️ Note deleted! Keep organizing!"); };
     function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
     document.getElementById('saveNoteBtn').onclick = () => {
         const title = document.getElementById('noteTitleInput').value.trim() || "Untitled";
         const content = document.getElementById('noteContentInput').value.trim();
-        if (!content) return;
+        if (!content) { showCuteAnimalPopup("📝 Write something in your note first!"); return; }
         savedNotes.push({ id: Date.now(), title, content });
         localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes));
         renderNotes();
@@ -717,10 +735,17 @@ document.addEventListener('DOMContentLoaded', () => {
         showCuteAnimalPopup("📓 Note saved! Smart cookie 🍪");
     };
     renderNotes();
-    document.getElementById('animalCompanion').onclick = () => { const messages = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈"]; const msg = messages[Math.floor(Math.random() * messages.length)]; document.querySelector('.animal-speech').innerText = msg; speakText(msg); showCuteAnimalPopup(msg); };
+    
+    // Animal companion click
+    document.getElementById('animalCompanion').onclick = () => { 
+        const messages = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈", "Try a quick quiz! 📝", "You've got this! 💪"]; 
+        const msg = messages[Math.floor(Math.random() * messages.length)]; 
+        document.querySelector('.animal-speech').innerText = msg; 
+        speakText(msg); 
+        showCuteAnimalPopup(msg); 
+    };
     document.getElementById('addTaskBtn')?.addEventListener('click', addNewTask);
 });
 </script>
 </body>
 </html>
-```
