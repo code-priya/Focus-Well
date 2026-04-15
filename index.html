@@ -1,3 +1,5 @@
+This is a complete HTML document that adds a lofi music player, daily mode, a task manager with a timer and date, and cute emoji pop-ups to your existing study suite.
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,6 +129,72 @@
         @keyframes fadeOut {
             to { opacity: 0; transform: translateX(30px); visibility: hidden; }
         }
+        
+        /* NEW: Daily Mode + Task Manager Styles */
+        .daily-mode-card {
+            background: var(--bg-card);
+            border-radius: 28px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+        }
+        .daily-date {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .daily-greeting {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        .task-item {
+            background: var(--primary-light);
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .task-text {
+            flex: 2;
+            font-weight: 500;
+        }
+        .task-timer {
+            font-family: monospace;
+            font-size: 1rem;
+            background: var(--bg-card);
+            padding: 4px 10px;
+            border-radius: 40px;
+        }
+        .task-actions button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 0 4px;
+            color: var(--primary);
+        }
+        .add-task-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .add-task-area input {
+            flex: 2;
+        }
+        .completion-badge {
+            font-size: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 30px;
+            padding: 4px 8px;
+            margin-left: 8px;
+        }
     </style>
 </head>
 <body>
@@ -150,6 +218,7 @@
             <button class="nav-btn" data-page="quiz">📝 Quiz</button>
             <button class="nav-btn" data-page="stress">💚 Stress</button>
             <button class="nav-btn" data-page="notes">📓 Notes</button>
+            <button class="nav-btn" data-page="daily">☀️ Daily Mode</button>
         </div>
         <div class="theme-selector">
             <button class="theme-btn" style="background:#2b7a4b;" onclick="setTheme('day')"></button>
@@ -167,6 +236,7 @@
             <div class="tool-card" onclick="navigateTo('quiz')"><i class="fas fa-question-circle"></i><h3>Quiz Generator</h3></div>
             <div class="tool-card" onclick="navigateTo('stress')"><i class="fas fa-brain"></i><h3>Stress Analysis</h3></div>
             <div class="tool-card" onclick="openPomodoro()"><i class="fas fa-hourglass-half"></i><h3>Pomodoro</h3></div>
+            <div class="tool-card" onclick="navigateTo('daily')"><i class="fas fa-calendar-day"></i><h3>Daily Tasks</h3></div>
         </div>
     </div>
 
@@ -214,19 +284,36 @@
         </div>
     </div>
 
+    <!-- NEW: Daily Mode Page with Task Manager + Timer + Date -->
+    <div id="daily-page" class="page">
+        <div class="daily-mode-card">
+            <div class="daily-date" id="currentDateDisplay"></div>
+            <div class="daily-greeting" id="dailyGreetingText"></div>
+            <div style="margin: 20px 0;">
+                <h3><i class="fas fa-tasks"></i> Today's Focus Tasks</h3>
+                <div id="taskListContainer"></div>
+                <div class="add-task-area">
+                    <input type="text" id="newTaskName" placeholder="e.g., Read chapter 3, Solve math problems...">
+                    <input type="number" id="taskMinutes" placeholder="Minutes" style="width: 100px;" value="25">
+                    <button class="btn-primary" id="addTaskBtn">+ Add Task with Timer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="animal-companion" id="animalCompanion">
         <div class="animal-avatar">🐼</div>
         <div class="animal-speech">Your AI buddy!</div>
     </div>
     
-    <!-- NEW: Music Player Widget (added without touching previous code) -->
+    <!-- NEW: Music Player Widget (Lofi Focus) -->
     <div class="music-player-bar" id="musicPlayerBar">
         <i class="fas fa-music" id="musicIconBtn" style="cursor: pointer;"></i>
         <i class="fas fa-play-circle" id="playPauseMusicBtn"></i>
-        <span class="music-title" id="musicTrackTitle">Focus Lofi</span>
+        <span class="music-title" id="musicTrackTitle">Lofi Focus Beats</span>
         <i class="fas fa-step-backward" id="prevTrackBtn"></i>
         <i class="fas fa-step-forward" id="nextTrackBtn"></i>
-        <input type="range" min="0" max="1" step="0.01" value="0.4" class="volume-slider" id="musicVolumeSlider">
+        <input type="range" min="0" max="1" step="0.01" value="0.3" class="volume-slider" id="musicVolumeSlider">
         <i class="fas fa-volume-up"></i>
     </div>
 </div>
@@ -243,7 +330,6 @@ async function callSecureAI(prompt, type = 'chat') {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt, type })
         });
-        
         if (!response.ok) throw new Error('API request failed');
         const data = await response.json();
         return data.result;
@@ -253,7 +339,6 @@ async function callSecureAI(prompt, type = 'chat') {
     }
 }
 
-// Local fallback (works offline too)
 function getLocalFallback(prompt, type) {
     if (type === 'quiz') return JSON.stringify([
         { question: "What is the main concept?", options: ["Option A", "Option B", "Option C", "Option D"], correct: 0 },
@@ -264,22 +349,20 @@ function getLocalFallback(prompt, type) {
     return "I'm your AI study assistant! Ask me about any topic, or try generating a quiz! 📚";
 }
 
-// Navigation
 function navigateTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
     document.getElementById(`${pageId}-page`).classList.add('active-page');
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`.nav-btn[data-page="${pageId}"]`).classList.add('active');
+    if (pageId === 'daily') refreshDailyUI();
 }
 
-// Theme
 function setTheme(theme) {
     document.body.classList.remove('night-theme');
     if (theme === 'night') document.body.classList.add('night-theme');
     localStorage.setItem('focuswell_theme', theme);
 }
 
-// Text to Speech
 function speakText(text) {
     if (!text) return;
     window.speechSynthesis.cancel();
@@ -288,7 +371,6 @@ function speakText(text) {
     window.speechSynthesis.speak(utterance);
 }
 
-// Pomodoro Timer
 function openPomodoro() {
     let seconds = 1500;
     const modal = document.createElement('div');
@@ -300,7 +382,6 @@ function openPomodoro() {
         <button class="btn-primary" onclick="this.closest('.modal').remove()">Close</button>
     </div>`;
     document.body.appendChild(modal);
-    
     document.getElementById('startTimerBtn').onclick = function() {
         this.disabled = true;
         const interval = setInterval(() => {
@@ -313,12 +394,13 @@ function openPomodoro() {
                 clearInterval(interval);
                 speakText("Time's up! Great focus session!");
                 modal.remove();
+                showCuteAnimalPopup("🍅 Pomodoro complete! Time for a mini break! 🧘");
             }
         }, 1000);
     };
 }
 
-// ======================= NEW MUSIC PLAYER FEATURE (no existing code altered) =======================
+// ======================= LOFI MUSIC PLAYER (Relaxing Focus Tracks) =======================
 const musicTracks = [
     { name: "🎧 Lofi Study Beats", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
     { name: "🌿 Calm Piano", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -331,53 +413,40 @@ let isMusicPlaying = false;
 
 function initMusicPlayer() {
     audioPlayer = new Audio();
-    audioPlayer.volume = 0.4;
+    audioPlayer.volume = 0.3;
     loadTrack(currentTrackIndex);
-    
     const playPauseBtn = document.getElementById('playPauseMusicBtn');
     const prevBtn = document.getElementById('prevTrackBtn');
     const nextBtn = document.getElementById('nextTrackBtn');
     const volumeSlider = document.getElementById('musicVolumeSlider');
     const musicIcon = document.getElementById('musicIconBtn');
-    
     playPauseBtn.addEventListener('click', () => {
         if (isMusicPlaying) {
             audioPlayer.pause();
             playPauseBtn.className = 'fas fa-play-circle';
             isMusicPlaying = false;
         } else {
-            audioPlayer.play().catch(e => console.log("Auto-play blocked, click play manually"));
+            audioPlayer.play().catch(e => console.log("Auto-play blocked"));
             playPauseBtn.className = 'fas fa-pause-circle';
             isMusicPlaying = true;
         }
     });
-    
     prevBtn.addEventListener('click', () => {
         currentTrackIndex = (currentTrackIndex - 1 + musicTracks.length) % musicTracks.length;
         loadTrack(currentTrackIndex);
-        if (isMusicPlaying) {
-            audioPlayer.play().catch(e => console.log);
-        }
+        if (isMusicPlaying) audioPlayer.play().catch(e => console.log);
     });
-    
     nextBtn.addEventListener('click', () => {
         currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
         loadTrack(currentTrackIndex);
-        if (isMusicPlaying) {
-            audioPlayer.play().catch(e => console.log);
-        }
+        if (isMusicPlaying) audioPlayer.play().catch(e => console.log);
     });
-    
-    volumeSlider.addEventListener('input', (e) => {
-        audioPlayer.volume = e.target.value;
-    });
-    
+    volumeSlider.addEventListener('input', (e) => { audioPlayer.volume = e.target.value; });
     audioPlayer.addEventListener('ended', () => {
         currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
         loadTrack(currentTrackIndex);
         if (isMusicPlaying) audioPlayer.play();
     });
-    
     musicIcon.addEventListener('click', () => {
         if (audioPlayer.paused && !isMusicPlaying) {
             audioPlayer.play().catch(e => console.log);
@@ -395,49 +464,34 @@ function loadTrack(index) {
     const track = musicTracks[index];
     audioPlayer.src = track.url;
     document.getElementById('musicTrackTitle').innerText = track.name;
-    if (isMusicPlaying) {
-        audioPlayer.play().catch(e => console.log);
-    }
+    if (isMusicPlaying) audioPlayer.play().catch(e => console.log);
 }
 
-// ======================= NEW CUTE ANIMAL POPUPS (random encouragement, no original code changed) =======================
+// ======================= CUTE ANIMAL POPUPS (random and event-based) =======================
 const cuteAnimals = [
-    { emoji: "🐣", msg: "You're doing amazing! Keep shining ✨" },
-    { emoji: "🦊", msg: "Take a tiny break, you deserve it! 🍃" },
-    { emoji: "🐱", msg: "Paws-itive vibes only! Meow~ 📚" },
-    { emoji: "🐶", msg: "Woof! You've got this, scholar! 🎓" },
-    { emoji: "🐸", msg: "Hop to it! One step at a time 🌱" },
-    { emoji: "🐝", msg: "Bee-lieve in yourself! 🍯" },
-    { emoji: "🐙", msg: "You're tentacle-fully focused! 🧠" },
-    { emoji: "🦄", msg: "Magical progress today! ✨" },
-    { emoji: "🐼", msg: "Stay chill and study well 🎋" },
-    { emoji: "🐥", msg: "Cheep cheep! Great effort! 🐤" }
+    { emoji: "🐣", msg: "You're doing amazing! Keep shining ✨" }, { emoji: "🦊", msg: "Take a tiny break, you deserve it! 🍃" },
+    { emoji: "🐱", msg: "Paws-itive vibes only! Meow~ 📚" }, { emoji: "🐶", msg: "Woof! You've got this, scholar! 🎓" },
+    { emoji: "🐸", msg: "Hop to it! One step at a time 🌱" }, { emoji: "🐝", msg: "Bee-lieve in yourself! 🍯" },
+    { emoji: "🐙", msg: "You're tentacle-fully focused! 🧠" }, { emoji: "🦄", msg: "Magical progress today! ✨" },
+    { emoji: "🐼", msg: "Stay chill and study well 🎋" }, { emoji: "🐥", msg: "Cheep cheep! Great effort! 🐤" }
 ];
 
 let popupTimeout = null;
-
 function showCuteAnimalPopup(customMessage = null) {
     const randomAnimal = cuteAnimals[Math.floor(Math.random() * cuteAnimals.length)];
     const message = customMessage || randomAnimal.msg;
-    const emojiToShow = customMessage ? (randomAnimal.emoji) : randomAnimal.emoji;
-    
+    const emojiToShow = randomAnimal.emoji;
     const existingPopup = document.querySelector('.animal-popup');
     if (existingPopup) existingPopup.remove();
-    
     const popupDiv = document.createElement('div');
     popupDiv.className = 'animal-popup';
-    popupDiv.innerHTML = `
-        <div class="animal-popup-avatar">${emojiToShow}</div>
-        <div class="animal-popup-text">${message}</div>
-    `;
+    popupDiv.innerHTML = `<div class="animal-popup-avatar">${emojiToShow}</div><div class="animal-popup-text">${message}</div>`;
     document.body.appendChild(popupDiv);
-    
     popupDiv.addEventListener('click', () => {
         speakText(message.replace(/[^a-zA-Z0-9 .,!?]/g, ''));
         popupDiv.remove();
         if (popupTimeout) clearTimeout(popupTimeout);
     });
-    
     if (popupTimeout) clearTimeout(popupTimeout);
     popupTimeout = setTimeout(() => {
         if (popupDiv && popupDiv.remove) popupDiv.classList.add('fade-out-popup');
@@ -445,80 +499,120 @@ function showCuteAnimalPopup(customMessage = null) {
     }, 5500);
 }
 
-// Random popup interval (every 75-120 seconds) but also triggered by positive events
 let animalInterval;
 function startRandomAnimalPopups() {
     if (animalInterval) clearInterval(animalInterval);
     animalInterval = setInterval(() => {
-        if (document.getElementById('mainApp').style.display === 'block') {
-            showCuteAnimalPopup();
-        }
-    }, Math.random() * 45000 + 60000); // between 60s - 105s
+        if (document.getElementById('mainApp').style.display === 'block') showCuteAnimalPopup();
+    }, Math.random() * 45000 + 60000);
 }
 
-// Trigger popups on specific study actions without touching previous logic
-function enhanceWithAnimalPopups() {
-    // Listen to quiz generation completion (by overriding button or intercepting)
-    const originalGenQuiz = document.getElementById('generateQuizBtn').onclick;
-    if (originalGenQuiz) {
-        const newGenHandler = async (e) => {
-            await originalGenQuiz(e);
-            showCuteAnimalPopup("🐣 Quiz incoming! You're on fire! 📝");
-        };
-        document.getElementById('generateQuizBtn').onclick = newGenHandler;
-    }
-    
-    // Listen to sentiment analysis for stress relief popup
-    const originalStressBtn = document.getElementById('analyzeSentimentBtn').onclick;
-    if (originalStressBtn) {
-        const newStressHandler = async (e) => {
-            await originalStressBtn(e);
-            setTimeout(() => {
-                showCuteAnimalPopup("💚 Self-care superstar! Keep breathing 🌸");
-            }, 800);
-        };
-        document.getElementById('analyzeSentimentBtn').onclick = newStressHandler;
-    }
-    
-    // Save note celebration popup
-    const originalSaveNote = document.getElementById('saveNoteBtn').onclick;
-    if (originalSaveNote) {
-        const newSaveHandler = () => {
-            originalSaveNote();
-            showCuteAnimalPopup("📓 Note saved! Smart cookie 🍪");
-        };
-        document.getElementById('saveNoteBtn').onclick = newSaveHandler;
-    }
-    
-    // Chat send success - occasional popup (not intrusive)
-    const originalSendChat = document.getElementById('sendChatBtn').onclick;
-    if (originalSendChat) {
-        const newChatHandler = async () => {
-            await originalSendChat();
-            if (Math.random() < 0.3) {
-                showCuteAnimalPopup("🤗 Keep asking, you're learning loads!");
-            }
-        };
-        document.getElementById('sendChatBtn').onclick = newChatHandler;
-        const chatInputField = document.getElementById('chatInput');
-        if(chatInputField) {
-            chatInputField.addEventListener('keypress', (e) => {
-                if(e.key === 'Enter') {
-                    setTimeout(() => {
-                        if(Math.random() < 0.3) showCuteAnimalPopup("💬 Great question! Keep exploring.");
-                    }, 500);
-                }
-            });
-        }
-    }
+// ======================= DAILY MODE + TASK MANAGER with TIMER =======================
+let tasks = JSON.parse(localStorage.getItem('focuswell_tasks') || '[]');
+let taskTimers = {};
+
+function formatTime(seconds) {
+    let mins = Math.floor(seconds / 60);
+    let secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
-// Initialize app
+function startTaskTimer(taskId, durationSeconds) {
+    if (taskTimers[taskId]) clearInterval(taskTimers[taskId]);
+    let remaining = durationSeconds;
+    const taskElement = document.getElementById(`task-timer-${taskId}`);
+    if (!taskElement) return;
+    const interval = setInterval(() => {
+        if (remaining <= 0) {
+            clearInterval(interval);
+            taskElement.innerText = "Time's up! ✅";
+            speakText(`Task ${tasks.find(t=>t.id==taskId)?.name} completed! Great job!`);
+            showCuteAnimalPopup("🎉 Task finished! You're crushing it!");
+            delete taskTimers[taskId];
+        } else {
+            remaining--;
+            taskElement.innerText = formatTime(remaining);
+        }
+    }, 1000);
+    taskTimers[taskId] = interval;
+}
+
+function renderTasks() {
+    const container = document.getElementById('taskListContainer');
+    if (!container) return;
+    if (tasks.length === 0) { container.innerHTML = "<p>✨ No tasks yet. Add a focus task for today!</p>"; return; }
+    container.innerHTML = tasks.map(task => `
+        <div class="task-item" data-task-id="${task.id}">
+            <div class="task-text">📌 ${escapeHtml(task.name)}</div>
+            <div class="task-timer" id="task-timer-${task.id}">⏱️ ${task.remaining > 0 ? formatTime(task.remaining) : "Ready"}</div>
+            <div class="task-actions">
+                <button onclick="startTaskById(${task.id}, ${task.duration})"><i class="fas fa-play"></i> Start</button>
+                <button onclick="completeTask(${task.id})"><i class="fas fa-check-circle"></i> Done</button>
+                <button onclick="deleteTask(${task.id})"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    `).join('');
+}
+
+window.startTaskById = (id, durationSec) => {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+    task.remaining = durationSec;
+    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+    startTaskTimer(id, durationSec);
+    speakText(`Starting timer for ${task.name}`);
+    showCuteAnimalPopup(`⏰ Timer started for "${task.name}"! Stay focused!`);
+    renderTasks();
+};
+
+window.completeTask = (id) => {
+    if (taskTimers[id]) clearInterval(taskTimers[id]);
+    tasks = tasks.filter(t => t.id !== id);
+    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+    renderTasks();
+    showCuteAnimalPopup("✅ Task completed! You're awesome!");
+    speakText("Task completed! Keep going!");
+};
+
+window.deleteTask = (id) => {
+    if (taskTimers[id]) clearInterval(taskTimers[id]);
+    tasks = tasks.filter(t => t.id !== id);
+    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+    renderTasks();
+    showCuteAnimalPopup("🗑️ Task removed. Stay productive!");
+};
+
+function addNewTask() {
+    const name = document.getElementById('newTaskName')?.value.trim();
+    const minutes = parseInt(document.getElementById('taskMinutes')?.value || "25");
+    if (!name) { showCuteAnimalPopup("Please enter a task name 🐣"); return; }
+    const durationSec = minutes * 60;
+    const newTask = { id: Date.now(), name: name, duration: durationSec, remaining: durationSec };
+    tasks.push(newTask);
+    localStorage.setItem('focuswell_tasks', JSON.stringify(tasks));
+    renderTasks();
+    document.getElementById('newTaskName').value = '';
+    showCuteAnimalPopup(`➕ Added "${name}"! Let's focus!`);
+    speakText(`New task added: ${name}`);
+}
+
+function refreshDailyUI() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('currentDateDisplay').innerHTML = `📅 ${dateStr}`;
+    const hour = now.getHours();
+    let greeting = "🌞 Good morning! Ready to learn?";
+    if (hour >= 12 && hour < 18) greeting = "☀️ Good afternoon! Stay productive!";
+    else if (hour >= 18) greeting = "🌙 Good evening! Wind down with focus.";
+    const userName = localStorage.getItem('focuswell_user') || "Scholar";
+    document.getElementById('dailyGreetingText').innerHTML = `${greeting}, ${userName}! ✨`;
+    renderTasks();
+}
+
+// Enhance event listeners with popups
 document.addEventListener('DOMContentLoaded', () => {
-    // Login
     const loginOverlay = document.getElementById('loginOverlay');
     const mainApp = document.getElementById('mainApp');
-    
     document.getElementById('loginBtn').onclick = () => {
         let name = document.getElementById('loginUsername').value.trim() || "Scholar";
         localStorage.setItem('focuswell_user', name);
@@ -526,27 +620,18 @@ document.addEventListener('DOMContentLoaded', () => {
         loginOverlay.style.display = 'none';
         mainApp.style.display = 'block';
         speakText(`Welcome ${name}! Let's study with focus.`);
-        
-        // Music initializer (after login)
         initMusicPlayer();
         startRandomAnimalPopups();
-        enhanceWithAnimalPopups();
-        // First welcome popup after login
-        setTimeout(() => {
-            showCuteAnimalPopup(`🎉 Welcome ${name}! Let's make today productive 🌟`);
-        }, 1200);
+        refreshDailyUI();
+        setTimeout(() => showCuteAnimalPopup(`🎉 Welcome ${name}! Let's make today productive 🌟`), 1200);
     };
-    
     if (localStorage.getItem('focuswell_theme')) setTheme(localStorage.getItem('focuswell_theme'));
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.onclick = () => navigateTo(btn.dataset.page);
-    });
+    document.querySelectorAll('.nav-btn').forEach(btn => { btn.onclick = () => navigateTo(btn.dataset.page); });
     
-    // Chatbot
+    // Chatbot handlers (preserved)
     const chatDiv = document.getElementById('chatMessages');
     const sendBtn = document.getElementById('sendChatBtn');
     const chatInput = document.getElementById('chatInput');
-    
     async function sendMessage() {
         const msg = chatInput.value.trim();
         if (!msg) return;
@@ -556,159 +641,86 @@ document.addEventListener('DOMContentLoaded', () => {
         chatDiv.innerHTML += `<div class="chat-message bot-msg">${reply}</div>`;
         chatDiv.scrollTop = chatDiv.scrollHeight;
         speakText(reply.substring(0, 200));
+        if(Math.random() < 0.3) showCuteAnimalPopup("💬 Great conversation! Keep exploring!");
     }
-    
     sendBtn.onclick = sendMessage;
     chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-    
     document.getElementById('voiceChatBtn').onclick = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognition) {
-            const rec = new SpeechRecognition();
-            rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); };
-            rec.start();
-        } else alert("Voice input not supported");
+        if (SpeechRecognition) { const rec = new SpeechRecognition(); rec.onresult = (e) => { chatInput.value = e.results[0][0].transcript; sendMessage(); }; rec.start(); }
+        else alert("Voice input not supported");
     };
-    
-    // Quiz Generator (preserve original functionality)
+    // Quiz & others (original logic)
     document.getElementById('generateQuizBtn').onclick = async () => {
         const topic = document.getElementById('quizTopicInput').value.trim();
         if (!topic) { alert("Please enter a topic"); return; }
-        
         const area = document.getElementById('quizDisplayArea');
         area.innerHTML = "Generating quiz... 🤖";
-        
         const quizData = await callSecureAI(topic, 'quiz');
         try {
             const quiz = JSON.parse(quizData);
             let html = `<div id="quizQuestions"></div><button class="btn-primary" id="submitQuizAnswers">Submit</button><div id="quizScore"></div>`;
             area.innerHTML = html;
-            
             const answers = new Array(quiz.length).fill(-1);
             quiz.forEach((q, idx) => {
-                const qDiv = document.createElement('div');
-                qDiv.style.margin = "15px 0";
+                const qDiv = document.createElement('div'); qDiv.style.margin = "15px 0";
                 qDiv.innerHTML = `<strong>${idx+1}. ${q.question}</strong>`;
-                q.options.forEach((opt, optIdx) => {
-                    const label = document.createElement('label');
-                    label.style.display = "block";
-                    label.innerHTML = `<input type="radio" name="q${idx}" value="${optIdx}"> ${opt}`;
-                    label.onclick = () => answers[idx] = optIdx;
-                    qDiv.appendChild(label);
-                });
+                q.options.forEach((opt, optIdx) => { const label = document.createElement('label'); label.style.display = "block"; label.innerHTML = `<input type="radio" name="q${idx}" value="${optIdx}"> ${opt}`; label.onclick = () => answers[idx] = optIdx; qDiv.appendChild(label); });
                 document.getElementById('quizQuestions').appendChild(qDiv);
             });
-            
             document.getElementById('submitQuizAnswers').onclick = () => {
                 let score = answers.filter((a, i) => a === quiz[i].correct).length;
                 document.getElementById('quizScore').innerHTML = `<strong>Score: ${score}/${quiz.length} 🎯</strong>`;
                 speakText(`You scored ${score} out of ${quiz.length}`);
-                if(score === quiz.length) showCuteAnimalPopup("🏆 Perfect score! Genius mode activated!");
-                else showCuteAnimalPopup("📖 You're getting better! Keep practicing!");
+                if(score === quiz.length) showCuteAnimalPopup("🏆 Perfect score! Genius mode!");
+                else showCuteAnimalPopup("📖 Keep practicing! You're improving!");
             };
-        } catch(e) {
-            area.innerHTML = "✨ Quiz ready! Try a different topic or use the chatbot for explanations!";
-        }
+        } catch(e) { area.innerHTML = "✨ Quiz ready! Try a different topic!"; }
     };
-    
-    // Sentiment Analysis
     document.getElementById('analyzeSentimentBtn').onclick = async () => {
         const text = document.getElementById('sentimentText').value;
         if (!text) { alert("Please share how you're feeling"); return; }
-        
         const workload = document.getElementById('workloadSelect').value;
         const resultDiv = document.getElementById('sentimentResult');
         const fillBar = document.getElementById('stressFillBar');
-        
         resultDiv.innerHTML = "Analyzing your sentiment... 🧠";
-        
         const analysis = await callSecureAI(JSON.stringify({ text, workload }), 'sentiment');
         try {
             const data = JSON.parse(analysis);
             fillBar.style.width = `${data.stressLevel * 10}%`;
-            resultDiv.innerHTML = `
-                <div style="padding: 10px;">
-                    <p><strong>😔 Sentiment:</strong> ${data.sentiment}</p>
-                    <p><strong>🧘 Advice:</strong> ${data.advice}</p>
-                    <p><strong>✨ Encouragement:</strong> ${data.encouragement}</p>
-                    <button class="btn-primary" onclick="speakText('${data.advice}')">🔊 Listen to Advice</button>
-                </div>
-            `;
+            resultDiv.innerHTML = `<div><p><strong>😔 Sentiment:</strong> ${data.sentiment}</p><p><strong>🧘 Advice:</strong> ${data.advice}</p><p><strong>✨ Encouragement:</strong> ${data.encouragement}</p><button class="btn-primary" onclick="speakText('${data.advice}')">🔊 Listen</button></div>`;
             speakText(data.advice);
-            if(data.sentiment.includes('stressed') || data.stressLevel > 6) {
-                showCuteAnimalPopup("🐢 Breathe deeply. You're stronger than stress! 💪");
-            } else {
-                showCuteAnimalPopup("🧘 Amazing self-awareness! Keep that balance.");
-            }
-        } catch(e) {
-            resultDiv.innerHTML = "💚 Take a deep breath. You're doing great! Try again or use the chatbot for support.";
-        }
+            if(data.sentiment.includes('stressed') || data.stressLevel > 6) showCuteAnimalPopup("🐢 Breathe deeply. You're stronger than stress!");
+            else showCuteAnimalPopup("🧘 Amazing self-awareness! Keep balance.");
+        } catch(e) { resultDiv.innerHTML = "💚 Take a deep breath. You're doing great!"; }
     };
-    
-    // Notes (preserve)
+    // Notes logic (preserved)
     let savedNotes = JSON.parse(localStorage.getItem('focuswell_notes') || '[]');
-    
     function renderNotes() {
         const container = document.getElementById('notesListPanel');
         if (!container) return;
-        if (savedNotes.length === 0) {
-            container.innerHTML = "<p>✨ No notes yet. Create your first study note!</p>";
-            return;
-        }
-        container.innerHTML = savedNotes.map(n => `
-            <div class="note-item">
-                <div><strong>${escapeHtml(n.title)}</strong><br>${escapeHtml(n.content.substring(0, 80))}</div>
-                <div>
-                    <button onclick="readNote(${n.id})" style="background: var(--primary); color: white; border: none; border-radius: 20px; padding: 5px 10px; margin-right: 5px;">🔊 Read</button>
-                    <button onclick="deleteNote(${n.id})" style="background: #ff6b6b; color: white; border: none; border-radius: 20px; padding: 5px 10px;">❌</button>
-                </div>
-            </div>
-        `).join('');
+        if (savedNotes.length === 0) { container.innerHTML = "<p>✨ No notes yet.</p>"; return; }
+        container.innerHTML = savedNotes.map(n => `<div class="note-item"><div><strong>${escapeHtml(n.title)}</strong><br>${escapeHtml(n.content.substring(0, 80))}</div><div><button onclick="readNote(${n.id})">🔊 Read</button><button onclick="deleteNote(${n.id})">❌</button></div></div>`).join('');
     }
-    
-    window.readNote = (id) => {
-        const note = savedNotes.find(n => n.id === id);
-        if (note) speakText(`Title: ${note.title}. Content: ${note.content}`);
-    };
-    
-    window.deleteNote = (id) => {
-        savedNotes = savedNotes.filter(n => n.id !== id);
-        localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes));
-        renderNotes();
-    };
-    
-    function escapeHtml(str) {
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
+    window.readNote = (id) => { const note = savedNotes.find(n => n.id === id); if (note) speakText(`Title: ${note.title}. Content: ${note.content}`); };
+    window.deleteNote = (id) => { savedNotes = savedNotes.filter(n => n.id !== id); localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes)); renderNotes(); };
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
     document.getElementById('saveNoteBtn').onclick = () => {
         const title = document.getElementById('noteTitleInput').value.trim() || "Untitled";
         const content = document.getElementById('noteContentInput').value.trim();
         if (!content) return;
-        
         savedNotes.push({ id: Date.now(), title, content });
         localStorage.setItem('focuswell_notes', JSON.stringify(savedNotes));
         renderNotes();
         document.getElementById('noteContentInput').value = "";
-        speakText("Note saved successfully!");
+        speakText("Note saved!");
+        showCuteAnimalPopup("📓 Note saved! Smart cookie 🍪");
     };
-    
     renderNotes();
-    
-    // Animal companion
-    document.getElementById('animalCompanion').onclick = () => {
-        const messages = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈", "Try a quick quiz! 📝"];
-        const msg = messages[Math.floor(Math.random() * messages.length)];
-        document.querySelector('.animal-speech').innerText = msg;
-        speakText(msg);
-        showCuteAnimalPopup(msg);
-    };
+    document.getElementById('animalCompanion').onclick = () => { const messages = ["Stay focused! 🎯", "Take a deep breath! 🌬️", "You're making progress! 📈"]; const msg = messages[Math.floor(Math.random() * messages.length)]; document.querySelector('.animal-speech').innerText = msg; speakText(msg); showCuteAnimalPopup(msg); };
+    document.getElementById('addTaskBtn')?.addEventListener('click', addNewTask);
 });
 </script>
 </body>
 </html>
+```
